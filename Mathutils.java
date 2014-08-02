@@ -18,8 +18,8 @@ public class Mathutils
 		float pos_y = pos.y;
 		float pos_z = pos.z;
 		result.set(normal);
-		result.mul(-dp_p_n);
-		result.div(dp_n_n);
+		result.scl(-dp_p_n);
+		result.scl(1f / dp_n_n);
 		result.add(pos_x, pos_y, pos_z);
 	}
 
@@ -33,8 +33,8 @@ public class Mathutils
 
 		v3tmp1.set(v1);
 		v3tmp2.set(v2);
-		v3tmp1.div(v1_len);
-		v3tmp2.div(v2_len);
+		v3tmp1.scl(1f / v1_len);
+		v3tmp2.scl(1f / v2_len);
 
 		float dp_v1n_v2n = v3tmp1.dot(v3tmp2);
 

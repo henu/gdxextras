@@ -27,7 +27,7 @@ public class Statistical
 			for (int data_ofs = 0; data_ofs < data_size; data_ofs ++) {
 				datapoint.set(data[data_ofs]);
 				float dot_result_datapoint = result1.dot(datapoint);
-				datapoint.mul(dot_result_datapoint);
+				datapoint.scl(dot_result_datapoint);
 				temp.add(datapoint);
 			}
 			result1.set(temp);
@@ -53,7 +53,7 @@ public class Statistical
 			for (int data_ofs = 0; data_ofs < data_size; data_ofs++) {
 				datapoint.set(data2[data_ofs]);
 				float dot_result_datapoint = result2.dot(datapoint);
-				datapoint.mul(dot_result_datapoint);
+				datapoint.scl(dot_result_datapoint);
 				temp.add(datapoint);
 			}
 			result2.set(temp);
@@ -72,8 +72,8 @@ public class Statistical
 
 		// Fix sizes so biggest is really biggest
 		// TODO: Do this so that it reflects the size of real distribution
-		result1.mul(3);
-		result2.mul(2);
+		result1.scl(3);
+		result2.scl(2);
 	}
 
 	public static boolean isDataCentered(Vector3[] data)
