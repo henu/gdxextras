@@ -23,6 +23,14 @@ public class Font
 	public Font(FileHandle fh, int pixelheight)
 	{
 		this.pixelheight = pixelheight;
+		this.glyphmodifier = null;
+		addNewFont(fh);
+	}
+
+	public Font(FileHandle fh, int pixelheight, Glyphmodifier glyphmodifier)
+	{
+		this.pixelheight = pixelheight;
+		this.glyphmodifier = glyphmodifier;
 		addNewFont(fh);
 	}
 
@@ -124,6 +132,8 @@ public class Font
 
 	private int pixelheight;
 
+	private Glyphmodifier glyphmodifier;
+
 	private Array<FreeTypeFontGenerator> fonts = new Array<FreeTypeFontGenerator>(true, 1, FreeTypeFontGenerator.class);
 
 	private Map<Integer, AtlasRegion> regions = new HashMap<Integer, AtlasRegion>();
@@ -181,9 +191,18 @@ public class Font
 			} else {
 				glyph_pixmap = null;
 			}
+			
+			// Apply possible glyph modifier
+			if (glyphmodifier != null) {
+				Vector2 offset = new Vector2(offset_x, offset_y);
+				glyph_pixmap = glyphmodifier.modify_glyph(offset, glyph_pixmap, pixelheight);
+				offset_x = offset.x;
+				offset_y = offset.y;
+			}
 
 			AtlasRegion region = drawGlyphToTexture(glyph_pixmap, offset_x, offset_y, advance);
 			
+			// Clean
 			glyph_pixmap.dispose();
 			
 			return region;
@@ -195,8 +214,7 @@ public class Font
 
 	private void spawnNewTexture()
 	{
-		// TODO: RGBA8888 is just for debugging purposes! Replace it with Alpha
-		// in future!
+		// TODO: RGBA8888 consumes too much memory! Use ALPHA if there is no glyph modifier!
 		Texture new_tex = new Texture(TEXTURE_WIDTH, TEXTURE_WIDTH, Format.RGBA8888);
 		new_tex.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 		texs.add(new_tex);
