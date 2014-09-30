@@ -17,7 +17,7 @@ public class FileHandleUtils
 		}
 		while (tokenizer.hasMoreElements()) {
 			String token = tokenizer.nextToken();
-			if (token == "..") {
+			if (token.equals("..")) {
 				result = result.parent();
 			} else {
 				result = result.child(token);
