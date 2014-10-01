@@ -6,6 +6,9 @@ import com.badlogic.gdx.math.Vector2;
 public class ScrollZoomArea extends Widget
 {
 
+	// Event types
+	public static final int CLICKED = 0;
+
 	public ScrollZoomArea()
 	{
 		scrolled = new Vector2(0, 0);
@@ -20,12 +23,33 @@ public class ScrollZoomArea extends Widget
 		// Enable expanding by default
 		setHorizontalExpanding(1);
 		setVerticalExpanding(1);
+		
+		// By default, clicks are disabled.
+		click_threshold = -1;
+		latest_click_pos = null;
+	}
+	
+	// "click_threshold" determines maximum distance that can be
+	// scrolled, while scrolling is still considered as click. 
+	public void enableClickEvents(float click_threshold)
+	{
+		this.click_threshold = click_threshold;
+		latest_click_pos = new Vector2();
+	}
+	
+	public void disableClickEvents()
+	{
+		click_threshold = -1;
+		latest_click_pos = null;
 	}
 
 	// Returns amount of scrolled from last reset of scrolled.
 	// Returns null if there has not been any scrolling.
 	public final Vector2 getScrolled()
 	{
+		if (touch_state == TouchState.CLICKING) {
+			return null;
+		}
 		if (scrolled.x == 0 && scrolled.y == 0) {
 			return null;
 		}
@@ -47,6 +71,11 @@ public class ScrollZoomArea extends Widget
 		return result;
 	}
 
+	public Vector2 getLatestClickPosition()
+	{
+		return latest_click_pos;
+	}
+
 	public boolean pointerDown(int pointer_id, Vector2 pos)
 	{
 		// In case of other pointers, do nothing
@@ -65,7 +94,14 @@ public class ScrollZoomArea extends Widget
 		}
 		// Check if scrolling was started
 		if (touch0_down != touch1_down) {
-			touch_state = TouchState.SCROLLING;
+			// However, if click events are enabled,
+			// then this is considered as click first.
+			if (click_threshold >= 0) {
+				touch_state = TouchState.CLICKING;
+				latest_click_pos.set(pos);
+			} else {
+				touch_state = TouchState.SCROLLING;
+			}
 		}
 		// Otherwise zooming was started
 		else {
@@ -83,7 +119,7 @@ public class ScrollZoomArea extends Widget
 		if (pointer_id > 1) {
 			return;
 		}
-		if (touch_state == TouchState.SCROLLING) {
+		if (touch_state == TouchState.SCROLLING || touch_state == TouchState.CLICKING) {
 			if (touch0_down) {
 				scrolled.x -= pos.x - touch0_last.x;
 				scrolled.y -= pos.y - touch0_last.y;
@@ -94,6 +130,11 @@ public class ScrollZoomArea extends Widget
 				scrolled.y -= pos.y - touch1_last.y;
 				touch1_last.x = pos.x;
 				touch1_last.y = pos.y;
+			}
+			// If we are clicking, check if threshold has been
+			// reached. If yes, then convert to scrolling.
+			if (touch_state == TouchState.CLICKING && scrolled.len() > click_threshold) {
+				touch_state = TouchState.SCROLLING;
 			}
 		} else if (touch_state == TouchState.ZOOMING) {
 			if (pointer_id == 0) {
@@ -117,7 +158,12 @@ public class ScrollZoomArea extends Widget
 		if (pointer_id > 1) {
 			return;
 		}
-		if (touch_state == TouchState.SCROLLING) {
+		if (touch_state == TouchState.CLICKING) {
+			touch_state = TouchState.NOTHING;
+			touch0_down = false;
+			touch1_down = false;
+			fireEvent(CLICKED);
+		} else if (touch_state == TouchState.SCROLLING) {
 			touch_state = TouchState.NOTHING;
 			touch0_down = false;
 			touch1_down = false;
@@ -155,7 +201,7 @@ public class ScrollZoomArea extends Widget
 	}
 
 	private enum TouchState {
-		NOTHING, SCROLLING, ZOOMING
+		NOTHING, SCROLLING, ZOOMING, CLICKING
 	}
 
 	private TouchState touch_state;
@@ -168,4 +214,8 @@ public class ScrollZoomArea extends Widget
 
 	private Vector2 scrolled;
 	private float touch_zoom_baseline;
+
+	private float click_threshold;
+	private Vector2 latest_click_pos;
+
 }
