@@ -23,6 +23,12 @@ public class IVector2
 		y = v.y;
 	}
 
+	public void set(IVector2 pos)
+	{
+		x = pos.x;
+		y = pos.y;
+	}
+
 	public String toString()
 	{
 		return "(" + x + ", " + y + ")";
@@ -33,9 +39,41 @@ public class IVector2
 		return v.x == x && v.y == y;
 	}
 
+	public float distanceTo(IVector2 pos)
+	{
+		return (float)Math.sqrt(distanceTo2(pos));
+	}
+
+	public long distanceTo2(IVector2 pos)
+	{
+		long xdiff = pos.x - x;
+		long ydiff = pos.y - y;
+		return xdiff * xdiff + ydiff * ydiff;
+	}
+
+	public int chebyshevDistanceTo(IVector2 pos)
+	{
+		return Math.max(Math.abs(pos.x - x), Math.abs(pos.y - y));
+	}
+
 	public IVector2 cpy()
 	{
 		return new IVector2(x, y);
+	}
+
+	public void scl(int i) {
+		x *= i;
+		y *= i;
+	}
+
+	public void sub(IVector2 pos)
+	{
+		sub(pos.x, pos.y);
+	}
+
+	private void sub(int x, int y) {
+		this.x -= x;
+		this.y -= y;
 	}
 
 }
