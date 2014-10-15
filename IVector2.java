@@ -36,7 +36,12 @@ public class IVector2
 	
 	public boolean equals(IVector2 v)
 	{
-		return v.x == x && v.y == y;
+		return equals(v.x, v.y);
+	}
+
+	public boolean equals(int x, int y)
+	{
+		return x == this.x && y == this.y;
 	}
 
 	public float distanceTo(IVector2 pos)
