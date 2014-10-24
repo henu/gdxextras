@@ -4,8 +4,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.math.Vector2;
 
-import fi.henu.gdxextras.Font;
-
 // TODO: Make toggling on/off available!
 public class Button extends Widget
 {
@@ -22,19 +20,15 @@ public class Button extends Widget
 		// Reset icon and label
 		icon = null;
 		label = null;
-		label_pixelheight = 0;
-		label_font = null;
 		// Reset state
 		hilight = false;
 		pressed = false;
 		enabled = true;
 	}
 
-	public void setLabel(String label, float pixelheight, Font font)
+	public void setLabel(String label)
 	{
 		this.label = label;
-		label_pixelheight = pixelheight;
-		label_font = font;
 		markToNeedReposition();
 	}
 	
@@ -130,9 +124,9 @@ public class Button extends Widget
 				draw_x += getStyle().side_padding * scale;
 			}
 			if (!enabled) {
-				label_font.renderString(batch, label, draw_x, getPositionY() + (getStyle().height / 2) * scale + label_pixelheight / 2, label_pixelheight, getStyle().label_color_disabled);
+				getStyle().font.renderString(batch, label, draw_x, getPositionY() + ((getStyle().height) + getStyle().label_height) * scale / 2, getStyle().label_height * scale, getStyle().label_color_disabled);
 			} else {
-				label_font.renderString(batch, label, draw_x, getPositionY() + (getStyle().height / 2) * scale + label_pixelheight / 2, label_pixelheight, getStyle().label_color);
+				getStyle().font.renderString(batch, label, draw_x, getPositionY() + ((getStyle().height) + getStyle().label_height) * scale / 2, getStyle().label_height * scale, getStyle().label_color);
 			}			
 		}
 		batch.setColor(1, 1, 1, 1);
@@ -142,7 +136,7 @@ public class Button extends Widget
 	{
 		float min_width = getStyle().side_padding * 2f * getStyle().scaling;
 		if (label != null) {
-			min_width += label_font.getStringWidth(label, label_pixelheight);
+			min_width += getStyle().font.getStringWidth(label, getStyle().label_height * getStyle().scaling);
 			if (icon != null) {
 				min_width += getStyle().side_padding * getStyle().scaling;
 			}
@@ -160,8 +154,6 @@ public class Button extends Widget
 	// Options
 	private AtlasRegion icon;
 	private String label;
-	private float label_pixelheight;
-	private Font label_font;
 
 	// State
 	private boolean hilight;
