@@ -2,14 +2,15 @@ package fi.henu.gdxextras;
 
 import java.util.HashMap;
 import java.util.Map;
+
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Pixmap.Format;
-import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.BitmapFont.Glyph;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.Texture.TextureFilter;
+import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeType.Bitmap;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
@@ -17,7 +18,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 
 // TODO: Support kerning!
-public class Font
+public class Font extends BitmapFont
 {
 
 	public Font(FileHandle fh, int pixelheight)
@@ -25,6 +26,9 @@ public class Font
 		this.pixelheight = pixelheight;
 		this.glyphmodifier = null;
 		addNewFont(fh);
+		scaling_x = 1f;
+		scaling_y = 1f;
+		color = new Color(1, 1, 1, 1);
 	}
 
 	public Font(FileHandle fh, int pixelheight, Glyphmodifier glyphmodifier)
@@ -32,6 +36,9 @@ public class Font
 		this.pixelheight = pixelheight;
 		this.glyphmodifier = glyphmodifier;
 		addNewFont(fh);
+		scaling_x = 1f;
+		scaling_y = 1f;
+		color = new Color(1, 1, 1, 1);
 	}
 
 	// Loads new font to memory, with lower priority than already loaded fonts.
@@ -59,12 +66,102 @@ public class Font
 		tallest_glyph_at_row = 0;
 	}
 	
-	public void renderString(SpriteBatch batch, String str, Vector2 pos, float pixelheight, Color color)
+	@Override
+	public void setScale(float scale_x, float scale_y)
+	{
+		scaling_x = scale_x;
+		scaling_y = scale_y;
+	}
+
+	@Override
+	public void setScale(float scale)
+	{
+		setScale(scale, scale);
+	}
+
+	@Override
+	public void scale(float amount)
+	{
+		setScale(scaling_x + amount, scaling_y + amount);
+	}
+
+	@Override
+	public void setColor(Color color)
+	{
+		setColor(color.r, color.g, color.b, color.a);
+	}
+	
+	@Override
+	public void setColor(float color)
+	{
+		setColor(color, color, color, 1f);
+	}
+ 
+	@Override
+	public void setColor(float r, float g, float b, float a)
+	{
+		color.set(r, g, b, a);
+	}
+
+	@Override
+	public 	TextBounds draw(Batch batch, CharSequence str, float x, float y)
+	{
+		float draw_pixelheight = pixelheight * scaling_y;
+	
+// TODO: Support scaling X component!
+		renderString(batch, str.toString(), x, y, draw_pixelheight, color);
+
+		TextBounds bounds = new TextBounds();
+		bounds.height = draw_pixelheight;
+		bounds.width = getStringWidth(str, pixelheight) * scaling_x;
+		return bounds;
+	}
+
+	@Override
+	public 	TextBounds draw(Batch batch, CharSequence str, float x, float y, int start, int end)
+	{
+		return draw(batch, str.subSequence(start, end), x, y);
+	}
+
+	@Override
+	public TextBounds getBounds(CharSequence str)
+	{
+		TextBounds bounds = new TextBounds();
+		bounds.height = pixelheight * scaling_y;
+		bounds.width = getStringWidth(str, pixelheight) * scaling_x;
+		return bounds;
+	}
+
+	@Override
+	public TextBounds getBounds(CharSequence str, TextBounds textBounds)
+	{
+		throw new RuntimeException("Not implemented yet!");
+	}
+
+	@Override
+	public TextBounds getBounds(CharSequence str, int start, int end)
+	{
+		return getBounds(str.subSequence(start, end));
+	}
+
+	@Override
+	public TextBounds getBounds(CharSequence str, int start, int end, BitmapFont.TextBounds textBounds)
+	{
+		return getBounds(str.subSequence(start, end), textBounds);
+	}
+	
+	@Override
+	public float getLineHeight()
+	{
+		return pixelheight * scaling_y;
+	}
+
+	public void renderString(Batch batch, String str, Vector2 pos, float pixelheight, Color color)
 	{
 		renderString(batch, str, pos.x, pos.y, pixelheight, color);
 	}
 
-	public void renderString(SpriteBatch batch, String str, float pos_x, float pos_y, float pixelheight, Color color)
+	public void renderString(Batch batch, String str, float pos_x, float pos_y, float pixelheight, Color color)
 	{
 		float scale = pixelheight / this.pixelheight;
 
@@ -98,8 +195,10 @@ public class Font
 		batch.setColor(1, 1, 1, 1);
 	}
 
-	public float getStringWidth(String str, float pixelheight)
+	public float getStringWidth(CharSequence str_raw, float pixelheight)
 	{
+		String str = str_raw.toString();
+		
 		float max_line = 0;
 		float current_line = 0;
 
@@ -131,6 +230,10 @@ public class Font
 	private static final float GLYPH_REAL_WIDTH_MULTIPLIER = 1000f;
 
 	private int pixelheight;
+
+	private Color color;
+	private float scaling_x;
+	private float scaling_y; 
 
 	private Glyphmodifier glyphmodifier;
 

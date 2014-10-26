@@ -2,9 +2,8 @@ package fi.henu.gdxextras.gui;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
-
-import fi.henu.gdxextras.Font;
 
 public class ButtonStyle
 {
@@ -28,5 +27,5 @@ public class ButtonStyle
 	public Color icon_color;
 	public Color icon_color_disabled;
 	// Font
-	public Font font;
+	public BitmapFont font;
 }

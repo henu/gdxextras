@@ -1,5 +1,6 @@
 package fi.henu.gdxextras.gui;
 
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.math.Vector2;
@@ -119,15 +120,20 @@ public class Button extends Widget
 		}
 		// Render possible label
 		if (label != null) {
+			BitmapFont font = getStyle().font;
+			font.setScale(1);
+			float label_scale = getStyle().label_height / font.getLineHeight() * scale;
 			float draw_x = getPositionX() + getStyle().side_padding * scale;
 			if (icon != null) {
 				draw_x += getStyle().side_padding * scale;
 			}
 			if (!enabled) {
-				getStyle().font.renderString(batch, label, draw_x, getPositionY() + ((getStyle().height) + getStyle().label_height) * scale / 2, getStyle().label_height * scale, getStyle().label_color_disabled);
+				font.setColor(getStyle().label_color_disabled);
 			} else {
-				getStyle().font.renderString(batch, label, draw_x, getPositionY() + ((getStyle().height) + getStyle().label_height) * scale / 2, getStyle().label_height * scale, getStyle().label_color);
+				font.setColor(getStyle().label_color);
 			}			
+			font.setScale(label_scale);
+			font.draw(batch, label, draw_x, getPositionY() + ((getStyle().height) + getStyle().label_height) * scale / 2);
 		}
 		batch.setColor(1, 1, 1, 1);
 	}
@@ -136,7 +142,11 @@ public class Button extends Widget
 	{
 		float min_width = getStyle().side_padding * 2f * getStyle().scaling;
 		if (label != null) {
-			min_width += getStyle().font.getStringWidth(label, getStyle().label_height * getStyle().scaling);
+			BitmapFont font = getStyle().font;
+			font.setScale(1);
+			float label_scale = getStyle().label_height / font.getLineHeight() * getStyle().scaling;
+			font.setScale(label_scale);
+			min_width += font.getBounds(label).width;
 			if (icon != null) {
 				min_width += getStyle().side_padding * getStyle().scaling;
 			}
