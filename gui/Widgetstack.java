@@ -22,6 +22,17 @@ public class Widgetstack extends Widget
 		markToNeedReposition();
 	}
 
+	public void removeWidget(Widget widget)
+	{
+		int pos = widgets.indexOf(widget, true);
+		if (pos < 0) {
+			throw new RuntimeException("Widget not found!");
+		}
+		widgets.removeIndex(pos);
+		removeChild(widget);
+		markToNeedReposition();
+	}
+
 	protected void doRepositioning()
 	{
 		Widget[] widgets_buf = widgets.items;
