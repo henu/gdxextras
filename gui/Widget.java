@@ -554,6 +554,20 @@ public abstract class Widget
 		batch.draw(region, draw_x, draw_y, region.getRegionWidth() / 2 * scale, region.getRegionHeight() / 2 * scale, region.packedWidth * scale, region.packedHeight * scale, 1, 1, angle);
 	}
 
+	protected static void renderToSpace(SpriteBatch batch, AtlasRegion region, float x, float y, float space_width, float space_height, float align_x, float align_y, float scale)
+	{
+		float extra_x = space_width - region.originalWidth * scale;
+		float extra_y = space_height - region.originalHeight * scale;
+		render(batch, region, x + extra_x * align_x, y + extra_y * align_y, scale);
+	}
+	
+	protected static void renderAndRepeatTexture(SpriteBatch batch, Texture tex, float x, float y, float width, float height, float scale)
+	{
+		float tex_x = width / tex.getWidth() / scale;
+		float tex_y = height / tex.getHeight() / scale;
+		batch.draw(tex, x, y, width, height, 0, tex_y, tex_x, 0);
+	}
+
 	// Spawns gray version of given color
 	protected static Color getDisabledColor(Color color)
 	{
