@@ -34,9 +34,14 @@ public class IVector2
 		return "(" + x + ", " + y + ")";
 	}
 	
-	public boolean equals(IVector2 v)
+	@Override
+	public final boolean equals(Object o)
 	{
-		return equals(v.x, v.y);
+		if (o instanceof IVector2) {
+			IVector2 v = (IVector2)o;
+			return equals(v.x, v.y);
+		}
+		return false;
 	}
 
 	public boolean equals(int x, int y)
@@ -81,4 +86,9 @@ public class IVector2
 		this.y -= y;
 	}
 
+	@Override
+	public int hashCode()
+	{
+		return x * 991 + y * 997;
+	}
 }
