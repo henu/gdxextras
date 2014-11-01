@@ -17,7 +17,9 @@ public class DecoratedEdges extends Widget
 			removeChild(this.widget);
 		}
 		this.widget = widget;
-		addChild(widget);
+		if (widget != null) {
+			addChild(widget);
+		}
 		markToNeedReposition();
 	}
 
