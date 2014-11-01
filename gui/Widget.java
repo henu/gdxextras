@@ -375,7 +375,14 @@ public abstract class Widget
 	// This may be only called by Gui and Widget!
 	public void setGui(Gui gui)
 	{
+		// If there is old Gui, then inform it that this Widget is being
+		// removed. This will unregister all pointer listenings, etc.
+		if (this.gui != null) {
+			this.gui.widgetRemoved(this);
+		}
+		// Set new Gui
 		this.gui = gui;
+		// Set new Gui also for children
 		Widget[] children_buf = children.items;
 		int children_size = children.size;
 		for (int child_id = 0; child_id < children_size; child_id++) {
@@ -456,6 +463,10 @@ public abstract class Widget
 
 	protected void unregisterPointerListener(int pointer_id)
 	{
+		// If this Widget is removed from Gui, then do nothing
+		if (gui == null) {
+			return;
+		}
 		// TODO: In future, make pointer listening to be started with function!
 		assert gui.getPointerListener(pointer_id) == this;
 		gui.unregisterPointerListener(pointer_id);

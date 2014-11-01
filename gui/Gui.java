@@ -294,6 +294,17 @@ public class Gui implements InputProcessor
 		}
 	}
 
+	// This is called by Widget, when its Gui is changed or removed.
+	// This will silently unregister this Widget as pointerlistener
+	public void widgetRemoved(Widget widget)
+	{
+		for (int pointer_id = 0; pointer_id < pointerlisteners.size; ++ pointer_id) {
+			if (pointerlisteners.get(pointer_id) == widget) {
+				pointerlisteners.set(pointer_id, null);
+			}
+		}
+	}
+
 	private int screen_width = 0;
 	private int screen_height = 0;
 
