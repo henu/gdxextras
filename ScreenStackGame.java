@@ -18,8 +18,31 @@ public abstract class ScreenStackGame extends Game
 	// Removes top screen and disposes it
 	public void popAndDisposeScreen()
 	{
-		assert screens.size > 0;
-		Screen disposed_screen = screens.pop();
+		removeAndDisposeScreenAt(0);
+	}
+
+	// Removes specific screen and disposes it
+	public void removeAndDisposeScreen(Screen screen)
+	{
+		int screen_index = screens.indexOf(screen, true);
+		if (screen_index < 0) {
+			throw new RuntimeException("Screen not found!");
+		}
+		removeAndDisposeScreenAt(screens.size - 1 - screen_index);
+	}
+
+	// Removes specific screen and disposes it. Note, that
+	// index starts from beginning, so that 0 means top screen.
+	public void removeAndDisposeScreenAt(int negative_index)
+	{
+		if (screens.size == 0) {
+			throw new RuntimeException("No screens!");
+		}
+		int index = screens.size - 1 - negative_index;
+		if (index < 0 || index >= screens.size) {
+			throw new RuntimeException("Index out of range!");
+		}
+		Screen disposed_screen = screens.removeIndex(index);
 		disposed_screen.dispose();
 		// Check if this was the last screen
 		if (screens.size == 0) {
@@ -43,6 +66,6 @@ public abstract class ScreenStackGame extends Game
 	}
 
 	// Stack of screens
-	private Array<Screen> screens = new Array<Screen>(false, 0, Screen.class);
+	private Array<Screen> screens = new Array<Screen>(true, 0, Screen.class);
 
 }
