@@ -48,8 +48,11 @@ public abstract class ScreenStackGame extends Game
 		if (screens.size == 0) {
 			Gdx.app.exit();
 		} else {
-			Screen new_top_screen = screens.get(screens.size - 1);
-			setScreen(new_top_screen);
+			// Only set top screen, if removed Screen was on the top
+			if (negative_index == 0) {
+				Screen new_top_screen = screens.get(screens.size - 1);
+				setScreen(new_top_screen);
+			}
 		}
 	}
 
