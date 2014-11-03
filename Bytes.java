@@ -1,6 +1,7 @@
 package fi.henu.gdxextras;
 
 import java.nio.ByteBuffer;
+import java.nio.charset.Charset;
 
 public class Bytes
 {
@@ -58,6 +59,14 @@ public class Bytes
 	public void push(Byteserializable serializable)
 	{
 		serializable.serializeToBytes(this);
+	}
+
+	public void push(String str)
+	{
+		byte[] str_bytes_utf8 = str.getBytes(Charset.forName("UTF-8"));
+		ensureAvailable(str_bytes_utf8.length);
+		System.arraycopy(str_bytes_utf8, 0, buf, items, str_bytes_utf8.length);
+		items += str_bytes_utf8.length;
 	}
 
 	// Ensures there is specific amount of empty space available
