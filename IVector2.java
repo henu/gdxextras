@@ -1,6 +1,6 @@
 package fi.henu.gdxextras;
 
-public class IVector2
+public class IVector2 implements Byteserializable
 {
 	
 	public int x, y;
@@ -90,5 +90,12 @@ public class IVector2
 	public int hashCode()
 	{
 		return x * 991 + y * 997;
+	}
+
+	@Override
+	public void serializeToBytes(Bytes bytes)
+	{
+		bytes.push(x);
+		bytes.push(y);
 	}
 }
