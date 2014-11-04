@@ -61,7 +61,16 @@ public class Bytes
 	{
 		serializable.serializeToBytes(this);
 	}
-	
+
+	public void push(Bytes bytes)
+	{
+		if (bytes.items > 0) {
+			ensureAvailable(bytes.items);
+			System.arraycopy(bytes.buf, 0, buf, items, bytes.items);
+			items += bytes.items;
+		}
+	}
+
 	// This will also push length of string to bytes, when encoded with UTF-8.
 	// This will take four extra bytes and it will be located before actual string.
 	public void push(String str)
@@ -117,7 +126,7 @@ public class Bytes
 
 	private void pushFromTemporaryByteBuffer()
 	{
-		int amount = tmp_bb.remaining();
+		int amount = tmp_bb.position();
 		ensureAvailable(amount);
 		System.arraycopy(tmp_bb.array(), 0, buf, items, amount);
 		items += amount;
