@@ -1,5 +1,7 @@
 package fi.henu.gdxextras;
 
+import java.nio.ByteBuffer;
+
 public class IVector2 implements Byteserializable
 {
 	
@@ -21,6 +23,12 @@ public class IVector2 implements Byteserializable
 	{
 		x = v.x;
 		y = v.y;
+	}
+
+	public IVector2(ByteBuffer buf)
+	{
+		x = buf.getInt();
+		y = buf.getInt();
 	}
 
 	public void set(IVector2 pos)

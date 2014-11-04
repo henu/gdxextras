@@ -1,5 +1,6 @@
 package fi.henu.gdxextras;
 
+import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
 
@@ -60,10 +61,13 @@ public class Bytes
 	{
 		serializable.serializeToBytes(this);
 	}
-
+	
+	// This will also push length of string to bytes, when encoded with UTF-8.
+	// This will take four extra bytes and it will be located before actual string.
 	public void push(String str)
 	{
 		byte[] str_bytes_utf8 = str.getBytes(Charset.forName("UTF-8"));
+		push((int)str_bytes_utf8.length);
 		ensureAvailable(str_bytes_utf8.length);
 		System.arraycopy(str_bytes_utf8, 0, buf, items, str_bytes_utf8.length);
 		items += str_bytes_utf8.length;
@@ -92,6 +96,18 @@ public class Bytes
 		return buf;
 	}
 
+	// This helper function will read Strings that are serialized with push() method.
+	public static String readStringFromByteBuffer(ByteBuffer buf)
+	{
+		int str_utf8_size = buf.getInt();
+		byte[] str_utf8 = new byte[str_utf8_size];
+		buf.get(str_utf8);
+		try {
+			return new String(str_utf8, "UTF-8");
+		} catch (UnsupportedEncodingException e) {
+			throw new RuntimeException("Unable to encode string from bytes with UTF-8!");
+		}
+	}
 
 	private byte[] buf = null;
 	private int items = 0;
