@@ -82,6 +82,13 @@ public class Bytes
 		items += str_bytes_utf8.length;
 	}
 
+	public void push(byte[] bytes)
+	{
+		ensureAvailable(bytes.length);
+		System.arraycopy(bytes, 0, buf, items, bytes.length);
+		items += bytes.length;
+	}
+
 	// Ensures there is specific amount of empty space available
 	public void ensureAvailable(int amount)
 	{
