@@ -235,7 +235,7 @@ public abstract class Widget
 		float real_w, real_h;
 		if (expanding_horiz == 0) real_w = getMinWidth() - margin*2;
 		else real_w = w;
-		if (expanding_vert == 0) real_h = getMinHeight(real_w) - margin*2;
+		if (expanding_vert == 0) real_h = getMinHeight(real_w + margin*2) - margin*2;
 		else real_h = h;
 
 		// Calculate real position
@@ -413,12 +413,17 @@ public abstract class Widget
 		}
 	}
 
+	// Tells minimum width needed. Includes margins,
+	// so actual width of widget will be thinner.
 	protected float getMinWidth()
 	{
 		if (shrunken) return 0;
 		return margin * 2 + Math.max(fixed_min_width, doGetMinWidth());
 	}
 
+	// Tells minimum height needed, when fit to a specific width.
+	// Both result and "width" includes margins, so actual size
+	// of widget will be smaller in both dimensions.
 	protected float getMinHeight(float width)
 	{
 		if (shrunken) return 0;
