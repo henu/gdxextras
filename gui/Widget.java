@@ -422,7 +422,7 @@ public abstract class Widget
 	protected float getMinHeight(float width)
 	{
 		if (shrunken) return 0;
-		return margin * 2 + Math.max(fixed_min_height, doGetMinHeight(width));
+		return margin * 2 + Math.max(fixed_min_height, doGetMinHeight(width - margin * 2));
 	}
 
 	protected int getHorizontalExpandingForRepositioning()
