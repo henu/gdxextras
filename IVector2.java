@@ -71,7 +71,12 @@ public class IVector2 implements Byteserializable
 
 	public int chebyshevDistanceTo(IVector2 pos)
 	{
-		return Math.max(Math.abs(pos.x - x), Math.abs(pos.y - y));
+		return chebyshevDistanceTo(pos.x, pos.y);
+	}
+
+	public int chebyshevDistanceTo(int x, int y)
+	{
+		return Math.max(Math.abs(this.x - x), Math.abs(this.y - y));
 	}
 
 	public IVector2 cpy()
