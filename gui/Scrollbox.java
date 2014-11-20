@@ -5,13 +5,14 @@ import com.badlogic.gdx.math.Vector2;
 
 public class Scrollbox extends Widget
 {
-
 	public Scrollbox()
 	{
 		super();
 		widget = null;
 		origin_horiz = Alignment.LEFT;
 		origin_vert = Alignment.TOP;
+		horizontal_scrolling_enabled = true;
+		vertical_scrolling_enabled = true;
 		// This widget has ability to receive
 		// pointer events before its children.
 		setBeTopmostBeforeChildren(true);
@@ -166,6 +167,22 @@ public class Scrollbox extends Widget
 		scroll_topright.y -= scroll_bottomleft.y - old_scroll_bottomleft_y;
 	}
 
+	// If horizontal scrolling is enabled, then scrollbox can be really thin.
+	// If disabled, then scrollbox needs to be as wide as its child.
+	public void enableHorizontalScrolling(boolean horizontal_scrolling_enabled)
+	{
+		this.horizontal_scrolling_enabled = horizontal_scrolling_enabled;
+		markToNeedReposition();
+	}
+
+	// If vertical scrolling is enabled, then scrollbox can be really shallow.
+	// If disabled, then scrollbox needs to be as tall as its child.
+	public void enableVerticalScrolling(boolean vertical_scrolling_enabled)
+	{
+		this.vertical_scrolling_enabled = vertical_scrolling_enabled;
+		markToNeedReposition();
+	}
+
 	public boolean pointerDown(int pointer_id, Vector2 pos)
 	{
 		if (pointer_id != 0 || widget == null) {
@@ -259,12 +276,18 @@ public class Scrollbox extends Widget
 
 	protected float doGetMinWidth()
 	{
-		return 0;
+		if (vertical_scrolling_enabled || widget == null) {
+			return 0;
+		}
+		return widget.getMinWidth();
 	}
 
 	protected float doGetMinHeight(float width)
 	{
-		return 0;
+		if (horizontal_scrolling_enabled || widget == null) {
+			return 0;
+		}
+		return widget.getMinHeight(99999999);
 	}
 
 	// Drags that are less or equal than this in
@@ -279,7 +302,9 @@ public class Scrollbox extends Widget
 	private Alignment origin_horiz;
 	private Alignment origin_vert;
 
+	private boolean horizontal_scrolling_enabled;
+	private boolean vertical_scrolling_enabled;
+
 	private Vector2 scroll_when_pointer_was_pressed = new Vector2();
 	private Vector2 pointer_down_pos = new Vector2();
-
 }
