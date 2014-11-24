@@ -276,7 +276,7 @@ public class Scrollbox extends Widget
 
 	protected float doGetMinWidth()
 	{
-		if (vertical_scrolling_enabled || widget == null) {
+		if (horizontal_scrolling_enabled || widget == null) {
 			return 0;
 		}
 		return widget.getMinWidth();
@@ -284,7 +284,7 @@ public class Scrollbox extends Widget
 
 	protected float doGetMinHeight(float width)
 	{
-		if (horizontal_scrolling_enabled || widget == null) {
+		if (vertical_scrolling_enabled || widget == null) {
 			return 0;
 		}
 		return widget.getMinHeight(99999999);
