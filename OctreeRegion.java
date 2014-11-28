@@ -13,7 +13,8 @@ public class OctreeRegion
 		this.parent = parent;
 		this.my_id = my_id;
 		bb = new BoundingBox(min, max);
-		bb_center = bb.getCenter();
+		bb_center = new Vector3();
+		bb_center = bb.getCenter(bb_center);
 		// Reset children
 		children = new OctreeRegion[8];
 		for (int child_id = 0; child_id < 8; child_id++) {
@@ -128,8 +129,15 @@ public class OctreeRegion
 	{
 		assert my_id != 8;
 		// Check if this region is 100% inside frustum
-		Vector3[] bb_corners = bb.getCorners();
-		if (frustum.pointInFrustum(bb_corners[0]) && frustum.pointInFrustum(bb_corners[1]) && frustum.pointInFrustum(bb_corners[2]) && frustum.pointInFrustum(bb_corners[3]) && frustum.pointInFrustum(bb_corners[4]) && frustum.pointInFrustum(bb_corners[5]) && frustum.pointInFrustum(bb_corners[6]) && frustum.pointInFrustum(bb_corners[7])) {
+		Vector3 tempv = new Vector3();
+		if (frustum.pointInFrustum(bb.getCorner000(tempv)) &&
+		    frustum.pointInFrustum(bb.getCorner001(tempv)) &&
+		    frustum.pointInFrustum(bb.getCorner010(tempv)) &&
+		    frustum.pointInFrustum(bb.getCorner011(tempv)) &&
+		    frustum.pointInFrustum(bb.getCorner100(tempv)) &&
+		    frustum.pointInFrustum(bb.getCorner101(tempv)) &&
+		    frustum.pointInFrustum(bb.getCorner110(tempv)) &&
+		    frustum.pointInFrustum(bb.getCorner111(tempv))) {
 			toggleFlag(flag_id, true);
 		}
 		// Check if this region is partly inside frustum
