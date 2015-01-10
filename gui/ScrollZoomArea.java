@@ -70,6 +70,16 @@ public class ScrollZoomArea extends Widget
 		touch_zoom_baseline = touch_zoom;
 		return result;
 	}
+	
+	public boolean isScrolling()
+	{
+		return touch_state == TouchState.SCROLLING;
+	}
+
+	public boolean isZooming()
+	{
+		return touch_state == TouchState.ZOOMING;
+	}
 
 	public Vector2 getLatestClickPosition()
 	{
