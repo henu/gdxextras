@@ -557,6 +557,17 @@ public abstract class Widget
 		batch.draw(region, x + region.offsetX * scale, y + region.offsetY * scale, region.packedWidth * scale, region.packedHeight * scale);
 	}
 
+	protected static void render(SpriteBatch batch, AtlasRegion region, float x, float y, float scale_x, float scale_y)
+	{
+		if (scale_x < 0) {
+			x += -scale_x * region.originalWidth;
+		}
+		if (scale_y < 0) {
+			y += -scale_y * region.originalHeight;
+		}
+		batch.draw(region, x + region.offsetX * scale_x, y + region.offsetY * scale_y, region.packedWidth * scale_x, region.packedHeight * scale_y);
+	}
+
 	protected static void renderFromCenter(SpriteBatch batch, AtlasRegion region, float x, float y, float scale)
 	{
 		batch.draw(region, x + (region.offsetX - region.originalWidth * 0.5f) * scale, y + (region.offsetY - region.originalHeight * 0.5f) * scale, region.packedWidth * scale, region.packedHeight * scale);
