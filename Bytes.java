@@ -71,10 +71,15 @@ public class Bytes
 		}
 	}
 
-	// This will also push length of string to bytes, when encoded with UTF-8.
-	// This will take four extra bytes and it will be located before actual string.
+	// This will also push length of string to bytes, when encoded with
+	// UTF-8. This will take four extra bytes and it will be located
+	// before actual string. null is considered as empty string.
 	public void push(String str)
 	{
+		if (str == null) {
+			push((int)0);
+			return;
+		}
 		byte[] str_bytes_utf8 = str.getBytes(Charset.forName("UTF-8"));
 		push((int)str_bytes_utf8.length);
 		ensureAvailable(str_bytes_utf8.length);
@@ -112,10 +117,14 @@ public class Bytes
 		return buf;
 	}
 
-	// This helper function will read Strings that are serialized with push() method.
+	// This helper function will read Strings that are serialized
+	// with push() method. If length is zero, then null is returned.
 	public static String readStringFromByteBuffer(ByteBuffer buf)
 	{
 		int str_utf8_size = buf.getInt();
+		if (str_utf8_size == 0) {
+			return null;
+		}
 		byte[] str_utf8 = new byte[str_utf8_size];
 		buf.get(str_utf8);
 		try {
