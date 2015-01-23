@@ -16,9 +16,8 @@ public class ButtonStyle
 	public Texture tex_hilight_center;
 	// Sizes
 	public float side_padding = 0f;
-	public float height = 0f;
-	public float scaling = 1f;
-	public float label_height = 0f;
+	public float bg_scaling = 1f;
+	public float label_scaling = 1f;
 	// Colors
 	public Color bg_color = Color.WHITE;
 	public Color bg_color_disabled = Color.GRAY;

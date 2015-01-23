@@ -92,63 +92,62 @@ public class Button extends Widget
 
 	protected void doRendering(SpriteBatch batch)
 	{
+		ButtonStyle style = getStyle();
+		int pixel_height = Math.max(Math.max(style.region_left.getRegionHeight(), style.region_right.getRegionHeight()), style.tex_center.getHeight());
+		
 		if (!enabled) {
-			batch.setColor(getStyle().bg_color_disabled);
+			batch.setColor(style.bg_color_disabled);
 		} else {
-			batch.setColor(getStyle().bg_color);
+			batch.setColor(style.bg_color);
 		}
-		float scale = getStyle().scaling;
 		// Render background
-		renderHorizontalBar(batch, getStyle().region_left, getStyle().side_padding, getStyle().region_right, getStyle().side_padding, getStyle().tex_center, getStyle().height, getPositionX(), getPositionY(), getWidth(), getHeight(), scale);
+		renderHorizontalBar(batch, style.region_left, style.side_padding, style.region_right, style.side_padding, style.tex_center, pixel_height, getPositionX(), getPositionY(), getWidth(), getHeight(), style.bg_scaling);
 		// Render possible hilights
 		if (pressed && enabled) {
 			batch.setColor(1, 1, 1, 1);
-			renderHorizontalBar(batch, getStyle().region_hilight_left, getStyle().side_padding, getStyle().region_hilight_right, getStyle().side_padding, getStyle().tex_hilight_center, getStyle().height, getPositionX(), getPositionY(), getWidth(), getHeight(), scale);
+			renderHorizontalBar(batch, style.region_hilight_left, style.side_padding, style.region_hilight_right, style.side_padding, style.tex_hilight_center, pixel_height, getPositionX(), getPositionY(), getWidth(), getHeight(), style.bg_scaling);
 		}
 		if (hilight) {
 			batch.setColor(1, 1, 1, 1);
-			renderHorizontalBar(batch, getStyle().region_hilight_left, getStyle().side_padding, getStyle().region_hilight_right, getStyle().side_padding, getStyle().tex_hilight_center, getStyle().height, getPositionX(), getPositionY(), getWidth(), getHeight(), scale);
+			renderHorizontalBar(batch, style.region_hilight_left, style.side_padding, style.region_hilight_right, style.side_padding, style.tex_hilight_center, pixel_height, getPositionX(), getPositionY(), getWidth(), getHeight(), style.bg_scaling);
 		}
 		// Render possible icon
 		if (icon != null) {
 			if (!enabled) {
-				batch.setColor(getStyle().icon_color_disabled);
+				batch.setColor(style.icon_color_disabled);
 			} else {
-				batch.setColor(getStyle().icon_color);
+				batch.setColor(style.icon_color);
 			}			
-			renderFromCenter(batch, icon, getPositionX() + getStyle().side_padding * scale, getCenterY(), scale);
+			renderFromCenter(batch, icon, getPositionX() + style.side_padding * style.bg_scaling, getCenterY(), style.bg_scaling);
 		}
 		// Render possible label
 		if (label != null) {
-			BitmapFont font = getStyle().font;
-			font.setScale(1);
-			float label_scale = getStyle().label_height / font.getLineHeight() * scale;
-			float draw_x = getPositionX() + getStyle().side_padding * scale;
+			BitmapFont font = style.font;
+			font.setScale(style.label_scaling);
+			float draw_x = getPositionX() + style.side_padding * style.bg_scaling;
 			if (icon != null) {
-				draw_x += getStyle().side_padding * scale;
+				draw_x += style.side_padding * style.bg_scaling;
 			}
 			if (!enabled) {
-				font.setColor(getStyle().label_color_disabled);
+				font.setColor(style.label_color_disabled);
 			} else {
-				font.setColor(getStyle().label_color);
+				font.setColor(style.label_color);
 			}			
-			font.setScale(label_scale);
-			font.draw(batch, label, draw_x, getPositionY() + ((getStyle().height) + getStyle().label_height) * scale / 2);
+			font.draw(batch, label, draw_x, getPositionY() + pixel_height * style.bg_scaling - (pixel_height * style.bg_scaling - font.getLineHeight()) / 2);
 		}
 		batch.setColor(1, 1, 1, 1);
 	}
 
 	protected float doGetMinWidth()
 	{
-		float min_width = getStyle().side_padding * 2f * getStyle().scaling;
+		ButtonStyle style = getStyle();
+		float min_width = style.side_padding * 2f * style.bg_scaling;
 		if (label != null) {
-			BitmapFont font = getStyle().font;
-			font.setScale(1);
-			float label_scale = getStyle().label_height / font.getLineHeight() * getStyle().scaling;
-			font.setScale(label_scale);
+			BitmapFont font = style.font;
+			font.setScale(style.label_scaling);
 			min_width += font.getBounds(label).width;
 			if (icon != null) {
-				min_width += getStyle().side_padding * getStyle().scaling;
+				min_width += style.side_padding * style.bg_scaling;
 			}
 		}
 		return min_width;
@@ -156,7 +155,9 @@ public class Button extends Widget
 
 	protected float doGetMinHeight(float width)
 	{
-		return getStyle().height * getStyle().scaling;
+		ButtonStyle style = getStyle();
+		int pixel_height = Math.max(Math.max(style.region_left.getRegionHeight(), style.region_right.getRegionHeight()), style.tex_center.getHeight());
+		return pixel_height * style.bg_scaling;
 	}
 
 	private static ButtonStyle default_style;
