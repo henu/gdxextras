@@ -6,15 +6,10 @@ import com.badlogic.gdx.files.FileHandle;
 
 public class FileHandleUtils
 {
-	public static FileHandle getRelativeFileHandle(FileHandle file_or_dir, String relative_path)
+	public static FileHandle getRelativeFileHandle(FileHandle dir, String relative_path)
 	{
 		StringTokenizer tokenizer = new StringTokenizer(relative_path, "\\/");
-		FileHandle result;
-		if (file_or_dir.isDirectory()) {
-			result = file_or_dir;
-		} else {
-			result = file_or_dir.parent();
-		}
+		FileHandle result = dir;
 		while (tokenizer.hasMoreElements()) {
 			String token = tokenizer.nextToken();
 			if (token.equals("..")) {
