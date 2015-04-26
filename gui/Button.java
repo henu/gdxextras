@@ -8,7 +8,6 @@ import com.badlogic.gdx.math.Vector2;
 // TODO: Make toggling on/off available!
 public class Button extends Widget
 {
-
 	// This is used to set default background and selected graphics for Button
 	public static void setDefaultStyle(ButtonStyle style)
 	{

@@ -1,13 +1,18 @@
 package fi.henu.gdxextras.gui;
 
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
-import fi.henu.gdxextras.Font;
 
 public class Textinput extends Widget
 {
-// TODO: BUG! If initial text is set, it is not shown until user changes it!
+	// TODO: BUG! If initial text is set, it is not shown until user changes it!
+	// This is used to set default style for Textinput
+	public static void setDefaultStyle(TextinputStyle style)
+	{
+		default_style = style;
+	}
 
 	// Event types
 	// TODO: Tab is so rare in mobile devices, so not not support it!
@@ -15,15 +20,15 @@ public class Textinput extends Widget
 	public static final int TAB_PRESSED = 1;
 	public static final int TEXT_CHANGED = 2;
 
-	public Textinput(float height, Font font)
+	public Textinput()
 	{
 		super();
 		
 		scrollbox = new Scrollbox();
 		scrollbox.setHorizontalExpanding(1);
-		scrollbox.setFixedMinimumHeight(height);
+		scrollbox.enableVerticalScrolling(false);
 
-		content = new Content(this, scrollbox, height, font);
+		content = new Content(this, scrollbox);
 		content.setHorizontalAlignment(Alignment.LEFT);
 		scrollbox.setWidget(content);
 		
@@ -50,11 +55,6 @@ public class Textinput extends Widget
 		return content.text;
 	}
 
-	public void setColor(Color color)
-	{
-		content.color.set(color);
-	}
-
 	public void setPassword(boolean password)
 	{
 		if (password) {
@@ -67,22 +67,17 @@ public class Textinput extends Widget
 		}
 	}
 
+	public void setMaxLength(int max_length)
+	{
+		this.max_length = max_length;
+	}
+
 	public void setActive(boolean active)
 	{
 		if (active) {
 			content.startListeningOfKeyboard();
 		} else {
 			content.stopListeningOfKeyboard();
-		}
-	}
-
-	// Give null to disable shadow
-	public void setShadow(Vector2 shadow)
-	{
-		if (shadow == null) {
-			content.shadow = null;
-		} else {
-			content.shadow = new Vector2(shadow);
 		}
 	}
 
@@ -104,12 +99,12 @@ public class Textinput extends Widget
 
 	protected float doGetMinHeight(float width)
 	{
-		return content.height;
+		return content.doGetMinHeight(0);
 	}
-	
+
 	private class Content extends Widget
 	{
-		public Content(Textinput textinput, Scrollbox scrollbox, float height, Font font)
+		public Content(Textinput textinput, Scrollbox scrollbox)
 		{
 			this.textinput = textinput;
 			this.scrollbox = scrollbox;
@@ -117,22 +112,21 @@ public class Textinput extends Widget
 			text = "";
 			cursor = 0;
 			password_text = null;
-			this.height = height;
-			this.font = font;
-			color = new Color(1, 1, 1, 1);
-			shadow = null;
 		}
 
 		public void scrollSoCursorIsShown()
 		{
+			BitmapFont font = getStyle().font;
+			font.setScale(getStyle().scaling);
+
 			// Get cursor specs in pixels
 			float cursor_pos_x_px;
 			if (password_text == null) {
-				cursor_pos_x_px = font.getStringWidth(text.substring(0, cursor), height);
+				cursor_pos_x_px = font.getBounds(text.substring(0, cursor)).width;
 			} else {
-				cursor_pos_x_px = font.getStringWidth("*", height) * cursor;
+				cursor_pos_x_px = font.getBounds("*").width * cursor;
 			}
-			float cursor_width_px = font.getStringWidth("_", height);
+			float cursor_width_px = font.getBounds("_").width;
 			
 			if (cursor_pos_x_px < scrollbox.getScrollX()) {
 				scrollbox.setScrollX(cursor_pos_x_px);
@@ -141,9 +135,9 @@ public class Textinput extends Widget
 			} else {
 				float text_width_px;
 				if (password_text == null) {
-					text_width_px = font.getStringWidth(text, height);
+					text_width_px = font.getBounds(text).width;
 				} else {
-					text_width_px = font.getStringWidth("*", height) * text.length();
+					text_width_px = font.getBounds("*").width * text.length();
 				}
 				float text_and_cursor_width_px = Math.max(text_width_px, cursor_pos_x_px + cursor_width_px);
 				if (scrollbox.getWidth() + scrollbox.getScrollX() > text_and_cursor_width_px) {
@@ -184,6 +178,11 @@ public class Textinput extends Widget
 			}
 			// Normal key
 			else {
+				// If maximum length is reached, then do nothing
+				if (max_length > 0 && text.length() >= max_length) {
+					return;
+				}
+
 				text = text.substring(0, cursor) + character + text.substring(cursor);
 				cursor ++;
 				scrollSoCursorIsShown();
@@ -196,6 +195,9 @@ public class Textinput extends Widget
 
 		public boolean pointerDown(int pointer_id, Vector2 pos)
 		{
+			BitmapFont font = getStyle().font;
+			font.setScale(getStyle().scaling);
+
 			String text_check;
 			if (password_text == null) {
 				text_check = text;
@@ -215,8 +217,8 @@ public class Textinput extends Widget
 					int halfpos = (search_begin + search_end) / 2;
 					String part1 = text_check.substring(search_begin, halfpos);
 					String part2 = text_check.substring(halfpos, search_end);
-					float part1_w = font.getStringWidth(part1, height);
-					float part2_w = font.getStringWidth(part2, height);
+					float part1_w = font.getBounds(part1).width;
+					float part2_w = font.getBounds(part2).width;
 					// Halve. If some of parts was only one character long,
 					// then it can decide where cursor should be located.
 					if (cursor_x < search_begin_x + part1_w) {
@@ -249,11 +251,18 @@ public class Textinput extends Widget
 			scrollSoCursorIsShown();
 
 			startListeningOfKeyboard();
+
 			return false;
 		}
 
 		protected void doRendering(SpriteBatch batch)
 		{
+			BitmapFont font = getStyle().font;
+			font.setScale(1);
+			float height = font.getLineHeight() * getStyle().scaling;
+			font.setScale(getStyle().scaling);
+			Vector2 shadow = getStyle().shadow;
+
 			String text_to_render;
 			if (password_text == null) {
 				text_to_render = text;
@@ -261,30 +270,36 @@ public class Textinput extends Widget
 				text_to_render = password_text;
 			}
 			if (shadow != null) {
-				font.renderString(batch, text_to_render, getPositionX() + shadow.x, getPositionY() + height + shadow.y, height, Color.BLACK);
+				font.setColor(Color.BLACK);
+				font.draw(batch, text_to_render, getPositionX() + shadow.x, getPositionY() + height + shadow.y);
 				if (listeningKeyboard()) {
-					float cursor_x = font.getStringWidth(text_to_render.substring(0, cursor), height);
-					font.renderString(batch, "_", getPositionX() + cursor_x + shadow.x, getPositionY() + height + shadow.y, height, Color.BLACK);
+					float cursor_x = font.getBounds(text_to_render.substring(0, cursor)).width;
+					font.draw(batch, "_", getPositionX() + cursor_x + shadow.x, getPositionY() + height + shadow.y);
 				}
 			}
-			font.renderString(batch, text_to_render, getPositionX(), getPositionY() + height, height, color);
+			font.setColor(getStyle().color);
+			font.draw(batch, text_to_render, getPositionX(), getPositionY() + height);
 			if (listeningKeyboard()) {
-				float cursor_x = font.getStringWidth(text_to_render.substring(0, cursor), height);
-				font.renderString(batch, "_", getPositionX() + cursor_x, getPositionY() + height, height, color);
+				float cursor_x = font.getBounds(text_to_render.substring(0, cursor)).width;
+				font.draw(batch, "_", getPositionX() + cursor_x, getPositionY() + height);
 			}
 		}
 
 		protected float doGetMinWidth()
 		{
+			BitmapFont font = getStyle().font;
+			font.setScale(getStyle().scaling);
+
 			if (password_text != null) {
-				return font.getStringWidth("*", height) * password_text.length() + font.getStringWidth("_", height);
+				return font.getBounds("*").width * password_text.length() + font.getBounds("_").width;
 			}
-			return font.getStringWidth(text + "_", height);
+			return font.getBounds(text + "_").width;
 		}
 
 		protected float doGetMinHeight(float width)
 		{
-			return height;
+			TextinputStyle textinput_style = textinput.getStyle();
+			return textinput_style.font.getLineHeight() * textinput_style.scaling;
 		}
 		
 		public void updatePasswordText()
@@ -303,14 +318,17 @@ public class Textinput extends Widget
 		public String text;
 		public int cursor;
 		public String password_text;
-		public float height;
-		public Font font;
-		public Color color;
-		private Vector2 shadow;
-
 	}
+
+	private static TextinputStyle default_style;
 	
 	private Scrollbox scrollbox;
 	Content content;
 
+	private int max_length;
+
+	private TextinputStyle getStyle()
+	{
+		return default_style;
+	}
 }
