@@ -1,16 +1,17 @@
 package fi.henu.gdxextras.gui;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 
 public abstract class Widget
 {
-
 	public enum Alignment {
 		LEFT, RIGHT, TOP, BOTTOM, CENTER
 	}
@@ -152,6 +153,11 @@ public abstract class Widget
 		return margin;
 	}
 
+	public void setBackgroundColor(Color color)
+	{
+		background_color = color;
+	}
+
 	// Returns this Widget or one of its children, whatever of them is topmost.
 	public Widget getTopmost(float x, float y)
 	{
@@ -266,9 +272,22 @@ public abstract class Widget
 
 	}
 
-	public void render(GL20 gl, SpriteBatch batch, int renderarea_pos_x, int renderarea_pos_y, int renderarea_width, int renderarea_height)
+	public void render(GL20 gl, SpriteBatch batch, ShapeRenderer shaperenderer, int renderarea_pos_x, int renderarea_pos_y, int renderarea_width, int renderarea_height)
 	{
 		if (visible && !shrunken) {
+
+			// Render possible background color
+			if (background_color != null) {
+				batch.end();
+				Gdx.gl.glEnable(GL20.GL_BLEND);
+				shaperenderer.begin(ShapeRenderer.ShapeType.Filled);
+				shaperenderer.setColor(background_color);
+				shaperenderer.rect(getPositionX(), getPositionY(), getWidth(), getHeight());
+				shaperenderer.end();
+				Gdx.gl.glDisable(GL20.GL_BLEND);
+				batch.begin();
+			}
+
 			// Render this Widget
 			doRendering(batch);
 			
@@ -333,7 +352,7 @@ public abstract class Widget
 			int children_size = children.size;
 			for (int child_id = 0; child_id < children_size; child_id++) {
 				Widget child = children_buf[child_id];
-				child.render(gl, batch, renderarea_pos_x, renderarea_pos_y, renderarea_width, renderarea_height);
+				child.render(gl, batch, shaperenderer, renderarea_pos_x, renderarea_pos_y, renderarea_width, renderarea_height);
 			}
 			
 			// Clear possible arealimit
@@ -621,6 +640,8 @@ public abstract class Widget
 	private Alignment align, valign;
 	private float fixed_min_width, fixed_min_height;
 	private float margin;
+
+	private Color background_color;
 
 	private Vector2 pos;
 	private Vector2 size;

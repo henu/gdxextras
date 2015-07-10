@@ -23,7 +23,7 @@ public class Textinput extends Widget
 	public Textinput()
 	{
 		super();
-		
+
 		scrollbox = new Scrollbox();
 		scrollbox.setHorizontalExpanding(1);
 		scrollbox.enableVerticalScrolling(false);
@@ -31,7 +31,7 @@ public class Textinput extends Widget
 		content = new Content(this, scrollbox);
 		content.setHorizontalAlignment(Alignment.LEFT);
 		scrollbox.setWidget(content);
-		
+
 		addChild(scrollbox);
 		markToNeedReposition();
 
@@ -108,7 +108,7 @@ public class Textinput extends Widget
 		{
 			this.textinput = textinput;
 			this.scrollbox = scrollbox;
-			
+
 			text = "";
 			cursor = 0;
 			password_text = null;
@@ -127,7 +127,7 @@ public class Textinput extends Widget
 				cursor_pos_x_px = font.getBounds("*").width * cursor;
 			}
 			float cursor_width_px = font.getBounds("_").width;
-			
+
 			if (cursor_pos_x_px < scrollbox.getScrollX()) {
 				scrollbox.setScrollX(cursor_pos_x_px);
 			} else if (cursor_pos_x_px + cursor_width_px > scrollbox.getWidth() + scrollbox.getScrollX()) {
@@ -247,7 +247,7 @@ public class Textinput extends Widget
 					}
 				} while (true);
 			}
-			
+
 			scrollSoCursorIsShown();
 
 			startListeningOfKeyboard();
@@ -298,10 +298,13 @@ public class Textinput extends Widget
 
 		protected float doGetMinHeight(float width)
 		{
-			TextinputStyle textinput_style = textinput.getStyle();
-			return textinput_style.font.getLineHeight() * textinput_style.scaling;
+			BitmapFont font = getStyle().font;
+			font.setScale(getStyle().scaling);
+
+			TextinputStyle textinput_style = getStyle();
+			return textinput_style.font.getLineHeight();
 		}
-		
+
 		public void updatePasswordText()
 		{
 			assert password_text != null;
@@ -321,7 +324,7 @@ public class Textinput extends Widget
 	}
 
 	private static TextinputStyle default_style;
-	
+
 	private Scrollbox scrollbox;
 	Content content;
 

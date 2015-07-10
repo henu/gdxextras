@@ -5,6 +5,7 @@ import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
@@ -26,8 +27,12 @@ public class Gui implements InputProcessor
 			batch.dispose();
 			batch = null;
 		}
+		if (shaperenderer != null) {
+			shaperenderer.dispose();
+			shaperenderer = null;
+		}
 	}
-	
+
 	public void setEventlistener(Eventlistener eventlistener)
 	{
 		this.eventlistener = eventlistener;
@@ -53,9 +58,10 @@ public class Gui implements InputProcessor
 		if (widget != null) {
 			widget.markToNeedReposition();
 		}
-		// Update projection of Spritebatch
+		// Update projection of Spritebatch and Shaperenderer
 		batch_projmatrix.setToOrtho2D(0, 0, width, height);
 		batch.setProjectionMatrix(batch_projmatrix);
+		shaperenderer.setProjectionMatrix(batch_projmatrix);
 	}
 
 	public void repositionWidgets()
@@ -67,7 +73,7 @@ public class Gui implements InputProcessor
 
 	public void render(GL20 gl)
 	{
-		if (batch == null || widget == null) {
+		if (batch == null || shaperenderer == null || widget == null) {
 			return;
 		}
 
@@ -77,7 +83,7 @@ public class Gui implements InputProcessor
 		}
 
 		batch.begin();
-		widget.render(gl, batch, 0, 0, -1, -1);
+		widget.render(gl, batch, shaperenderer, 0, 0, -1, -1);
 		batch.end();
 
 		if (cull_face_enabled) {
@@ -264,7 +270,7 @@ public class Gui implements InputProcessor
 		if (widget_here == null) {
 			return;
 		}
-		
+
 		// Pointer down event
 		if (widget_here.pointerDown(pointer_id, down_pos)) {
 
@@ -272,7 +278,7 @@ public class Gui implements InputProcessor
 			assert pointer_id < widgets_topmost.size;
 			Widget old_topmost = widgets_topmost.items[pointer_id];
 			widgets_topmost.items[pointer_id] = widget_here;
-			
+
 			while (pointer_id >= pointerlisteners.size) {
 				pointerlisteners.add(null);
 			}
@@ -283,12 +289,12 @@ public class Gui implements InputProcessor
 			if (!down_pos.equals(up_pos)) {
 				widget_here.pointerMove(pointer_id, up_pos);
 			}
-			
+
 			// Finally up event, but just for the Widget that listens it.
 			if (pointer_id < pointerlisteners.size && pointerlisteners.get(pointer_id) != null) {
 				pointerlisteners.get(pointer_id).pointerUp(pointer_id, up_pos);
 			}
-			
+
 			// Resume correct topmost widget
 			widgets_topmost.items[pointer_id] = old_topmost;
 		}
@@ -310,6 +316,7 @@ public class Gui implements InputProcessor
 
 	private SpriteBatch batch = new SpriteBatch();
 	private Matrix4 batch_projmatrix = new Matrix4();
+	private ShapeRenderer shaperenderer = new ShapeRenderer();
 
 	// The Widget and the possible pointerlistener. If pointerlistener
 	// is set, then all events are delivered to it.
@@ -317,14 +324,14 @@ public class Gui implements InputProcessor
 	private Array<Widget> widgets_topmost = new Array<Widget>(true, 0, Widget.class);
 	private Array<Widget> pointerlisteners = new Array<Widget>();
 	private Widget keyboardlistener = null;
-	
+
 	// Listener for special events, like back button, etc.
 	private Eventlistener eventlistener = null;
 
 	// Mouse position is used to find correct
 	// Widget to receive scroll wheel events.
 	private Vector2 mouse_last_pos = new Vector2(0, 0);
-	
+
 	private Vector2 v2tmp = new Vector2();
 
 	private void storeTopmostWidget(int pointer_id, Widget topmost)
