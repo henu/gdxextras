@@ -131,7 +131,7 @@ public class Button extends Widget
 				font.setColor(style.label_color_disabled);
 			} else {
 				font.setColor(style.label_color);
-			}			
+			}
 			font.draw(batch, label, draw_x, getPositionY() + pixel_height * style.bg_scaling - (pixel_height * style.bg_scaling - font.getLineHeight()) / 2);
 		}
 		batch.setColor(1, 1, 1, 1);

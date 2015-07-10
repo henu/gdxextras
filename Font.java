@@ -47,25 +47,25 @@ public class Font extends BitmapFont
 		FreeTypeFontGenerator new_font = new FreeTypeFontGenerator(fh);
 		fonts.add(new_font);
 	}
-	
+
 	// This resets font. Next time the font is used, it needs to
 	// re-create all Textures and glyphs to them. This should be called
-	// when application is put background and OpenGL context is lost. 
+	// when application is put background and OpenGL context is lost.
 	public void reset()
 	{
 		regions.clear();
-		
+
 		for (int tex_id = 0; tex_id < texs.size; tex_id ++) {
 			Texture tex = texs.items[tex_id];
 			tex.dispose();
 		}
 		texs.clear();
-		
+
 		next_glyph_x = 0;
 		next_glyph_y = 0;
 		tallest_glyph_at_row = 0;
 	}
-	
+
 	@Override
 	public void setScale(float scale_x, float scale_y)
 	{
@@ -90,13 +90,13 @@ public class Font extends BitmapFont
 	{
 		setColor(color.r, color.g, color.b, color.a);
 	}
-	
+
 	@Override
 	public void setColor(float color)
 	{
 		setColor(color, color, color, 1f);
 	}
- 
+
 	@Override
 	public void setColor(float r, float g, float b, float a)
 	{
@@ -107,7 +107,7 @@ public class Font extends BitmapFont
 	public 	TextBounds draw(Batch batch, CharSequence str, float x, float y)
 	{
 		float draw_pixelheight = pixelheight * scaling_y;
-	
+
 // TODO: Support scaling X component!
 		renderString(batch, str.toString(), x, y, draw_pixelheight, color);
 
@@ -149,7 +149,7 @@ public class Font extends BitmapFont
 	{
 		return getBounds(str.subSequence(start, end), textBounds);
 	}
-	
+
 	@Override
 	public float getLineHeight()
 	{
@@ -170,10 +170,10 @@ public class Font extends BitmapFont
 
 		batch.setColor(color);
 		for (int str_idx = 0; str_idx < str.length(); str_idx++) {
-			Integer codepoint = new Integer(str.codePointAt(str_idx));
+			Integer codepoint = str.codePointAt(str_idx);
 
 			// In case of newline
-			if (codepoint.intValue() == 0x0a) {
+			if (codepoint == 0x0a) {
 				draw_x = 0;
 				draw_y -= pixelheight;
 				continue;
@@ -198,17 +198,17 @@ public class Font extends BitmapFont
 	public float getStringWidth(CharSequence str_raw, float pixelheight)
 	{
 		String str = str_raw.toString();
-		
+
 		float max_line = 0;
 		float current_line = 0;
 
 		float scale = pixelheight / this.pixelheight;
 
 		for (int str_idx = 0; str_idx < str.length(); str_idx++) {
-			Integer codepoint = new Integer(str.codePointAt(str_idx));
+			Integer codepoint = str.codePointAt(str_idx);
 
 			// In case of newline
-			if (codepoint.intValue() == 0x0a) {
+			if (codepoint == 0x0a) {
 				max_line = Math.max(max_line, current_line);
 				current_line = 0;
 				continue;
@@ -224,7 +224,7 @@ public class Font extends BitmapFont
 		}
 		return Math.max(max_line, current_line);
 	}
-	
+
 	private static final int TEXTURE_WIDTH = 256;
 	private static final int PADDING = 2;
 	private static final float GLYPH_REAL_WIDTH_MULTIPLIER = 1000f;
@@ -233,7 +233,7 @@ public class Font extends BitmapFont
 
 	private Color color;
 	private float scaling_x;
-	private float scaling_y; 
+	private float scaling_y;
 
 	private Glyphmodifier glyphmodifier;
 
@@ -268,9 +268,9 @@ public class Font extends BitmapFont
 		// glyph" if no proper glyph could be found from any other fonts.
 		for (int font_id = 0; font_id <= fonts.size; font_id++) {
 			FreeTypeFontGenerator font = fonts.get(font_id % fonts.size);
-			
-			int c = codepoint.intValue();
-			
+
+			int c = codepoint;
+
 			// Try to find glyph from this font. If no proper
 			// glyph was found, then try the next font
 			FreeTypeFontGenerator.GlyphAndBitmap gnbm = font.generateGlyphAndBitmap(c, font.scaleForPixelHeight(pixelheight), false);
@@ -283,7 +283,7 @@ public class Font extends BitmapFont
 			float offset_x = glyph.xoffset;
 			float offset_y = glyph.yoffset;
 			float advance = glyph.xadvance;
-			
+
 			// For example with space, there is no bitmap. In this
 			// case, mark pixmap to be null. This will spawn empty
 			// region that will have its originalWidth the advance
@@ -294,7 +294,7 @@ public class Font extends BitmapFont
 			} else {
 				glyph_pixmap = null;
 			}
-			
+
 			// Apply possible glyph modifier
 			if (glyphmodifier != null) {
 				Vector2 offset = new Vector2(offset_x, offset_y);
@@ -304,10 +304,10 @@ public class Font extends BitmapFont
 			}
 
 			AtlasRegion region = drawGlyphToTexture(glyph_pixmap, offset_x, offset_y, advance);
-			
+
 			// Clean
 			glyph_pixmap.dispose();
-			
+
 			return region;
 
 		}
@@ -335,7 +335,7 @@ public class Font extends BitmapFont
 		if (texs.size == 0) {
 			spawnNewTexture();
 		}
-		
+
 		// Special case, when there is nothing
 		// to draw, but advance is still needed.
 		if (glyph == null) {

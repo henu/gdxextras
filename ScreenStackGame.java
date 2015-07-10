@@ -56,6 +56,7 @@ public abstract class ScreenStackGame extends Game
 		}
 	}
 
+	@Override
 	public void dispose()
 	{
 		// Clear screens
@@ -66,9 +67,10 @@ public abstract class ScreenStackGame extends Game
 			screen.dispose();
 		}
 		screens.clear();
+		setScreen(null);
+		super.dispose();
 	}
 
 	// Stack of screens
 	private Array<Screen> screens = new Array<Screen>(true, 0, Screen.class);
-
 }

@@ -48,7 +48,7 @@ public class Meshcombiner
 		Map<String, Integer> attrs_usages = new HashMap<String, Integer>();
 		for (int attr_id = 0; attr_id < mesh0_attrs.size(); attr_id++) {
 			VertexAttribute attr = mesh0_attrs.get(attr_id);
-			attrs_usages.put(attr.alias, new Integer(attr.usage));
+			attrs_usages.put(attr.alias, attr.usage);
 			// Update size of single vertex
 			if (attr.usage == Usage.ColorPacked) {
 				vrt_size += 1;

@@ -52,15 +52,13 @@ public class Knob extends Widget
 	public void pointerMove(int pointer_id, Vector2 pos)
 	{
 		if (pointer_id == 0) {
-			if (pointer_id == 0) {
-				float new_angle = getAngleToPointer(pos);
-				float diff_angle = new_angle - pressed_angle;
-				pressed_angle = new_angle;
-				diff_angle = Mathutils.fixAngle(diff_angle);
-				angle = Mathutils.fixAngle(angle + diff_angle);
-				if (diff_angle != 0) {
-					fireEvent();
-				}
+			float new_angle = getAngleToPointer(pos);
+			float diff_angle = new_angle - pressed_angle;
+			pressed_angle = new_angle;
+			diff_angle = Mathutils.fixAngle(diff_angle);
+			angle = Mathutils.fixAngle(angle + diff_angle);
+			if (diff_angle != 0) {
+				fireEvent();
 			}
 		}
 	}

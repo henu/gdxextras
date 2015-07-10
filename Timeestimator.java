@@ -5,13 +5,13 @@ public class Timeestimator
 
 	public void start(int target)
 	{
-		started = System.currentTimeMillis();
+		long started = System.currentTimeMillis();
 		this.target = target;
-		last_speed_update = this.started;
+		last_speed_update = started;
 		value_now = 0;
 		speed = 0;
 		value_since_last_speedupdate = 0;
-		last_update_time = this.started;
+		last_update_time = started;
 	}
 
 	public void add(int value)
@@ -59,7 +59,6 @@ public class Timeestimator
 
 	private static final int SPEED_UPDATE_INTERVAL_MS = 5 * 1000;
 
-	private long started;
 	private int target;
 	private int value_now;
 	private long last_update_time;

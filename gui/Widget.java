@@ -66,7 +66,7 @@ public abstract class Widget
 		}
 		this.shrunken = shrunken;
 	}
-	
+
 	public boolean isShrunken()
 	{
 		return shrunken;
@@ -77,17 +77,17 @@ public abstract class Widget
 	{
 		this.pointerevents_enabled = pointerevents_enabled;
 	}
-	
+
 	public boolean getPointerEvents()
 	{
 		return pointerevents_enabled;
 	}
-	
+
 	public void setBeTopmostBeforeChildren(boolean be_topmost_before_children)
 	{
 		this.be_topmost_before_children = be_topmost_before_children;
 	}
-	
+
 	public boolean getBeTopmostBeforeChildren() {
 		return be_topmost_before_children;
 	}
@@ -123,7 +123,7 @@ public abstract class Widget
 		}
 		fixed_min_width = min_width;
 	}
-	
+
 	public void setFixedMinimumHeight(float min_height)
 	{
 		if (fixed_min_height != min_height) {
@@ -141,7 +141,7 @@ public abstract class Widget
 	{
 		return expanding_vert;
 	}
-	
+
 	public void setMargin(float margin)
 	{
 		this.margin = margin;
@@ -171,7 +171,7 @@ public abstract class Widget
 		if (x < getPositionX() || x > getPositionX() + getWidth() || y < getPositionY() || y > getPositionY() + getHeight()) {
 			return null;
 		}
-		
+
 		if (be_topmost_before_children && pointerevents_enabled && isOver(x, y)) {
 			return this;
 		}
@@ -230,7 +230,7 @@ public abstract class Widget
 			reposition_needed = false;
 			return;
 		}
-		
+
 		// Apply margin
 		x += margin;
 		y += margin;
@@ -290,7 +290,7 @@ public abstract class Widget
 
 			// Render this Widget
 			doRendering(batch);
-			
+
 			// Check if this Widget limits rendering of its children
 			boolean arealimit_was_just_set = false;
 			if (children_arealimit) {
@@ -315,27 +315,27 @@ public abstract class Widget
 					int new_renderarea_pos_y = (int)(children_arealimit_pos.y + 0.5f);
 					int new_renderarea_width = (int)(children_arealimit_pos.x + children_arealimit_size.x + 0.5f) - renderarea_pos_x;
 					int new_renderarea_height = (int)(children_arealimit_pos.y + children_arealimit_size.y + 0.5f) - renderarea_pos_y;
-					
+
 					// Check if left edge needs to be moved
 					if (new_renderarea_pos_x > renderarea_pos_x) {
-						renderarea_width -= (new_renderarea_pos_x - renderarea_pos_x); 
-						renderarea_pos_x = new_renderarea_pos_x; 
+						renderarea_width -= (new_renderarea_pos_x - renderarea_pos_x);
+						renderarea_pos_x = new_renderarea_pos_x;
 						update_arealimit = true;
 					}
 					// Check if right edge needs to be moved
 					if (new_renderarea_pos_x + new_renderarea_width < renderarea_pos_x + renderarea_width) {
-						renderarea_width -= ((renderarea_pos_x + renderarea_width) - (new_renderarea_pos_x + new_renderarea_width)); 
+						renderarea_width -= ((renderarea_pos_x + renderarea_width) - (new_renderarea_pos_x + new_renderarea_width));
 						update_arealimit = true;
 					}
 					// Check if bottom edge needs to be moved
 					if (new_renderarea_pos_y > renderarea_pos_y) {
-						renderarea_height -= (new_renderarea_pos_y - renderarea_pos_y); 
-						renderarea_pos_y = new_renderarea_pos_y; 
+						renderarea_height -= (new_renderarea_pos_y - renderarea_pos_y);
+						renderarea_pos_y = new_renderarea_pos_y;
 						update_arealimit = true;
 					}
 					// Check if top edge needs to be moved
 					if (new_renderarea_pos_y + new_renderarea_height < renderarea_pos_y + renderarea_height) {
-						renderarea_height -= ((renderarea_pos_y + renderarea_height) - (new_renderarea_pos_y + new_renderarea_height)); 
+						renderarea_height -= ((renderarea_pos_y + renderarea_height) - (new_renderarea_pos_y + new_renderarea_height));
 						update_arealimit = true;
 					}
 
@@ -344,9 +344,9 @@ public abstract class Widget
 						gl.glScissor(renderarea_pos_x, renderarea_pos_y, renderarea_width, renderarea_height);
 						batch.begin();
 					}
-				}				
+				}
 			}
-			
+
 			// Render children
 			Widget[] children_buf = children.items;
 			int children_size = children.size;
@@ -354,7 +354,7 @@ public abstract class Widget
 				Widget child = children_buf[child_id];
 				child.render(gl, batch, shaperenderer, renderarea_pos_x, renderarea_pos_y, renderarea_width, renderarea_height);
 			}
-			
+
 			// Clear possible arealimit
 			if (arealimit_was_just_set) {
 				batch.end();
@@ -451,7 +451,7 @@ public abstract class Widget
 
 	protected int getHorizontalExpandingForRepositioning()
 	{
-		if (shrunken) return 0; 
+		if (shrunken) return 0;
 		return expanding_horiz;
 	}
 
@@ -606,7 +606,7 @@ public abstract class Widget
 		float extra_y = space_height - region.originalHeight * scale;
 		render(batch, region, x + extra_x * align_x, y + extra_y * align_y, scale);
 	}
-	
+
 	protected static void renderAndRepeatTexture(SpriteBatch batch, Texture tex, float x, float y, float width, float height, float scale)
 	{
 		float tex_x = width / tex.getWidth() / scale;
@@ -622,8 +622,7 @@ public abstract class Widget
 		}
 		float lightness = 0.8f;
 		float color_value = (color.r + color.g + color.b) / 3;
-		Color result = new Color(color_value * lightness, color_value * lightness, color_value * lightness, 1);
-		return result;
+		return new Color(color_value * lightness, color_value * lightness, color_value * lightness, 1);
 	}
 
 	private Gui gui;

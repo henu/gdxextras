@@ -9,7 +9,7 @@ public class Vectorcontainer extends Widget
 
 	public enum Direction {
 		HORIZONTAL, VERTICAL
-	};
+	}
 
 	public Vectorcontainer()
 	{

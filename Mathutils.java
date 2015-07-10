@@ -96,12 +96,7 @@ public class Mathutils
 		}
 
 		// Check if all values should be turned 180°.
-		boolean turn180;
-		if (max_angle - min_angle > 180) {
-			turn180 = true;
-		} else {
-			turn180 = false;
-		}
+		boolean turn180 = max_angle - min_angle > 180;
 
 		// Now calculate average angle, and turn 180° if necessary. Also
 		// calculate new minimum and maximum. If again bigger than 180°

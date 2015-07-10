@@ -11,8 +11,8 @@ public class Shadermanager
 {
 	public Shadermanager(String vertexshader_code, String fragmentshader_code)
 	{
-		this.vertexshader_code = new String(vertexshader_code);
-		this.fragmentshader_code = new String(fragmentshader_code);
+		this.vertexshader_code = vertexshader_code;
+		this.fragmentshader_code = fragmentshader_code;
 		shaders = new HashMap<TreeSet<String>, ShaderProgram>();
 	}
 
