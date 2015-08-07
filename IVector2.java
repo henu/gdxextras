@@ -4,9 +4,9 @@ import java.nio.ByteBuffer;
 
 public class IVector2 implements Byteserializable
 {
-	
+
 	public int x, y;
-	
+
 	public IVector2()
 	{
 		x = 0;
@@ -18,7 +18,7 @@ public class IVector2 implements Byteserializable
 		this.x = x;
 		this.y = y;
 	}
-	
+
 	public IVector2(IVector2 v)
 	{
 		x = v.x;
@@ -41,7 +41,7 @@ public class IVector2 implements Byteserializable
 	{
 		return "(" + x + ", " + y + ")";
 	}
-	
+
 	@Override
 	public final boolean equals(Object o)
 	{
@@ -108,7 +108,7 @@ public class IVector2 implements Byteserializable
 	@Override
 	public void serializeToBytes(Bytes bytes)
 	{
-		bytes.push(x);
-		bytes.push(y);
+		bytes.pushInt(x);
+		bytes.pushInt(y);
 	}
 }

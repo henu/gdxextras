@@ -6,7 +6,7 @@ import java.nio.charset.Charset;
 
 public class Bytes
 {
-	
+
 	public boolean empty()
 	{
 		return items == 0;
@@ -22,42 +22,42 @@ public class Bytes
 		items = 0;
 	}
 
-	public void push(byte b)
+	public void pushByte(byte b)
 	{
 		ensureAvailable(1);
 		buf[items] = b;
 		items ++;
 	}
 
-	public void push(short s)
+	public void pushShort(short s)
 	{
 		tmp_bb.clear();
 		tmp_bb.putShort(s);
 		pushFromTemporaryByteBuffer();
 	}
 
-	public void push(int i)
+	public void pushInt(int i)
 	{
 		tmp_bb.clear();
 		tmp_bb.putInt(i);
 		pushFromTemporaryByteBuffer();
 	}
 
-	public void push(long l)
+	public void pushLong(long l)
 	{
 		tmp_bb.clear();
 		tmp_bb.putLong(l);
 		pushFromTemporaryByteBuffer();
 	}
 
-	public void push(float f)
+	public void pushFloat(float f)
 	{
 		tmp_bb.clear();
 		tmp_bb.putFloat(f);
 		pushFromTemporaryByteBuffer();
 	}
 
-	public void push(Byteserializable serializable)
+	public void pushByteserializable(Byteserializable serializable)
 	{
 		serializable.serializeToBytes(this);
 	}
@@ -74,20 +74,20 @@ public class Bytes
 	// This will also push length of string to bytes, when encoded with
 	// UTF-8. This will take four extra bytes and it will be located
 	// before actual string. null is considered as empty string.
-	public void push(String str)
+	public void pushString(String str)
 	{
 		if (str == null) {
-			push((int)0);
+			pushInt(0);
 			return;
 		}
 		byte[] str_bytes_utf8 = str.getBytes(Charset.forName("UTF-8"));
-		push((int)str_bytes_utf8.length);
+		pushInt(str_bytes_utf8.length);
 		ensureAvailable(str_bytes_utf8.length);
 		System.arraycopy(str_bytes_utf8, 0, buf, items, str_bytes_utf8.length);
 		items += str_bytes_utf8.length;
 	}
 
-	public void push(byte[] bytes)
+	public void pushBytes(byte[] bytes)
 	{
 		ensureAvailable(bytes.length);
 		System.arraycopy(bytes, 0, buf, items, bytes.length);
@@ -137,7 +137,7 @@ public class Bytes
 	private byte[] buf = null;
 	private int items = 0;
 	private int alloc = 0;
-	
+
 	private ByteBuffer tmp_bb = ByteBuffer.allocate(8);
 
 	private void pushFromTemporaryByteBuffer()
