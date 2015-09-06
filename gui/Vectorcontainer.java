@@ -76,86 +76,121 @@ public class Vectorcontainer extends Widget
 		}
 
 		Widget[] widgets_buf = widgets.items;
-		int widgets_size = widgets.size;
 
 		if (dir == Direction.HORIZONTAL) {
-			float min_width = getMinWidth();
-			float space_left = getWidth() - min_width;
-			if (space_left < 0f) space_left = 0f;
 			// Calculate total expanding, so relative expandings
 			// of widgets can be calculated.
 			int total_expanding = 0;
-			for (int widget_id = 0; widget_id < widgets_size; widget_id ++) {
+			int non_shrunked_widgets = 0;
+			for (int widget_id = 0; widget_id < widgets.size; widget_id ++) {
 				Widget widget = widgets_buf[widget_id];
 				total_expanding += widget.getHorizontalExpandingForRepositioning();
+				if (!widget.isShrunken()) {
+					++ non_shrunked_widgets;
+				}
 			}
-			float pos_x = 0f;
-			float space_distributed = 0f;
-			for (int widget_id = 0; widget_id < widgets_size; widget_id++) {
+			if (non_shrunked_widgets == 0) {
+				return;
+			}
+			// Check if any of the widgets requires extra space
+			float extra_space_required = 0f;
+			for (int widget_id = 0; widget_id < widgets.size; widget_id++) {
 				Widget widget = widgets_buf[widget_id];
-				float child_width = widget.getMinWidth();
+				float child_min_width = widget.getMinWidth();
+				float child_reserved_width = 0f;
+				if (total_expanding > 0) {
+					child_reserved_width = getWidth() * widget.getHorizontalExpandingForRepositioning() / total_expanding;
+				} else if (!widget.isShrunken()) {
+					child_reserved_width = getWidth() / non_shrunked_widgets;
+				}
+				extra_space_required += Math.max(0f, child_min_width - child_reserved_width);
+			}
+			float space_left = getWidth();
+			float space_to_spread = (getWidth() - extra_space_required * 2);
+			// Do the actual repositioning
+			float pos_x = 0f;
+			for (int widget_id = 0; widget_id < widgets.size; widget_id++) {
+				Widget widget = widgets_buf[widget_id];
+				float child_min_width = widget.getMinWidth();
+				float child_width = 0f;
 				// If this is last widget, then give
 				// all of remaining space to it.
-				if (widget_id == widgets_size - 1) {
-					child_width += space_left;
+				if (widget_id == widgets.size - 1) {
+					child_width = Math.max(child_min_width, space_left);
 				}
-				// Use expanding value to calculate the size
-				// of portion that this widget gets.
-				else {
+				else if (!widget.isShrunken()) {
+					// Use expanding value to calculate the size
+					// of portion that this widget gets.
 					float portion;
 					// If every Widget has expanding zero, then
 					// distribute remaining space equally.
 					if (total_expanding == 0) {
-						portion = 1f / widgets_size;
+						portion = 1f / non_shrunked_widgets;
 					} else {
 						portion = widget.getHorizontalExpandingForRepositioning() / (float)total_expanding;
 					}
-					float space = (space_left + space_distributed) * portion;
-					if (space > space_left) space = space_left;
-					child_width += space;
-					space_left -= space;
-					space_distributed += space;
+					child_width = Math.max(0f, space_to_spread * portion);
+					child_width = Math.max(child_width, widget.getMinWidth());
+					space_left -= child_width;
 				}
 				repositionChild(widget, getPositionX() + pos_x, getPositionY() + 0f, child_width, getHeight());
 				pos_x += child_width;
 			}
 		} else {
-			float min_height = getMinHeight(getWidth());
-			float space_left = getHeight() - min_height;
-			if (space_left < 0f) space_left = 0f;
 			// Calculate total expanding, so relative expandings
 			// of widgets can be calculated.
 			int total_expanding = 0;
-			for (int widget_id = 0; widget_id < widgets_size; widget_id++) {
+			int non_shrunked_widgets = 0;
+			for (int widget_id = 0; widget_id < widgets.size; widget_id++) {
 				Widget widget = widgets_buf[widget_id];
 				total_expanding += widget.getVerticalExpandingForRepositioning();
+				if (!widget.isShrunken()) {
+					++ non_shrunked_widgets;
+				}
 			}
-			float pos_y = 0f;
-			float space_distributed = 0f;
-			for (int widget_id = 0; widget_id < widgets_size; widget_id++) {
+			if (non_shrunked_widgets == 0) {
+				return;
+			}
+			// Check if any of the widgets requires extra space
+			float extra_space_required = 0f;
+			for (int widget_id = 0; widget_id < widgets.size; widget_id++) {
 				Widget widget = widgets_buf[widget_id];
-				float child_height = widget.getMinHeight(getWidth());
+				float child_min_height = widget.getMinHeight(getWidth());
+				float child_reserved_height = 0f;
+				if (total_expanding > 0) {
+					child_reserved_height = getHeight() * widget.getVerticalExpandingForRepositioning() / total_expanding;
+				} else if (!widget.isShrunken()) {
+					child_reserved_height = getHeight() / non_shrunked_widgets;
+				}
+				extra_space_required += Math.max(0f, child_min_height - child_reserved_height);
+			}
+			float space_left = getHeight();
+			float space_to_spread = (getHeight() - extra_space_required * 2);
+			// Do the actual repositioning
+			float pos_y = 0f;
+			for (int widget_id = 0; widget_id < widgets.size; widget_id++) {
+				Widget widget = widgets_buf[widget_id];
+				float child_min_height = widget.getMinHeight(getWidth());
+				float child_height = 0f;
 				// If this is last widget, then give
 				// all of remaining space to it.
-				if (widget_id == widgets_size - 1) {
-					child_height += space_left;
+				if (widget_id == widgets.size - 1) {
+					child_height = Math.max(child_min_height, space_left);
 				}
-				// Use expanding value to calculate the size
-				// of portion that this widget gets.
-				else {
+				else if (!widget.isShrunken()) {
+					// Use expanding value to calculate the size
+					// of portion that this widget gets.
 					float portion;
 					// If every Widget has expanding zero, then
 					// distribute remaining space equally.
 					if (total_expanding == 0) {
-						portion = 1f / widgets_size;
+						portion = 1f / non_shrunked_widgets;
 					} else {
 						portion = widget.getVerticalExpandingForRepositioning() / (float)total_expanding;
 					}
-					float space = (space_left + space_distributed) * portion;
-					if (space > space_left) space = space_left;
-					child_height += space;
-					space_left -= space;
-					space_distributed += space;
+					child_height = Math.max(0f, space_to_spread * portion);
+					child_height = Math.max(child_height, widget.getMinHeight(getWidth()));
+					space_left -= child_height;
 				}
 				repositionChild(widget, getPositionX() + 0f, getPositionY() + getHeight() - child_height - pos_y, getWidth(), child_height);
 				pos_y += child_height;
