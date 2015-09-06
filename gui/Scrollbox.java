@@ -29,7 +29,7 @@ public class Scrollbox extends Widget
 		}
 		markToNeedReposition();
 	}
-	
+
 	public void setHorizontalOrigin(Alignment origin)
 	{
 		if (origin != Alignment.LEFT && origin != Alignment.RIGHT) {
@@ -37,7 +37,7 @@ public class Scrollbox extends Widget
 		}
 		origin_horiz = origin;
 	}
-	
+
 	public void setVerticalOrigin(Alignment origin)
 	{
 		if (origin != Alignment.TOP && origin != Alignment.BOTTOM) {
@@ -45,10 +45,10 @@ public class Scrollbox extends Widget
 		}
 		origin_vert = origin;
 	}
-	
+
 	public Alignment getHorizontalOrigin() { return origin_horiz; }
 	public Alignment getVerticalOrigin() { return origin_vert; }
-	
+
 	public void setScroll(Vector2 scroll)
 	{
 		setScroll(scroll.x, scroll.y);
@@ -200,21 +200,21 @@ public class Scrollbox extends Widget
 		float old_scroll_bottomleft_x = scroll_bottomleft.x;
 		float old_scroll_bottomleft_y = scroll_bottomleft.y;
 		// X scrolling
-		if (widget.getWidth() > getWidth()) {
+		if (widget.getWidth() + widget.getMargin() * 2 > getWidth()) {
 			scroll_bottomleft.x = scroll_when_pointer_was_pressed.x + pointer_down_pos.x - pos.x;
 			if (scroll_bottomleft.x < 0) {
 				scroll_bottomleft.x = 0;
-			} else if (scroll_bottomleft.x > widget.getWidth() - getWidth()) {
-				scroll_bottomleft.x = widget.getWidth() - getWidth();
+			} else if (scroll_bottomleft.x > widget.getWidth() + widget.getMargin() * 2 - getWidth()) {
+				scroll_bottomleft.x = widget.getWidth() + widget.getMargin() * 2 - getWidth();
 			}
 		}
 		// Y scrolling
-		if (widget.getHeight() > getHeight()) {
+		if (widget.getHeight() + widget.getMargin() * 2 > getHeight()) {
 			scroll_bottomleft.y = scroll_when_pointer_was_pressed.y + pointer_down_pos.y - pos.y;
 			if (scroll_bottomleft.y < 0) {
 				scroll_bottomleft.y = 0;
-			} else if (scroll_bottomleft.y > widget.getHeight() - getHeight()) {
-				scroll_bottomleft.y = widget.getHeight() - getHeight();
+			} else if (scroll_bottomleft.y > widget.getHeight() + widget.getMargin() * 2 - getHeight()) {
+				scroll_bottomleft.y = widget.getHeight() + widget.getMargin() * 2 - getHeight();
 			}
 		}
 		// Update another scroll value too
@@ -231,7 +231,7 @@ public class Scrollbox extends Widget
 		assert pointer_id == 0;
 		assert widget != null;
 		unregisterPointerListener(pointer_id);
-		
+
 		// If pointer moved only small amount, then consider this as a click to the child.
 		if (pos.dst2(pointer_down_pos) <= CLICK_TO_CHILD_DRAG_THRESHOLD * CLICK_TO_CHILD_DRAG_THRESHOLD) {
 			generateDragEventToChildren(widget, pointer_id, pos, pos);
@@ -251,7 +251,7 @@ public class Scrollbox extends Widget
 
 		float width = Math.max(widget.getMinWidth(), getWidth());
 		float height = Math.max(widget.getMinHeight(width), getHeight());
-		
+
 		// If scrolling values are not sync, then sync them
 		if (Math.abs(scroll_bottomleft.x + getWidth() + scroll_topright.x - width) > 0.5f) {
 			if (origin_horiz == Alignment.LEFT) {
@@ -267,9 +267,9 @@ public class Scrollbox extends Widget
 				scroll_bottomleft.y = height - scroll_topright.y - getHeight();
 			}
 		}
-		
+
 		repositionChild(widget, getPositionX() - scroll_bottomleft.x, getPositionY() - scroll_bottomleft.y, width, height);
-		
+
 		// Request rendering and pointing limit for children
 		enableArealimitForChildren(getPositionX(), getPositionY(), getWidth(), getHeight());
 	}
@@ -298,7 +298,7 @@ public class Scrollbox extends Widget
 
 	private Vector2 scroll_bottomleft = new Vector2(0, 0);
 	private Vector2 scroll_topright = new Vector2(0, 0);
-	
+
 	private Alignment origin_horiz;
 	private Alignment origin_vert;
 
