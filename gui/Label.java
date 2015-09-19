@@ -8,7 +8,6 @@ import com.badlogic.gdx.utils.Array;
 
 public class Label extends Widget
 {
-
 	public static void setDefaultStyle(LabelStyle style)
 	{
 		default_style = style;
@@ -27,12 +26,12 @@ public class Label extends Widget
 		this.text = text;
 		markToNeedReposition();
 	}
-	
+
 	public void setTextAlignment(Alignment align)
 	{
 		text_align = align;
 	}
-	
+
 	public void setMultiline(boolean multiline)
 	{
 		if (this.multiline != multiline) {
@@ -40,7 +39,12 @@ public class Label extends Widget
 		}
 		this.multiline = multiline;
 	}
-	
+
+	public void setStyle(LabelStyle style)
+	{
+		this.style = style;
+	}
+
 	protected void doRendering(SpriteBatch batch)
 	{
 		// Get font and scale it correctly
@@ -65,7 +69,7 @@ public class Label extends Widget
 				lines.add(line);
 				// Skip whitespace after the line
 				while (text_ofs < text.length() && (text.charAt(text_ofs) == ' ' || text.charAt(text_ofs) == '\t' || text.charAt(text_ofs) == '\n')) {
-					boolean is_endline = (text.charAt(text_ofs) == '\n'); 
+					boolean is_endline = (text.charAt(text_ofs) == '\n');
 					++ text_ofs;
 					if (is_endline) {
 						break;
@@ -129,7 +133,7 @@ public class Label extends Widget
 			font.setScale(1);
 			float lineheight = 	font.getLineHeight();
 			font.setScale(getStyle().height / lineheight);
-			
+
 			int text_ofs = 0;
 			int lines = 0;
 			while (text_ofs < text.length()) {
@@ -139,7 +143,7 @@ public class Label extends Widget
 				++ lines;
 				// Skip whitespace after the line
 				while (text_ofs < text.length() && (text.charAt(text_ofs) == ' ' || text.charAt(text_ofs) == '\t' || text.charAt(text_ofs) == '\n')) {
-					boolean is_endline = (text.charAt(text_ofs) == '\n'); 
+					boolean is_endline = (text.charAt(text_ofs) == '\n');
 					++ text_ofs;
 					if (is_endline) {
 						break;
@@ -157,6 +161,8 @@ public class Label extends Widget
 
 	// This also tells if multiple lines are supported. Null means not.
 	private boolean multiline;
+
+	private LabelStyle style;
 
 	private void renderLineWithAlignment(SpriteBatch batch, String text, BitmapFont font, float pos_x, float pos_y, float width, Color color)
 	{
@@ -233,13 +239,13 @@ public class Label extends Widget
 					whitespace = "";
 					word = "";
 				}
-				
+
 				// If whitespace was line break or if end was
 				// reached, then stop and return current line
 				if (c == '\n' || text_ofs >= text.length()) {
 					return line;
 				}
-				
+
 				whitespace += c;
 			} else {
 				word += c;
@@ -250,6 +256,9 @@ public class Label extends Widget
 
 	private LabelStyle getStyle()
 	{
+		if (style != null) {
+			return style;
+		}
 		return default_style;
 	}
 }
