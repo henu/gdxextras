@@ -37,6 +37,12 @@ public class IVector2 implements Byteserializable
 		y = pos.y;
 	}
 
+	public void set(int x, int y)
+	{
+		this.x = x;
+		this.y = y;
+	}
+
 	public String toString()
 	{
 		return "(" + x + ", " + y + ")";
