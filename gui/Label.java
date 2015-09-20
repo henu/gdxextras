@@ -88,10 +88,6 @@ public class Label extends Widget
 		}
 	}
 
-	protected void doRepositioning()
-	{
-	}
-
 	protected float doGetMinWidth()
 	{
 		// Get font and scale it correctly

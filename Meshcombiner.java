@@ -77,7 +77,7 @@ public class Meshcombiner
 				boolean found = false;
 				for (int attr_id = 0; attr_id < attrs.size(); attr_id++) {
 					VertexAttribute attr = attrs.get(attr_id);
-					if (attr.alias == attr_name) {
+					if (attr.alias.equals(attr_name)) {
 						found = true;
 						break;
 					}
@@ -125,7 +125,7 @@ public class Meshcombiner
 					VertexAttribute mesh0_attr = mesh_attrs.get(mesh0_attr_id);
 					// Search correct attribute from this Mesh
 					int mesh_attr_find = 0;
-					while (mesh_attrs.get(mesh_attr_find).alias != mesh0_attr.alias) {
+					while (!mesh_attrs.get(mesh_attr_find).alias.equals(mesh0_attr.alias)) {
 						mesh_attr_find++;
 						assert mesh_attr_find < mesh_attrs.size();
 					}

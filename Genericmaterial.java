@@ -36,7 +36,7 @@ public class Genericmaterial
 		OrderedMap< String, Object > json = (OrderedMap< String, Object >)json_raw;
 		// Extract data from JSON
 		if (json.containsKey("colormap")) {
-			colormap = texs.get((String)json.get("colormap"));
+			colormap = texs.get(json.get("colormap"));
 		}
 		if (json.containsKey("twosided")) {
 			twosided = (Boolean)json.get("twosided");
@@ -82,17 +82,17 @@ public class Genericmaterial
 
 		// Set pre-rendering options
 		if (light != null) {
-			if (this.light == false) shader = null;
+			if (!this.light) shader = null;
 			this.light = true;
 		} else {
-			if (this.light == true) shader = null;
+			if (this.light) shader = null;
 			this.light = false;
 		}
 		if (ambient_light != null && (ambient_light.x > 0 || ambient_light.y > 0 || ambient_light.z > 0)) {
-			if (this.ambient_light == false) shader = null;
+			if (!this.ambient_light) shader = null;
 			this.ambient_light = true;
 		} else {
-			if (this.ambient_light == true) shader = null;
+			if (this.ambient_light) shader = null;
 			this.ambient_light = false;
 		}
 

@@ -22,6 +22,7 @@ public class Octree
 		findregion_realbb.mul(transf);
 
 		// Start finding regions
+		int max_depth = 8;
 		OctreeRegion region = root.find(findregion_realbb, max_depth);
 
 		return region;
@@ -38,6 +39,5 @@ public class Octree
 	}
 
 	private OctreeRegion root;
-	private int max_depth = 8;
 
 }
