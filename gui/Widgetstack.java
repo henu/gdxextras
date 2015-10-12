@@ -58,6 +58,6 @@ public class Widgetstack extends Widget
 		return 0f;
 	}
 
-	private Array<Widget> widgets = new Array<Widget>(true, 0, Widget.class);
+	private final Array<Widget> widgets = new Array<Widget>(true, 0, Widget.class);
 
 }

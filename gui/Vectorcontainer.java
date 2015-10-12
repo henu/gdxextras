@@ -97,7 +97,9 @@ public class Vectorcontainer extends Widget
 		}
 
 		// This array is used to calculate sizes of widgets
-		float[] sizes = new float[widgets.size];
+		if (widgets_sizes == null || widgets_sizes.length != widgets.size) {
+			widgets_sizes = new float[widgets.size];
+		}
 
 		// First set sizes of those Widgets, that are shrunked or have zero expanding. Set
 		// other sizes less than zero, to indicate that their size is not yet defined.
@@ -111,15 +113,15 @@ public class Vectorcontainer extends Widget
 		for (int widget_id = 0; widget_id < widgets.size; widget_id ++) {
 			Widget widget = widgets_buf[widget_id];
 			if (widget.isShrunken()) {
-				sizes[widget_id] = 0f;
+				widgets_sizes[widget_id] = 0f;
 			} else if (dir == Direction.HORIZONTAL && widget.getHorizontalExpandingForRepositioning() == 0) {
-				sizes[widget_id] = widget.getMinWidth();
+				widgets_sizes[widget_id] = widget.getMinWidth();
 				extra_space_left -= widget.getMinWidth();
 			} else if (dir == Direction.VERTICAL && widget.getVerticalExpandingForRepositioning() == 0) {
-				sizes[widget_id] = widget.getMinHeight(getWidth());
+				widgets_sizes[widget_id] = widget.getMinHeight(getWidth());
 				extra_space_left -= widget.getMinHeight(getWidth());
 			} else {
-				sizes[widget_id] = -1f;
+				widgets_sizes[widget_id] = -1f;
 				++ expanding_widgets_left;
 			}
 		}
@@ -135,7 +137,7 @@ public class Vectorcontainer extends Widget
 			boolean too_big_ones_found = false;
 			for (int widget_id = 0; widget_id < widgets.size; widget_id ++) {
 				// Skip those, that already have their size set
-				if (sizes[widget_id] >= 0f) continue;
+				if (widgets_sizes[widget_id] >= 0f) continue;
 
 				Widget widget = widgets_buf[widget_id];
 				int expanding_points;
@@ -150,7 +152,7 @@ public class Vectorcontainer extends Widget
 
 				float size = expanding_points * space_per_expanding;
 				if (size < widget_min_size) {
-					sizes[widget_id] = widget_min_size;
+					widgets_sizes[widget_id] = widget_min_size;
 					too_big_ones_found = true;
 					extra_space_left -= widget_min_size;
 					total_expanding -= expanding_points;
@@ -163,7 +165,7 @@ public class Vectorcontainer extends Widget
 			// Now every remaining expanding widget should fit to the extra space
 			for (int widget_id = 0; widget_id < widgets.size; widget_id ++) {
 				// Skip those, that already have their size set
-				if (sizes[widget_id] >= 0f) continue;
+				if (widgets_sizes[widget_id] >= 0f) continue;
 
 				Widget widget = widgets_buf[widget_id];
 				int expanding_points;
@@ -172,7 +174,7 @@ public class Vectorcontainer extends Widget
 				} else {
 					expanding_points = widget.getVerticalExpandingForRepositioning();
 				}
-				sizes[widget_id] = expanding_points * space_per_expanding;
+				widgets_sizes[widget_id] = expanding_points * space_per_expanding;
 			}
 			break;
 		}
@@ -182,7 +184,7 @@ public class Vectorcontainer extends Widget
 			float pos_x = 0f;
 			for (int widget_id = 0; widget_id < widgets.size; widget_id++) {
 				Widget widget = widgets_buf[widget_id];
-				float child_width = sizes[widget_id];
+				float child_width = widgets_sizes[widget_id];
 				repositionChild(widget, getPositionX() + pos_x, getPositionY() + 0f, child_width, getHeight());
 				pos_x += child_width;
 			}
@@ -190,7 +192,7 @@ public class Vectorcontainer extends Widget
 			float pos_y = 0f;
 			for (int widget_id = 0; widget_id < widgets.size; widget_id++) {
 				Widget widget = widgets_buf[widget_id];
-				float child_height = sizes[widget_id];
+				float child_height = widgets_sizes[widget_id];
 				repositionChild(widget, getPositionX() + 0f, getPositionY() + getHeight() - child_height - pos_y, getWidth(), child_height);
 				pos_y += child_height;
 			}
@@ -237,7 +239,10 @@ public class Vectorcontainer extends Widget
 
 	private Direction dir;
 
-	private Array<Widget> widgets = new Array<Widget>(true, 0, Widget.class);
+	private final Array<Widget> widgets = new Array<Widget>(true, 0, Widget.class);
+
+	// This is only used when doing repositioning
+	private float[] widgets_sizes;
 
 	private Texture background_tex;
 
