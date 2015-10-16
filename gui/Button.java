@@ -31,7 +31,7 @@ public class Button extends Widget
 		this.label = label;
 		markToNeedReposition();
 	}
-	
+
 	public void setIcon(AtlasRegion icon)
 	{
 		this.icon = icon;
@@ -53,6 +53,7 @@ public class Button extends Widget
 		return enabled;
 	}
 
+	@Override
 	public boolean pointerDown(int pointer_id, Vector2 pos)
 	{
 		if (pointer_id == 0) {
@@ -63,6 +64,7 @@ public class Button extends Widget
 		return false;
 	}
 
+	@Override
 	public void pointerMove(int pointer_id, Vector2 pos)
 	{
 		if (pointer_id == 0) {
@@ -70,6 +72,7 @@ public class Button extends Widget
 		}
 	}
 
+	@Override
 	public void pointerUp(int pointer_id, Vector2 pos)
 	{
 		if (pointer_id == 0) {
@@ -89,11 +92,12 @@ public class Button extends Widget
 		return true;
 	}
 
+	@Override
 	protected void doRendering(SpriteBatch batch)
 	{
 		ButtonStyle style = getStyle();
 		int pixel_height = Math.max(Math.max(style.region_left.getRegionHeight(), style.region_right.getRegionHeight()), style.tex_center.getHeight());
-		
+
 		if (!enabled) {
 			batch.setColor(style.bg_color_disabled);
 		} else {
@@ -116,7 +120,7 @@ public class Button extends Widget
 				batch.setColor(style.icon_color_disabled);
 			} else {
 				batch.setColor(style.icon_color);
-			}			
+			}
 			renderFromCenter(batch, icon, getPositionX() + style.side_padding * style.bg_scaling, getCenterY(), style.bg_scaling);
 		}
 		// Render possible label
@@ -137,6 +141,7 @@ public class Button extends Widget
 		batch.setColor(1, 1, 1, 1);
 	}
 
+	@Override
 	protected float doGetMinWidth()
 	{
 		ButtonStyle style = getStyle();
@@ -152,6 +157,7 @@ public class Button extends Widget
 		return min_width;
 	}
 
+	@Override
 	protected float doGetMinHeight(float width)
 	{
 		ButtonStyle style = getStyle();

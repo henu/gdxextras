@@ -151,8 +151,7 @@ public class Mathutils
 		float aspect_ratio = screen_width / screen_height;
 		float viewplane_height = (float)(Math.tan(Math.toRadians(fov_y / 2)));
 		float viewplane_width = viewplane_height * aspect_ratio;
-		float fov_x = (float)Math.toDegrees(Math.atan(viewplane_width)) * 2;
-		return fov_x;
+		return (float)Math.toDegrees(Math.atan(viewplane_width)) * 2;
 	}
 
 	// Returns vector that is perpendicular to v.
