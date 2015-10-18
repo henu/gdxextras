@@ -1,5 +1,6 @@
 package fi.henu.gdxextras.gui;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 
@@ -23,23 +24,23 @@ public class ScrollZoomArea extends Widget
 		// Enable expanding by default
 		setHorizontalExpanding(1);
 		setVerticalExpanding(1);
-		
+
 		// By default, clicks are disabled.
-		click_threshold = -1;
+		click_threshold_mm = -1;
 		latest_click_pos = null;
 	}
-	
-	// "click_threshold" determines maximum distance that can be
-	// scrolled, while scrolling is still considered as click. 
-	public void enableClickEvents(float click_threshold)
+
+	// "click_threshold_mm" determines maximum distance that can be
+	// scrolled, while scrolling is still considered as click.
+	public void enableClickEvents(float click_threshold_mm)
 	{
-		this.click_threshold = click_threshold;
+		this.click_threshold_mm = click_threshold_mm;
 		latest_click_pos = new Vector2();
 	}
-	
+
 	public void disableClickEvents()
 	{
-		click_threshold = -1;
+		click_threshold_mm = -1;
 		latest_click_pos = null;
 	}
 
@@ -70,7 +71,7 @@ public class ScrollZoomArea extends Widget
 		touch_zoom_baseline = touch_zoom;
 		return result;
 	}
-	
+
 	public boolean isScrolling()
 	{
 		return touch_state == TouchState.SCROLLING;
@@ -106,7 +107,7 @@ public class ScrollZoomArea extends Widget
 		if (touch0_down != touch1_down) {
 			// However, if click events are enabled,
 			// then this is considered as click first.
-			if (click_threshold >= 0) {
+			if (click_threshold_mm >= 0) {
 				touch_state = TouchState.CLICKING;
 				latest_click_pos.set(pos);
 			} else {
@@ -143,7 +144,7 @@ public class ScrollZoomArea extends Widget
 			}
 			// If we are clicking, check if threshold has been
 			// reached. If yes, then convert to scrolling.
-			if (touch_state == TouchState.CLICKING && scrolled.len() > click_threshold) {
+			if (touch_state == TouchState.CLICKING && scrolled.len() > click_threshold_mm * Gdx.graphics.getPpcX() / 10f) {
 				touch_state = TouchState.SCROLLING;
 			}
 		} else if (touch_state == TouchState.ZOOMING) {
@@ -225,7 +226,7 @@ public class ScrollZoomArea extends Widget
 	private Vector2 scrolled;
 	private float touch_zoom_baseline;
 
-	private float click_threshold;
+	private float click_threshold_mm;
 	private Vector2 latest_click_pos;
 
 }
