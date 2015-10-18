@@ -232,6 +232,8 @@ public class Scrollbox extends Widget
 		assert widget != null;
 		unregisterPointerListener(pointer_id);
 
+		final float CLICK_TO_CHILD_DRAG_THRESHOLD = CLICK_TO_CHILD_DRAG_THRESHOLD_MM * Gdx.graphics.getPpcX() / 10f;
+
 		// If pointer moved only small amount, then consider this as a click to the child.
 		if (pos.dst2(pointer_down_pos) <= CLICK_TO_CHILD_DRAG_THRESHOLD * CLICK_TO_CHILD_DRAG_THRESHOLD) {
 			generateDragEventToChildren(widget, pointer_id, pos, pos);
@@ -292,7 +294,7 @@ public class Scrollbox extends Widget
 
 	// Drags that are less or equal than this in
 	// pixels are considered clicks to child.
-	private static final int CLICK_TO_CHILD_DRAG_THRESHOLD = 4;
+	private static final float CLICK_TO_CHILD_DRAG_THRESHOLD_MM = 3f;
 
 	private Widget widget;
 
