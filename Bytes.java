@@ -2,7 +2,6 @@ package fi.henu.gdxextras;
 
 import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
-import java.nio.charset.Charset;
 
 public class Bytes
 {
@@ -80,7 +79,12 @@ public class Bytes
 			pushInt(0);
 			return;
 		}
-		byte[] str_bytes_utf8 = str.getBytes(Charset.forName("UTF-8"));
+		byte[] str_bytes_utf8;
+		try {
+			str_bytes_utf8 = str.getBytes("UTF-8");
+		} catch (UnsupportedEncodingException e) {
+			throw new RuntimeException("Unable to serialize string!");
+		}
 		pushInt(str_bytes_utf8.length);
 		ensureAvailable(str_bytes_utf8.length);
 		System.arraycopy(str_bytes_utf8, 0, buf, items, str_bytes_utf8.length);
@@ -138,7 +142,7 @@ public class Bytes
 	private int items = 0;
 	private int alloc = 0;
 
-	private ByteBuffer tmp_bb = ByteBuffer.allocate(8);
+	private final ByteBuffer tmp_bb = ByteBuffer.allocate(8);
 
 	private void pushFromTemporaryByteBuffer()
 	{
