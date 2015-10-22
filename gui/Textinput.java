@@ -204,7 +204,7 @@ public class Textinput extends Widget
 			} else {
 				text_check = password_text;
 			}
-			if (text_check.isEmpty()) {
+			if (text_check.length() == 0) {
 				cursor = 0;
 			} else {
 				// Find correct cursor position with binary search
