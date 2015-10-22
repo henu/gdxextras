@@ -42,7 +42,7 @@ public class Scrollbox extends Widget
 	public void setVerticalOrigin(Alignment origin)
 	{
 		if (origin != Alignment.TOP && origin != Alignment.BOTTOM) {
-			throw new RuntimeException("Only LEFT and RIGHT are allowed to horizontal origin!");
+			throw new RuntimeException("Only TOP and BOTTOM are allowed to vertical origin!");
 		}
 		origin_vert = origin;
 	}
@@ -102,7 +102,7 @@ public class Scrollbox extends Widget
 
 	public float getScrollY()
 	{
-		if (origin_horiz == Alignment.BOTTOM) {
+		if (origin_vert == Alignment.BOTTOM) {
 			return scroll_bottomleft.y;
 		} else {
 			return scroll_topright.y;
@@ -269,6 +269,24 @@ public class Scrollbox extends Widget
 			} else {
 				scroll_bottomleft.y = height - scroll_topright.y - getHeight();
 			}
+		}
+
+		// Make sure scrolling is not out of bounds
+		if (scroll_topright.x < 0) {
+			scroll_bottomleft.x += scroll_topright.x;
+			scroll_topright.x = 0;
+		}
+		if (scroll_bottomleft.x < 0) {
+			scroll_topright.x += scroll_bottomleft.x;
+			scroll_bottomleft.x = 0;
+		}
+		if (scroll_topright.y < 0) {
+			scroll_bottomleft.y += scroll_topright.y;
+			scroll_topright.y = 0;
+		}
+		if (scroll_bottomleft.y < 0) {
+			scroll_topright.y += scroll_bottomleft.y;
+			scroll_bottomleft.y = 0;
 		}
 
 		repositionChild(widget, getPositionX() - scroll_bottomleft.x, getPositionY() - scroll_bottomleft.y, width, height);
