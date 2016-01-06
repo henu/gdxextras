@@ -1,12 +1,13 @@
 package fi.henu.gdxextras.gui;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 
 public class Freearea extends Widget
 {
-	
+
 	public Freearea()
 	{
 		super();
@@ -46,7 +47,8 @@ public class Freearea extends Widget
 		}
 	}
 
-	protected void doRendering(SpriteBatch batch)
+	@Override
+	protected void doRendering(SpriteBatch batch, ShapeRenderer shapes)
 	{
 		// Draw nothing
 	}

@@ -1,11 +1,12 @@
 package fi.henu.gdxextras.gui;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 
 public class ClickArea extends Widget
 {
-	
+
 	// Event types
 	public static final int CLICKED = 0;
 	public static final int RELEASED = 1;
@@ -42,7 +43,8 @@ public class ClickArea extends Widget
 		unregisterPointerListener(pointer_id);
 	}
 
-	protected void doRendering(SpriteBatch batch)
+	@Override
+	protected void doRendering(SpriteBatch batch, ShapeRenderer shapes)
 	{
 		// This Widget is invisible
 	}
@@ -59,5 +61,5 @@ public class ClickArea extends Widget
 
 	private Vector2 latest_click_pos = new Vector2(0, 0);
 	private int latest_pointer_id = 0;
-	
+
 }

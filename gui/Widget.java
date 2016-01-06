@@ -272,7 +272,7 @@ public abstract class Widget
 
 	}
 
-	public void render(GL20 gl, SpriteBatch batch, ShapeRenderer shaperenderer, int renderarea_pos_x, int renderarea_pos_y, int renderarea_width, int renderarea_height)
+	public void render(GL20 gl, SpriteBatch batch, ShapeRenderer shapes, int renderarea_pos_x, int renderarea_pos_y, int renderarea_width, int renderarea_height)
 	{
 		if (visible && !shrunken) {
 
@@ -280,16 +280,16 @@ public abstract class Widget
 			if (background_color != null) {
 				batch.end();
 				Gdx.gl.glEnable(GL20.GL_BLEND);
-				shaperenderer.begin(ShapeRenderer.ShapeType.Filled);
-				shaperenderer.setColor(background_color);
-				shaperenderer.rect(getPositionX(), getPositionY(), getWidth(), getHeight());
-				shaperenderer.end();
+				shapes.begin(ShapeRenderer.ShapeType.Filled);
+				shapes.setColor(background_color);
+				shapes.rect(getPositionX(), getPositionY(), getWidth(), getHeight());
+				shapes.end();
 				Gdx.gl.glDisable(GL20.GL_BLEND);
 				batch.begin();
 			}
 
 			// Render this Widget
-			doRendering(batch);
+			doRendering(batch, shapes);
 
 			// Check if this Widget limits rendering of its children
 			boolean arealimit_was_just_set = false;
@@ -352,7 +352,7 @@ public abstract class Widget
 			int children_size = children.size;
 			for (int child_id = 0; child_id < children_size; child_id++) {
 				Widget child = children_buf[child_id];
-				child.render(gl, batch, shaperenderer, renderarea_pos_x, renderarea_pos_y, renderarea_width, renderarea_height);
+				child.render(gl, batch, shapes, renderarea_pos_x, renderarea_pos_y, renderarea_width, renderarea_height);
 			}
 
 			// Clear possible arealimit
@@ -373,7 +373,7 @@ public abstract class Widget
 		return true;
 	}
 
-	protected abstract void doRendering(SpriteBatch batch);
+	protected abstract void doRendering(SpriteBatch batch, ShapeRenderer shapes);
 
 	protected void repositionChild(Widget child, float x, float y, float width, float height)
 	{

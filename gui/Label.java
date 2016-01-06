@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.BitmapFont.TextBounds;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.Array;
 
 public class Label extends Widget
@@ -45,7 +46,8 @@ public class Label extends Widget
 		this.style = style;
 	}
 
-	protected void doRendering(SpriteBatch batch)
+	@Override
+	protected void doRendering(SpriteBatch batch, ShapeRenderer shapes)
 	{
 		// Get font and scale it correctly
 		BitmapFont font = getStyle().font;

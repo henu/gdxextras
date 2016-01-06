@@ -3,6 +3,7 @@ package fi.henu.gdxextras.gui;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 
 // TODO: Make toggling on/off available!
@@ -93,7 +94,7 @@ public class Button extends Widget
 	}
 
 	@Override
-	protected void doRendering(SpriteBatch batch)
+	protected void doRendering(SpriteBatch batch, ShapeRenderer shapes)
 	{
 		ButtonStyle style = getStyle();
 		int pixel_height = Math.max(Math.max(style.region_left.getRegionHeight(), style.region_right.getRegionHeight()), style.tex_center.getHeight());

@@ -2,6 +2,7 @@ package fi.henu.gdxextras.gui;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 
 public class ImageButton extends Widget
@@ -58,7 +59,7 @@ public class ImageButton extends Widget
 	}
 
 	@Override
-	protected void doRendering(SpriteBatch batch)
+	protected void doRendering(SpriteBatch batch, ShapeRenderer shapes)
 	{
 		render(batch, region, getPositionX(), getPositionY(), scale);
 	}

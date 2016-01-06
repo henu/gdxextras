@@ -2,6 +2,7 @@ package fi.henu.gdxextras.gui;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 
 public class Scrollbox extends Widget
@@ -241,7 +242,8 @@ public class Scrollbox extends Widget
 		}
 	}
 
-	protected void doRendering(SpriteBatch batch)
+	@Override
+	protected void doRendering(SpriteBatch batch, ShapeRenderer shapes)
 	{
 		// This Widget is invisible
 	}

@@ -1,6 +1,7 @@
 package fi.henu.gdxextras.gui;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.Array;
 
 public class Widgetstack extends Widget
@@ -43,7 +44,8 @@ public class Widgetstack extends Widget
 		}
 	}
 
-	public void doRendering(SpriteBatch batch)
+	@Override
+	protected void doRendering(SpriteBatch batch, ShapeRenderer shapes)
 	{
 		// Do nothing
 	}

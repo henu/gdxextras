@@ -1,6 +1,7 @@
 package fi.henu.gdxextras.gui;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.Array;
 
@@ -39,7 +40,8 @@ public class Bestfitcontainer extends Widget
 		widgets.clear();
 	}
 
-	protected void doRendering(SpriteBatch batch)
+	@Override
+	protected void doRendering(SpriteBatch batch, ShapeRenderer shapes)
 	{
 	}
 
@@ -50,7 +52,7 @@ public class Bestfitcontainer extends Widget
 		}
 
 		Array<Widget> widgets_left = new Array<Widget>(widgets);
-		
+
 		// Remove those Widgets, that are shrunken
 		for (int i = 0; i < widgets_left.size;) {
 			Widget widget = widgets_left.items[i];
@@ -62,14 +64,14 @@ public class Bestfitcontainer extends Widget
 				i ++;
 			}
 		}
-		
+
 		if (widgets_left.size == 0) {
 			return;
 		}
-		
+
 		// Initialize new positioning tree
 		ReposNode tree = new ReposNode();
-		
+
 		while (widgets_left.size > 0) {
 			// Position first the Widget that has biggest edge/edge ratio
 			float biggest_ratio = 0;
@@ -93,10 +95,10 @@ public class Bestfitcontainer extends Widget
 				}
 			}
 			assert biggest_ratio_i >= 0;
-			
+
 			Widget widget = widgets_left.items[biggest_ratio_i];
 			widgets_left.removeIndex(biggest_ratio_i);
-			
+
 			// Find all Nodes from the tree where this Widget fits, and select the one that is the smallest one.
 			float widget_w = widget.getMinWidth();
 			float widget_h = widget.getMinHeight(widget_w);
@@ -146,20 +148,20 @@ public class Bestfitcontainer extends Widget
 			}
 
 		}
-		
+
 		// Optimize tree. This means removing those Nodes,
 		// that are not splitted and do not contain Widget
 		removeEmptyNodes(tree);
-		
+
 		// Fix rectangles so they take maximum space
 		expandRectangles(tree, getPositionX(), getPositionY(), getEndX(), getEndY());
-		
+
 		// Go tree through and reposition Widgets
 		repositionWidgetsFromTree(tree);
-		
+
 		// Clear reference so garbage collector can clean the tree.
 		fit_node = null;
-			
+
 	}
 
 	protected float doGetMinWidth()
@@ -206,7 +208,7 @@ public class Bestfitcontainer extends Widget
 		public Rectangle w_rect;
 		public ReposNode c1, c2;
 	}
-	
+
 	private Array<Widget> widgets = new Array<Widget>(true, 0, Widget.class);
 
 	// Results for "findBestFitFromTree()"
@@ -284,20 +286,20 @@ public class Bestfitcontainer extends Widget
 			assert node.c2 == null;
 			return;
 		}
-		
+
 		boolean modifications_done;
 		do {
 			modifications_done = false;
-			
+
 			// If this node contains Widget, then do nothing
 			if (node.w != null) {
 				return;
 			}
-			
+
 			// If first side is completely unused, then remove it
 			if (node.c1.w == null && node.c1.c1 == null) {
 				assert node.c1.c2 == null;
-	
+
 				node.w = node.c2.w;
 				node.w_rect = node.c2.w_rect;
 				node.horizontal_splitline = node.c2.horizontal_splitline;
@@ -309,7 +311,7 @@ public class Bestfitcontainer extends Widget
 			// If second side is completely unused, then remove it
 			else if (node.c2.w == null && node.c2.c1 == null) {
 				assert node.c2.c2 == null;
-	
+
 				node.w = node.c1.w;
 				node.w_rect = node.c1.w_rect;
 				node.horizontal_splitline = node.c1.horizontal_splitline;
@@ -319,7 +321,7 @@ public class Bestfitcontainer extends Widget
 				modifications_done = true;
 			}
 		} while (modifications_done);
-		
+
 		assert node.c1 != null;
 		assert node.c2 != null;
 		removeEmptyNodes(node.c1);
@@ -335,12 +337,12 @@ public class Bestfitcontainer extends Widget
 			node.w_rect.set(x1, y1, x2 - x1, y2 - y1);
 			return;
 		}
-		
+
 		// In case tree contains nothing at all
 		if (node.c1 == null || node.c2 == null) {
 			return;
 		}
-		
+
 		// This node is splitted, so calculate sizes for both sides
 		if (node.horizontal_splitline) {
 			// Calculate properties of both children and their grand children

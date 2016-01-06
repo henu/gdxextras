@@ -2,6 +2,7 @@ package fi.henu.gdxextras.gui;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.Array;
 
 public class Vectorcontainer extends Widget
@@ -58,7 +59,8 @@ public class Vectorcontainer extends Widget
 		background_tex = tex;
 	}
 
-	protected void doRendering(SpriteBatch batch)
+	@Override
+	protected void doRendering(SpriteBatch batch, ShapeRenderer shapes)
 	{
 		if (background_tex != null) {
 			float x = getPositionX();

@@ -3,6 +3,7 @@ package fi.henu.gdxextras.gui;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 
 public class Textinput extends Widget
@@ -81,7 +82,8 @@ public class Textinput extends Widget
 		}
 	}
 
-	protected void doRendering(SpriteBatch batch)
+	@Override
+	protected void doRendering(SpriteBatch batch, ShapeRenderer shapes)
 	{
 		// Invisible Widget
 	}
@@ -255,7 +257,8 @@ public class Textinput extends Widget
 			return false;
 		}
 
-		protected void doRendering(SpriteBatch batch)
+		@Override
+		protected void doRendering(SpriteBatch batch, ShapeRenderer shapes)
 		{
 			BitmapFont font = getStyle().font;
 			font.setScale(1);

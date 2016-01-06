@@ -1,6 +1,7 @@
 package fi.henu.gdxextras.gui;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.Array;
 
 public class Gridcontainer extends Widget
@@ -70,7 +71,8 @@ public class Gridcontainer extends Widget
 		return widgets.items[widget_index];
 	}
 
-	protected void doRendering(SpriteBatch batch)
+	@Override
+	protected void doRendering(SpriteBatch batch, ShapeRenderer shapes)
 	{
 		// Draw nothing
 	}
@@ -80,7 +82,7 @@ public class Gridcontainer extends Widget
 		if (widgets.size == 0) {
 			return;
 		}
-		
+
 		float[] widths = getOptimalColumnWidths(getWidth());
 		float[] heights = getOptimalRowHeights(widths, getHeight());
 
@@ -92,9 +94,9 @@ public class Gridcontainer extends Widget
 		float pos_y = getHeight() - heights[0];
 		for (int widget_id = 0; widget_id < widgets_size; widget_id++) {
 			Widget widget = widgets_buf[widget_id];
-			
+
 			repositionChild(widget, getPositionX() + pos_x, getPositionY() + pos_y, widths[col_id], heights[row_id]);
-			
+
 			pos_x += widths[col_id];
 			col_id ++;
 			if (col_id == cols) {
@@ -115,11 +117,11 @@ public class Gridcontainer extends Widget
 	protected float doGetMinHeight(float width)
 	{
 		float[] widths = getOptimalColumnWidths(width);
-		
+
 		float min_height = 0;
 		float row_height = 0;
 		int col_id = 0;
-		
+
 		Widget[] widgets_buf = widgets.items;
 		int widgets_size = widgets.size;
 		for (int widget_id = 0; widget_id < widgets_size; widget_id++) {
@@ -152,7 +154,7 @@ public class Gridcontainer extends Widget
 		for (int col_id = 0; col_id < cols; col_id ++) {
 			widths[col_id] = 0;
 		}
-		
+
 		// Calculate minimum width of each columns.
 		Widget[] widgets_buf = widgets.items;
 		int widgets_size = widgets.size;
@@ -162,10 +164,10 @@ public class Gridcontainer extends Widget
 			widths[col_id] = Math.max(widths[col_id], widget.getMinWidth());
 			col_id = (col_id + 1) % cols;
 		}
-		
+
 		return widths;
 	}
-	
+
 	private float[] getMinimumRowHeights(float[] widths)
 	{
 		int rows = getNumOfRows();
@@ -189,7 +191,7 @@ public class Gridcontainer extends Widget
 				row_id ++;
 			}
 		}
-		
+
 		return heights;
 	}
 
@@ -215,7 +217,7 @@ public class Gridcontainer extends Widget
 	{
 		float[] widths = getMinimumColumnWidths();
 		float total_width_now = calculateSum(widths);
-		
+
 		// Get expandings
 		int[] expandings = getHorizontalExpandings();
 		int total_expanding = calculateSumInt(expandings);
@@ -259,7 +261,7 @@ public class Gridcontainer extends Widget
 		for (int col_id = 0; col_id < cols; col_id ++) {
 			expandings[col_id] = 0;
 		}
-		
+
 		// Calculate maximum expandings of each columns.
 		Widget[] widgets_buf = widgets.items;
 		int widgets_size = widgets.size;
@@ -269,7 +271,7 @@ public class Gridcontainer extends Widget
 			expandings[col_id] = Math.max(expandings[col_id], widget.getHorizontalExpandingForRepositioning());
 			col_id = (col_id + 1) % cols;
 		}
-		
+
 		return expandings;
 	}
 

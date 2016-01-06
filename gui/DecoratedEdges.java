@@ -1,6 +1,7 @@
 package fi.henu.gdxextras.gui;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
 public class DecoratedEdges extends Widget
 {
@@ -36,10 +37,10 @@ public class DecoratedEdges extends Widget
 	}
 
 	@Override
-	protected void doRendering(SpriteBatch batch)
+	protected void doRendering(SpriteBatch batch, ShapeRenderer shapes)
 	{
 		DecoratedEdgesStyle style = getStyle();
-		
+
 		float left_width = calculateLeftWidth();
 		float right_width = calculateRightWidth();
 		float top_height = calculateTopHeight();
@@ -50,13 +51,13 @@ public class DecoratedEdges extends Widget
 		renderToSpace(batch, style.region_bottomright_corner, getEndX() - right_width, getPositionY(), right_width, bottom_height, 0, 1, style.scaling);
 		renderToSpace(batch, style.region_topleft_corner, getPositionX(), getEndY() - top_height, left_width, top_height, 1, 0, style.scaling);
 		renderToSpace(batch, style.region_topright_corner, getEndX() - right_width, getEndY() - top_height, right_width, top_height, 0, 0, style.scaling);
-		
+
 		// Render edges
 		renderAndRepeatTexture(batch, style.tex_top_edge, getPositionX() + left_width, getEndY() - top_height, getWidth() - left_width - right_width, style.tex_top_edge.getHeight() * style.scaling, style.scaling);
 		renderAndRepeatTexture(batch, style.tex_bottom_edge, getPositionX() + left_width, getPositionY() + bottom_height - style.tex_bottom_edge.getHeight() * style.scaling, getWidth() - left_width - right_width, style.tex_bottom_edge.getHeight() * style.scaling, style.scaling);
 		renderAndRepeatTexture(batch, style.tex_right_edge, getEndX() - right_width, getPositionY() + bottom_height, style.tex_right_edge.getWidth() * style.scaling, getHeight() - bottom_height - top_height, style.scaling);
 		renderAndRepeatTexture(batch, style.tex_left_edge, getPositionX() + left_width - style.tex_left_edge.getWidth() * style.scaling, getPositionY() + bottom_height, style.tex_left_edge.getWidth() * style.scaling, getHeight() - bottom_height - top_height, style.scaling);
-		
+
 		// Render background
 		renderAndRepeatTexture(batch, style.tex_background, getPositionX() + left_width, getPositionY() + bottom_height, getWidth() - left_width - right_width, getHeight() - bottom_height - top_height, style.scaling);
 	}
@@ -114,7 +115,7 @@ public class DecoratedEdges extends Widget
 	private static DecoratedEdgesStyle default_style;
 
 	private Widget widget;
-	
+
 	private DecoratedEdgesStyle getStyle()
 	{
 		return default_style;

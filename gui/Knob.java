@@ -3,6 +3,7 @@ package fi.henu.gdxextras.gui;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import fi.henu.gdxextras.Mathutils;
@@ -71,7 +72,8 @@ public class Knob extends Widget
 		}
 	}
 
-	public void doRendering(SpriteBatch batch)
+	@Override
+	protected void doRendering(SpriteBatch batch, ShapeRenderer shapes)
 	{
 		if (!enabled) {
 			batch.setColor(0.5f, 0.5f, 0.5f, 1f);

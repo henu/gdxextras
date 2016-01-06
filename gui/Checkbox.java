@@ -1,6 +1,7 @@
 package fi.henu.gdxextras.gui;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 
 public class Checkbox extends Widget
@@ -34,7 +35,7 @@ public class Checkbox extends Widget
 	}
 
 	@Override
-	protected void doRendering(SpriteBatch batch)
+	protected void doRendering(SpriteBatch batch, ShapeRenderer shapes)
 	{
 		CheckboxStyle style = getStyle();
 		if (checked) {
