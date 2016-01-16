@@ -1,12 +1,18 @@
 package fi.henu.gdxextras.gui;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 
 public class Scrollbox extends Widget
 {
+	public static void setDefaultStyle(ScrollboxStyle style)
+	{
+		default_style = style;
+	}
+
 	public Scrollbox()
 	{
 		super();
@@ -108,6 +114,36 @@ public class Scrollbox extends Widget
 		} else {
 			return scroll_topright.y;
 		}
+	}
+
+	// Returns 0 - 1 or negative. 0 is left, 1 is right,
+	// negative means scrolling is not possible.
+	public float getRelativeScrollX()
+	{
+		float left_hidden = scroll_bottomleft.x;
+		float right_hidden = scroll_topright.x;
+
+		if (left_hidden <= 0 && right_hidden <= 0) {
+			return -1;
+		}
+
+		float total_hidden = right_hidden + left_hidden;
+		return left_hidden / total_hidden;
+	}
+
+	// Returns 0 - 1 or negative. 0 is bottom, 1 is top,
+	// negative means scrolling is not possible.
+	public float getRelativeScrollY()
+	{
+		float bottom_hidden = scroll_bottomleft.y;
+		float top_hidden = scroll_topright.y;
+
+		if (bottom_hidden <= 0 && top_hidden <= 0) {
+			return -1;
+		}
+
+		float total_hidden = top_hidden + bottom_hidden;
+		return bottom_hidden / total_hidden;
 	}
 
 	// Scrolls show that specific rectangle becomes shown as much
@@ -243,9 +279,94 @@ public class Scrollbox extends Widget
 	}
 
 	@Override
-	protected void doRendering(SpriteBatch batch, ShapeRenderer shapes)
+	protected void doRenderingAfterChildren(SpriteBatch batch, ShapeRenderer shapes)
 	{
-		// This Widget is invisible
+		ScrollboxStyle style = getStyle();
+
+		if (style != null && style.scroll_indicator_region != null) {
+
+			float left_indicator_alpha = 0f;
+			float right_indicator_alpha = 0f;
+			float bottom_indicator_alpha = 0f;
+			float top_indicator_alpha = 0f;
+
+			// Decide how strong is the alpha of indicators
+			float relative_scroll_x = getRelativeScrollX();
+			float relative_scroll_y = getRelativeScrollY();
+			if (relative_scroll_x >= 0f) {
+				left_indicator_alpha = relative_scroll_x;
+				right_indicator_alpha = 1f - relative_scroll_x;
+			}
+			if (relative_scroll_y >= 0f) {
+				bottom_indicator_alpha = relative_scroll_y;
+				top_indicator_alpha = 1f - relative_scroll_y;
+			}
+
+			// Draw nothing, if everything is zero
+			if (left_indicator_alpha <= 0f && right_indicator_alpha <= 0f && bottom_indicator_alpha <= 0f && top_indicator_alpha <= 0f) {
+				return;
+			}
+
+			// Left
+			if (left_indicator_alpha > 0f) {
+				batch.setColor(1, 1, 1, left_indicator_alpha);
+				batch.draw(
+						style.scroll_indicator_region,
+						getPositionX(),
+						getPositionY() + getHeight(),
+						0,
+						0,
+						style.scroll_indicator_region.getRegionWidth(),
+						style.scroll_indicator_region.getRegionHeight(),
+						getHeight() / style.scroll_indicator_region.getRegionWidth(),
+						style.scroll_indicator_scaling,
+						-90f
+				);
+			}
+
+			// Right
+			if (right_indicator_alpha > 0f) {
+				batch.setColor(1, 1, 1, right_indicator_alpha);
+				batch.draw(
+						style.scroll_indicator_region,
+						getPositionX() + getWidth(),
+						getPositionY(),
+						0,
+						0,
+						style.scroll_indicator_region.getRegionWidth(),
+						style.scroll_indicator_region.getRegionHeight(),
+						getHeight() / style.scroll_indicator_region.getRegionWidth(),
+						style.scroll_indicator_scaling,
+						90f
+				);
+			}
+
+			// Bottom indicator
+			if (bottom_indicator_alpha > 0f) {
+				batch.setColor(1, 1, 1, bottom_indicator_alpha);
+				batch.draw(
+					style.scroll_indicator_region,
+					getPositionX(),
+					getPositionY(),
+					getWidth(),
+					style.scroll_indicator_region.getRegionHeight() * style.scroll_indicator_scaling
+				);
+			}
+
+			// Top indicator
+			if (top_indicator_alpha > 0f) {
+				batch.setColor(1, 1, 1, top_indicator_alpha);
+				batch.draw(
+					style.scroll_indicator_region,
+					getPositionX(),
+					getPositionY() + getHeight(),
+					getWidth(),
+					-style.scroll_indicator_region.getRegionHeight() * style.scroll_indicator_scaling
+				);
+			}
+
+			batch.setColor(Color.WHITE);
+		}
 	}
 
 	protected void doRepositioning()
@@ -317,8 +438,11 @@ public class Scrollbox extends Widget
 	// pixels are considered clicks to child.
 	private static final float CLICK_TO_CHILD_DRAG_THRESHOLD_MM = 3f;
 
+	private static ScrollboxStyle default_style;
+
 	private Widget widget;
 
+	// These tell what part of the element is hidden
 	private Vector2 scroll_bottomleft = new Vector2(0, 0);
 	private Vector2 scroll_topright = new Vector2(0, 0);
 
@@ -330,4 +454,12 @@ public class Scrollbox extends Widget
 
 	private Vector2 scroll_when_pointer_was_pressed = new Vector2();
 	private Vector2 pointer_down_pos = new Vector2();
+
+	private ScrollboxStyle style;
+
+	private ScrollboxStyle getStyle()
+	{
+		if (style == null) return default_style;
+		return style;
+	}
 }

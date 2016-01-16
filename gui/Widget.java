@@ -362,6 +362,9 @@ public abstract class Widget
 				gl.glDisable(GL20.GL_SCISSOR_BOX);
 				batch.begin();
 			}
+
+			// Do second rendering
+			doRenderingAfterChildren(batch, shapes);
 		}
 	}
 
@@ -373,7 +376,9 @@ public abstract class Widget
 		return true;
 	}
 
-	protected abstract void doRendering(SpriteBatch batch, ShapeRenderer shapes);
+	protected void doRendering(SpriteBatch batch, ShapeRenderer shapes) { }
+
+	protected void doRenderingAfterChildren(SpriteBatch batch, ShapeRenderer shapes) { }
 
 	protected void repositionChild(Widget child, float x, float y, float width, float height)
 	{
