@@ -21,7 +21,9 @@ public class ButtonStyle
 	// Colors
 	public Color bg_color = Color.WHITE;
 	public Color bg_color_disabled = Color.GRAY;
+	public Color bg_color_pressed = Color.WHITE;
 	public Color label_color = Color.BLACK;
+	public Color label_color_pressed = Color.BLACK;
 	public Color label_color_disabled = Color.DARK_GRAY;
 	public Color icon_color;
 	public Color icon_color_disabled;

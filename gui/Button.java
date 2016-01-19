@@ -27,6 +27,11 @@ public class Button extends Widget
 		enabled = true;
 	}
 
+	public void setStyle(ButtonStyle style)
+	{
+		this.style = style;
+	}
+
 	public void setLabel(String label)
 	{
 		this.label = label;
@@ -108,7 +113,7 @@ public class Button extends Widget
 		renderHorizontalBar(batch, style.region_left, style.side_padding, style.region_right, style.side_padding, style.tex_center, pixel_height, getPositionX(), getPositionY(), getWidth(), getHeight(), style.bg_scaling);
 		// Render possible hilights
 		if (pressed && enabled) {
-			batch.setColor(1, 1, 1, 1);
+			batch.setColor(style.bg_color_pressed);
 			renderHorizontalBar(batch, style.region_hilight_left, style.side_padding, style.region_hilight_right, style.side_padding, style.tex_hilight_center, pixel_height, getPositionX(), getPositionY(), getWidth(), getHeight(), style.bg_scaling);
 		}
 		if (hilight) {
@@ -134,6 +139,8 @@ public class Button extends Widget
 			}
 			if (!enabled) {
 				font.setColor(style.label_color_disabled);
+			} else if (pressed) {
+				font.setColor(style.label_color_pressed);
 			} else {
 				font.setColor(style.label_color);
 			}
@@ -177,8 +184,13 @@ public class Button extends Widget
 	private boolean pressed;
 	private boolean enabled;
 
+	private ButtonStyle style;
+
 	private ButtonStyle getStyle()
 	{
+		if (style != null) {
+			return style;
+		}
 		return default_style;
 	}
 }
