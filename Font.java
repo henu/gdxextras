@@ -1,8 +1,5 @@
 package fi.henu.gdxextras;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
@@ -16,6 +13,7 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreeType.Bitmap;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.IntMap;
 
 // TODO: Support kerning!
 public class Font extends BitmapFont
@@ -239,7 +237,7 @@ public class Font extends BitmapFont
 
 	private Array<FreeTypeFontGenerator> fonts = new Array<FreeTypeFontGenerator>(true, 1, FreeTypeFontGenerator.class);
 
-	private Map<Integer, AtlasRegion> regions = new HashMap<Integer, AtlasRegion>();
+	private IntMap<AtlasRegion> regions = new IntMap<AtlasRegion>();
 
 	// Textures that hold glyph data and counters where next glyph
 	// should be added. Also tallest glyph at current row.
