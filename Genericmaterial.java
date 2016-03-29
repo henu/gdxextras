@@ -69,10 +69,10 @@ public class Genericmaterial
 	public void setColor(Vector3 color) { this.color.set(color); shader = null; }
 
 	// Rendering functions
-	private float[] render_light_color_buf = { 0, 0, 0, 1 };
-	private float[] render_light_dir_neg_buf = { 0, 0, 0, 1 };
-	private float[] render_light_ambient_buf = { 0, 0, 0, 1 };
-	private float[] render_color_buf = { 0, 0, 0, 1 };
+	private final float[] render_light_color_buf = { 0, 0, 0, 1 };
+	private final float[] render_light_dir_neg_buf = { 0, 0, 0, 1 };
+	private final float[] render_light_ambient_buf = { 0, 0, 0, 1 };
+	private final float[] render_color_buf = { 0, 0, 0, 1 };
 	public void render(GL20 gl, Mesh mesh, Matrix4 mat_modelviewproj, Matrix4 mat_nrm, ArrayList<Light> lights, Vector3 ambient_light)
 	{
 

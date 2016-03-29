@@ -315,14 +315,14 @@ public class Gui implements InputProcessor
 	private int screen_height = 0;
 
 	private SpriteBatch batch = new SpriteBatch();
-	private Matrix4 batch_projmatrix = new Matrix4();
+	private final Matrix4 batch_projmatrix = new Matrix4();
 	private ShapeRenderer shaperenderer = new ShapeRenderer();
 
 	// The Widget and the possible pointerlistener. If pointerlistener
 	// is set, then all events are delivered to it.
 	private Widget widget;
-	private Array<Widget> widgets_topmost = new Array<Widget>(true, 0, Widget.class);
-	private Array<Widget> pointerlisteners = new Array<Widget>();
+	private final Array<Widget> widgets_topmost = new Array<Widget>(true, 0, Widget.class);
+	private final Array<Widget> pointerlisteners = new Array<Widget>();
 	private Widget keyboardlistener = null;
 
 	// Listener for special events, like back button, etc.
@@ -330,9 +330,9 @@ public class Gui implements InputProcessor
 
 	// Mouse position is used to find correct
 	// Widget to receive scroll wheel events.
-	private Vector2 mouse_last_pos = new Vector2(0, 0);
+	private final Vector2 mouse_last_pos = new Vector2(0, 0);
 
-	private Vector2 v2tmp = new Vector2();
+	private final Vector2 v2tmp = new Vector2();
 
 	private void storeTopmostWidget(int pointer_id, Widget topmost)
 	{

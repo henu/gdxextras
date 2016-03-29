@@ -59,7 +59,7 @@ public class ClickArea extends Widget
 		return 0;
 	}
 
-	private Vector2 latest_click_pos = new Vector2(0, 0);
+	private final Vector2 latest_click_pos = new Vector2(0, 0);
 	private int latest_pointer_id = 0;
 
 }

@@ -63,6 +63,6 @@ public class Freearea extends Widget
 		return 0f;
 	}
 
-	private Array<Freehandle> handles = new Array<Freehandle>(true, 0, Freehandle.class);
+	private final Array<Freehandle> handles = new Array<Freehandle>(true, 0, Freehandle.class);
 
 }

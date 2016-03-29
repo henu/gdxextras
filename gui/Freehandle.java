@@ -38,6 +38,6 @@ public class Freehandle
 
 	private Widget widget = null;
 
-	private Vector2 pos = new Vector2();
+	private final Vector2 pos = new Vector2();
 
 }

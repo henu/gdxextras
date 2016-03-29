@@ -209,12 +209,12 @@ public class Bestfitcontainer extends Widget
 		public ReposNode c1, c2;
 	}
 
-	private Array<Widget> widgets = new Array<Widget>(true, 0, Widget.class);
+	private final Array<Widget> widgets = new Array<Widget>(true, 0, Widget.class);
 
 	// Results for "findBestFitFromTree()"
 	private float fit_best_area = 0;
 	private ReposNode fit_node = null;
-	private Rectangle fit_rectangle = new Rectangle();
+	private final Rectangle fit_rectangle = new Rectangle();
 	private boolean fit_split_horizontally;
 
 	private void findBestFitFromTree(Widget widget, float widget_w, float widget_h, ReposNode node, float x1, float y1, float x2, float y2, boolean last_widget)
@@ -322,8 +322,6 @@ public class Bestfitcontainer extends Widget
 			}
 		} while (modifications_done);
 
-		assert node.c1 != null;
-		assert node.c2 != null;
 		removeEmptyNodes(node.c1);
 		removeEmptyNodes(node.c2);
 	}

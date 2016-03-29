@@ -227,21 +227,21 @@ public class Font extends BitmapFont
 	private static final int PADDING = 2;
 	private static final float GLYPH_REAL_WIDTH_MULTIPLIER = 1000f;
 
-	private int pixelheight;
+	private final int pixelheight;
 
 	private Color color;
 	private float scaling_x;
 	private float scaling_y;
 
-	private Glyphmodifier glyphmodifier;
+	private final Glyphmodifier glyphmodifier;
 
-	private Array<FreeTypeFontGenerator> fonts = new Array<FreeTypeFontGenerator>(true, 1, FreeTypeFontGenerator.class);
+	private final Array<FreeTypeFontGenerator> fonts = new Array<FreeTypeFontGenerator>(true, 1, FreeTypeFontGenerator.class);
 
-	private IntMap<AtlasRegion> regions = new IntMap<AtlasRegion>();
+	private final IntMap<AtlasRegion> regions = new IntMap<AtlasRegion>();
 
 	// Textures that hold glyph data and counters where next glyph
 	// should be added. Also tallest glyph at current row.
-	private Array<Texture> texs = new Array<Texture>(true, 1, Texture.class);
+	private final Array<Texture> texs = new Array<Texture>(true, 1, Texture.class);
 	private int next_glyph_x, next_glyph_y, tallest_glyph_at_row;
 
 	private AtlasRegion getRegionForCodepoint(Integer codepoint)
@@ -304,7 +304,9 @@ public class Font extends BitmapFont
 			AtlasRegion region = drawGlyphToTexture(glyph_pixmap, offset_x, offset_y, advance);
 
 			// Clean
-			glyph_pixmap.dispose();
+			if (glyph_pixmap != null) {
+				glyph_pixmap.dispose();
+			}
 
 			return region;
 
