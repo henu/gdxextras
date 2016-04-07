@@ -2,6 +2,7 @@ package fi.henu.gdxextras.gui;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
@@ -44,6 +45,7 @@ public class Textinput extends Widget
 	public void setText(String text)
 	{
 		content.text = text;
+		content.text_layout = null;
 		if (content.password_text != null) {
 			content.updatePasswordText();
 		}
@@ -118,17 +120,22 @@ public class Textinput extends Widget
 
 		public void scrollSoCursorIsShown()
 		{
+			GlyphLayout temp_layout;
+
 			BitmapFont font = getStyle().font;
-			font.setScale(getStyle().scaling);
+			font.getData().setScale(getStyle().scaling);
 
 			// Get cursor specs in pixels
 			float cursor_pos_x_px;
 			if (password_text == null) {
-				cursor_pos_x_px = font.getBounds(text.substring(0, cursor)).width;
+				temp_layout = new GlyphLayout(font, text.substring(0, cursor));
+				cursor_pos_x_px = temp_layout.width;
 			} else {
-				cursor_pos_x_px = font.getBounds("*").width * cursor;
+				temp_layout = new GlyphLayout(font, "*");
+				cursor_pos_x_px = temp_layout.width * cursor;
 			}
-			float cursor_width_px = font.getBounds("_").width;
+			temp_layout = new GlyphLayout(font, "_");
+			float cursor_width_px = temp_layout.width;
 
 			if (cursor_pos_x_px < scrollbox.getScrollX()) {
 				scrollbox.setScrollX(cursor_pos_x_px);
@@ -137,9 +144,13 @@ public class Textinput extends Widget
 			} else {
 				float text_width_px;
 				if (password_text == null) {
-					text_width_px = font.getBounds(text).width;
+					if (text_layout == null) {
+						text_layout = new GlyphLayout(font, text);
+					}
+					text_width_px = text_layout.width;
 				} else {
-					text_width_px = font.getBounds("*").width * text.length();
+					temp_layout = new GlyphLayout(font, "*");
+					text_width_px = temp_layout.width * text.length();
 				}
 				float text_and_cursor_width_px = Math.max(text_width_px, cursor_pos_x_px + cursor_width_px);
 				if (scrollbox.getWidth() + scrollbox.getScrollX() > text_and_cursor_width_px) {
@@ -154,7 +165,8 @@ public class Textinput extends Widget
 			if (character == 0x08) {
 				if (cursor > 0) {
 					text = text.substring(0, cursor - 1) + text.substring(cursor);
-					cursor--;
+					text_layout = null;
+					-- cursor;
 					scrollSoCursorIsShown();
 					textinput.fireEvent(TEXT_CHANGED);
 				}
@@ -167,6 +179,7 @@ public class Textinput extends Widget
 			else if (character == 0x7f) {
 				if (cursor < text.length()) {
 					text = text.substring(0, cursor) + text.substring(cursor + 1);
+					text_layout = null;
 					scrollSoCursorIsShown();
 					textinput.fireEvent(TEXT_CHANGED);
 				}
@@ -186,6 +199,7 @@ public class Textinput extends Widget
 				}
 
 				text = text.substring(0, cursor) + character + text.substring(cursor);
+				text_layout = null;
 				cursor ++;
 				scrollSoCursorIsShown();
 				textinput.fireEvent(TEXT_CHANGED);
@@ -198,7 +212,7 @@ public class Textinput extends Widget
 		public boolean pointerDown(int pointer_id, Vector2 pos)
 		{
 			BitmapFont font = getStyle().font;
-			font.setScale(getStyle().scaling);
+			font.getData().setScale(getStyle().scaling);
 
 			String text_check;
 			if (password_text == null) {
@@ -219,8 +233,10 @@ public class Textinput extends Widget
 					int halfpos = (search_begin + search_end) / 2;
 					String part1 = text_check.substring(search_begin, halfpos);
 					String part2 = text_check.substring(halfpos, search_end);
-					float part1_w = font.getBounds(part1).width;
-					float part2_w = font.getBounds(part2).width;
+					GlyphLayout part1_layout = new GlyphLayout(font, part1);
+					GlyphLayout part2_layout = new GlyphLayout(font, part2);
+					float part1_w = part1_layout.width;
+					float part2_w = part2_layout.width;
 					// Halve. If some of parts was only one character long,
 					// then it can decide where cursor should be located.
 					if (cursor_x < search_begin_x + part1_w) {
@@ -261,9 +277,9 @@ public class Textinput extends Widget
 		protected void doRendering(SpriteBatch batch, ShapeRenderer shapes)
 		{
 			BitmapFont font = getStyle().font;
-			font.setScale(1);
+			font.getData().setScale(1);
 			float height = font.getLineHeight() * getStyle().scaling;
-			font.setScale(getStyle().scaling);
+			font.getData().setScale(getStyle().scaling);
 			Vector2 shadow = getStyle().shadow;
 
 			String text_to_render;
@@ -276,14 +292,17 @@ public class Textinput extends Widget
 				font.setColor(Color.BLACK);
 				font.draw(batch, text_to_render, getPositionX() + shadow.x, getPositionY() + height + shadow.y);
 				if (listeningKeyboard()) {
-					float cursor_x = font.getBounds(text_to_render.substring(0, cursor)).width;
+// TODO: Do not allocate this at every frame!
+GlyphLayout temp_layout = new GlyphLayout(font, text_to_render.substring(0, cursor));
+					float cursor_x = temp_layout.width;
 					font.draw(batch, "_", getPositionX() + cursor_x + shadow.x, getPositionY() + height + shadow.y);
 				}
 			}
 			font.setColor(getStyle().color);
 			font.draw(batch, text_to_render, getPositionX(), getPositionY() + height);
 			if (listeningKeyboard()) {
-				float cursor_x = font.getBounds(text_to_render.substring(0, cursor)).width;
+GlyphLayout temp_layout = new GlyphLayout(font, text_to_render.substring(0, cursor));
+				float cursor_x = temp_layout.width;
 				font.draw(batch, "_", getPositionX() + cursor_x, getPositionY() + height);
 			}
 		}
@@ -291,18 +310,21 @@ public class Textinput extends Widget
 		protected float doGetMinWidth()
 		{
 			BitmapFont font = getStyle().font;
-			font.setScale(getStyle().scaling);
+			font.getData().setScale(getStyle().scaling);
+
+			GlyphLayout temp_layout1 = new GlyphLayout(font, "_");
 
 			if (password_text != null) {
-				return font.getBounds("*").width * password_text.length() + font.getBounds("_").width;
+				GlyphLayout temp_layout2 = new GlyphLayout(font, "*");
+				return temp_layout2.width * password_text.length() + temp_layout1.width;
 			}
-			return font.getBounds(text + "_").width;
+			return temp_layout1.width;
 		}
 
 		protected float doGetMinHeight(float width)
 		{
 			BitmapFont font = getStyle().font;
-			font.setScale(getStyle().scaling);
+			font.getData().setScale(getStyle().scaling);
 
 			TextinputStyle textinput_style = getStyle();
 			return textinput_style.font.getLineHeight();
@@ -322,6 +344,7 @@ public class Textinput extends Widget
 		public Scrollbox scrollbox;
 
 		public String text;
+		public GlyphLayout text_layout;
 		public int cursor;
 		public String password_text;
 	}

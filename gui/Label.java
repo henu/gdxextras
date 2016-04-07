@@ -2,7 +2,7 @@ package fi.henu.gdxextras.gui;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.BitmapFont.TextBounds;
+import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.Array;
@@ -25,12 +25,14 @@ public class Label extends Widget
 	public void setText(String text)
 	{
 		this.text = text;
+		text_layout = null;
 		markToNeedReposition();
 	}
 
 	public void setTextAlignment(Alignment align)
 	{
 		text_align = align;
+		text_layout = null;
 	}
 
 	public void setMultiline(boolean multiline)
@@ -39,6 +41,7 @@ public class Label extends Widget
 			markToNeedReposition();
 		}
 		this.multiline = multiline;
+		text_layout = null;
 	}
 
 	public void setStyle(LabelStyle style)
@@ -51,9 +54,9 @@ public class Label extends Widget
 	{
 		// Get font and scale it correctly
 		BitmapFont font = getStyle().font;
-		font.setScale(1);
+		font.getData().setScale(1);
 		float lineheight = 	font.getLineHeight();
-		font.setScale(getStyle().height / lineheight);
+		font.getData().setScale(getStyle().height / lineheight);
 
 		if (!multiline) {
 			if (getStyle().shadow != null) {
@@ -94,29 +97,32 @@ public class Label extends Widget
 	{
 		// Get font and scale it correctly
 		BitmapFont font = getStyle().font;
-		font.setScale(1);
+		font.getData().setScale(1);
 		float lineheight = 	font.getLineHeight();
-		font.setScale(getStyle().height / lineheight);
+		font.getData().setScale(getStyle().height / lineheight);
 
 		// Calculate minimum width
 		if (!multiline) {
-			TextBounds bounds = font.getBounds(text);
-			return bounds.width;
+			if (text_layout == null) {
+				text_layout = new GlyphLayout(font, text);
+			}
+			return text_layout.width;
 		} else {
 			float result = 0;
 			String word = "";
+			GlyphLayout word_layout;
 			for (int text_idx = 0; text_idx < text.length(); text_idx ++) {
 				char c = text.charAt(text_idx);
 				if (c == ' ' || c == '\t' || c == '\n') {
-					TextBounds bounds = font.getBounds(word);
-					result = Math.max(result, bounds.width);
+					word_layout = new GlyphLayout(font, word);
+					result = Math.max(result, word_layout.width);
 					word = "";
 				} else {
 					word += c;
 				}
 			}
-			TextBounds bounds = font.getBounds(word);
-			result = Math.max(result, bounds.width);
+			word_layout = new GlyphLayout(font, word);
+			result = Math.max(result, word_layout.width);
 			return result;
 		}
 	}
@@ -128,9 +134,9 @@ public class Label extends Widget
 		} else {
 			// Get font and scale it correctly
 			BitmapFont font = getStyle().font;
-			font.setScale(1);
+			font.getData().setScale(1);
 			float lineheight = 	font.getLineHeight();
-			font.setScale(getStyle().height / lineheight);
+			font.getData().setScale(getStyle().height / lineheight);
 
 			int text_ofs = 0;
 			int lines = 0;
@@ -156,6 +162,7 @@ public class Label extends Widget
 
 	private String text;
 	private Alignment text_align;
+	private GlyphLayout text_layout;
 
 	// This also tells if multiple lines are supported. Null means not.
 	private boolean multiline;
@@ -167,7 +174,10 @@ public class Label extends Widget
 		// Set color
 		font.setColor(color);
 
-		float text_width = font.getBounds(text).width;
+// TODO: Do not allocate this at every call!
+text_layout = new GlyphLayout(font, text);
+
+		float text_width = text_layout.width;
 		if (text_align == Alignment.LEFT) {
 			font.draw(batch, text, pos_x, pos_y + getStyle().height);
 		} else {
@@ -200,7 +210,8 @@ public class Label extends Widget
 				// If there is word
 				if (word.length() > 0) {
 					// If word fits to the line
-					if (font.getBounds(line + whitespace + word).width <= width) {
+					GlyphLayout temp_layout = new GlyphLayout(font, line + whitespace + word);
+					if (temp_layout.width <= width) {
 						line += whitespace + word;
 					}
 					// If word does not fit and it's the only word
@@ -216,7 +227,8 @@ public class Label extends Widget
 						while (good_length_max - good_length_min > 1) {
 							int good_length_half = (good_length_min + good_length_max) / 2;
 							String good_length_half_substr = line.substring(0, good_length_half);
-							float width_now = font.getBounds(good_length_half_substr).width;
+							temp_layout = new GlyphLayout(font, good_length_half_substr);
+							float width_now = temp_layout.width;
 							if (width_now == width) {
 								return good_length_half_substr;
 							} else if (width_now < width) {

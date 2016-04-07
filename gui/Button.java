@@ -1,6 +1,7 @@
 package fi.henu.gdxextras.gui;
 
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -18,23 +19,20 @@ public class Button extends Widget
 	public Button()
 	{
 		super();
-		// Reset icon and label
-		icon = null;
-		label = null;
 		// Reset state
-		hilight = false;
-		pressed = false;
 		enabled = true;
 	}
 
 	public void setStyle(ButtonStyle style)
 	{
 		this.style = style;
+		label_layout = null;
 	}
 
 	public void setLabel(String label)
 	{
 		this.label = label;
+		label_layout = null;
 		markToNeedReposition();
 	}
 
@@ -93,6 +91,7 @@ public class Button extends Widget
 	// Returns true if position is over Widget. Position is relative to Widget
 	// and over the rectangle of Widget, so this function is for Widgets that
 	// are not rectangle shaped.
+	@Override
 	public boolean isOver(float x, float y)
 	{
 		return true;
@@ -132,7 +131,13 @@ public class Button extends Widget
 		// Render possible label
 		if (label != null) {
 			BitmapFont font = style.font;
-			font.setScale(style.label_scaling);
+			font.getData().setScale(style.label_scaling);
+
+			if (label_layout == null) {
+				label_layout = new GlyphLayout();
+				label_layout.setText(style.font, label);
+			}
+
 			float draw_x = getPositionX() + style.side_padding * style.bg_scaling;
 			if (icon != null) {
 				draw_x += style.side_padding * style.bg_scaling;
@@ -144,7 +149,7 @@ public class Button extends Widget
 			} else {
 				font.setColor(style.label_color);
 			}
-			font.draw(batch, label, draw_x, getPositionY() + pixel_height * style.bg_scaling - (pixel_height * style.bg_scaling - font.getLineHeight()) / 2);
+			font.draw(batch, label_layout, draw_x, getPositionY() + pixel_height * style.bg_scaling - (pixel_height * style.bg_scaling - font.getLineHeight()) / 2);
 		}
 		batch.setColor(1, 1, 1, 1);
 	}
@@ -156,8 +161,12 @@ public class Button extends Widget
 		float min_width = style.side_padding * 2f * style.bg_scaling;
 		if (label != null) {
 			BitmapFont font = style.font;
-			font.setScale(style.label_scaling);
-			min_width += font.getBounds(label).width;
+			font.getData().setScale(style.label_scaling);
+
+			label_layout = new GlyphLayout();
+			label_layout.setText(style.font, label);
+
+			min_width += label_layout.width;
 			if (icon != null) {
 				min_width += style.side_padding * style.bg_scaling;
 			}
@@ -178,6 +187,7 @@ public class Button extends Widget
 	// Options
 	private AtlasRegion icon;
 	private String label;
+	private GlyphLayout label_layout;
 
 	// State
 	private boolean hilight;
