@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 
 public class Label extends Widget
@@ -171,21 +172,18 @@ public class Label extends Widget
 
 	private void renderLineWithAlignment(SpriteBatch batch, String text, BitmapFont font, float pos_x, float pos_y, float width, Color color)
 	{
-		// Set color
-		font.setColor(color);
-
 // TODO: Do not allocate this at every call!
-text_layout = new GlyphLayout(font, text);
+text_layout = new GlyphLayout(font, text, color, 0, Align.left, false);
 
 		float text_width = text_layout.width;
 		if (text_align == Alignment.LEFT) {
-			font.draw(batch, text, pos_x, pos_y + getStyle().height);
+			font.draw(batch, text_layout, pos_x, pos_y + getStyle().height);
 		} else {
 			float extra_space = width - text_width;
 			if (text_align == Alignment.RIGHT) {
-				font.draw(batch, text, pos_x + extra_space, pos_y + getStyle().height);
+				font.draw(batch, text_layout, pos_x + extra_space, pos_y + getStyle().height);
 			} else {
-				font.draw(batch, text, pos_x + extra_space / 2, pos_y + getStyle().height);
+				font.draw(batch, text_layout, pos_x + extra_space / 2, pos_y + getStyle().height);
 			}
 		}
 	}

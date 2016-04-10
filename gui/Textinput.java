@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Align;
 
 public class Textinput extends Widget
 {
@@ -289,21 +290,26 @@ public class Textinput extends Widget
 				text_to_render = password_text;
 			}
 			if (shadow != null) {
-				font.setColor(Color.BLACK);
-				font.draw(batch, text_to_render, getPositionX() + shadow.x, getPositionY() + height + shadow.y);
+// TODO: Do not allocate this at every frame!
+GlyphLayout temp_layout = new GlyphLayout(font, text_to_render, Color.BLACK, 0, Align.left, false);
+				font.draw(batch, temp_layout, getPositionX() + shadow.x, getPositionY() + height + shadow.y);
 				if (listeningKeyboard()) {
 // TODO: Do not allocate this at every frame!
-GlyphLayout temp_layout = new GlyphLayout(font, text_to_render.substring(0, cursor));
+temp_layout = new GlyphLayout(font, text_to_render.substring(0, cursor));
 					float cursor_x = temp_layout.width;
-					font.draw(batch, "_", getPositionX() + cursor_x + shadow.x, getPositionY() + height + shadow.y);
+temp_layout = new GlyphLayout(font, "_", Color.BLACK, 0, Align.left, false);
+					font.draw(batch, temp_layout, getPositionX() + cursor_x + shadow.x, getPositionY() + height + shadow.y);
 				}
 			}
-			font.setColor(getStyle().color);
-			font.draw(batch, text_to_render, getPositionX(), getPositionY() + height);
+// TODO: Do not allocate this at every frame!
+GlyphLayout temp_layout = new GlyphLayout(font, text_to_render, getStyle().color, 0, Align.left, false);
+			font.draw(batch, temp_layout, getPositionX(), getPositionY() + height);
 			if (listeningKeyboard()) {
-GlyphLayout temp_layout = new GlyphLayout(font, text_to_render.substring(0, cursor));
+// TODO: Do not allocate this at every frame!
+temp_layout = new GlyphLayout(font, text_to_render.substring(0, cursor));
 				float cursor_x = temp_layout.width;
-				font.draw(batch, "_", getPositionX() + cursor_x, getPositionY() + height);
+temp_layout = new GlyphLayout(font, "_", getStyle().color, 0, Align.left, false);
+				font.draw(batch, temp_layout, getPositionX() + cursor_x, getPositionY() + height);
 			}
 		}
 

@@ -1,11 +1,13 @@
 package fi.henu.gdxextras.gui;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Align;
 
 // TODO: Make toggling on/off available!
 public class Button extends Widget
@@ -50,6 +52,7 @@ public class Button extends Widget
 	public void setEnabled(boolean enabled)
 	{
 		this.enabled = enabled;
+		label_layout = null;
 	}
 
 	public boolean isEnabled()
@@ -63,6 +66,7 @@ public class Button extends Widget
 		if (pointer_id == 0) {
 			clearKeyboardListener();
 			pressed = true;
+			label_layout = null;
 			return true;
 		}
 		return false;
@@ -72,7 +76,11 @@ public class Button extends Widget
 	public void pointerMove(int pointer_id, Vector2 pos)
 	{
 		if (pointer_id == 0) {
-			pressed = pointerOver(0);
+			boolean new_pressed = pointerOver(0);
+			if (pressed != new_pressed) {
+				label_layout = null;
+			}
+			pressed = new_pressed;
 		}
 	}
 
@@ -84,6 +92,7 @@ public class Button extends Widget
 				fireEvent();
 			}
 			pressed = false;
+			label_layout = null;
 			unregisterPointerListener(pointer_id);
 		}
 	}
@@ -119,6 +128,7 @@ public class Button extends Widget
 			batch.setColor(1, 1, 1, 1);
 			renderHorizontalBar(batch, style.region_hilight_left, style.side_padding, style.region_hilight_right, style.side_padding, style.tex_hilight_center, pixel_height, getPositionX(), getPositionY(), getWidth(), getHeight(), style.bg_scaling);
 		}
+
 		// Render possible icon
 		if (icon != null) {
 			if (!enabled) {
@@ -128,30 +138,34 @@ public class Button extends Widget
 			}
 			renderFromCenter(batch, icon, getPositionX() + style.side_padding * style.bg_scaling, getCenterY(), style.bg_scaling);
 		}
+
+		batch.setColor(1, 1, 1, 1);
+
 		// Render possible label
 		if (label != null) {
 			BitmapFont font = style.font;
 			font.getData().setScale(style.label_scaling);
 
+			// Decide color
+			Color font_color;
+			if (!enabled) {
+				font_color = style.label_color_disabled;
+			} else if (pressed) {
+				font_color = style.label_color_pressed;
+			} else {
+				font_color = style.label_color;
+			}
+
 			if (label_layout == null) {
-				label_layout = new GlyphLayout();
-				label_layout.setText(style.font, label);
+				label_layout = new GlyphLayout(style.font, label, font_color, 0, Align.left, false);
 			}
 
 			float draw_x = getPositionX() + style.side_padding * style.bg_scaling;
 			if (icon != null) {
 				draw_x += style.side_padding * style.bg_scaling;
 			}
-			if (!enabled) {
-				font.setColor(style.label_color_disabled);
-			} else if (pressed) {
-				font.setColor(style.label_color_pressed);
-			} else {
-				font.setColor(style.label_color);
-			}
 			font.draw(batch, label_layout, draw_x, getPositionY() + pixel_height * style.bg_scaling - (pixel_height * style.bg_scaling - font.getLineHeight()) / 2);
 		}
-		batch.setColor(1, 1, 1, 1);
 	}
 
 	@Override
@@ -170,6 +184,8 @@ public class Button extends Widget
 			if (icon != null) {
 				min_width += style.side_padding * style.bg_scaling;
 			}
+
+			label_layout = null;
 		}
 		return min_width;
 	}
