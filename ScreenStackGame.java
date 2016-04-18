@@ -46,7 +46,7 @@ public abstract class ScreenStackGame extends Game
 		disposed_screen.dispose();
 		// Check if this was the last screen
 		if (screens.size == 0) {
-			Gdx.app.exit();
+			setScreen(null);
 		} else {
 			// Only set top screen, if removed Screen was on the top
 			if (negative_index == 0) {
@@ -54,6 +54,18 @@ public abstract class ScreenStackGame extends Game
 				setScreen(new_top_screen);
 			}
 		}
+	}
+
+	@Override
+	public void render ()
+	{
+		// If there are no screens, then quit
+		if (screens.size == 0) {
+			Gdx.app.exit();
+			return;
+		}
+
+		super.render();
 	}
 
 	@Override
