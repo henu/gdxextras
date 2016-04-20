@@ -19,6 +19,22 @@ public class ByteQueue
 		size += 2;
 	}
 
+	public void writeInt(int i)
+	{
+		ensureSpace(4);
+
+		bytes[write] = (byte)(i >> 24);
+		write = (write + 1) % bytes.length;
+		bytes[write] = (byte)(i >> 16);
+		write = (write + 1) % bytes.length;
+		bytes[write] = (byte)(i >> 8);
+		write = (write + 1) % bytes.length;
+		bytes[write] = (byte)i;
+		write = (write + 1) % bytes.length;
+
+		size += 4;
+	}
+
 	public void writeBytes(byte[] bytes, int size)
 	{
 		ensureSpace(size);
