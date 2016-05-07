@@ -35,6 +35,30 @@ public class ByteQueue
 		size += 4;
 	}
 
+	public void writeLong(long l)
+	{
+		ensureSpace(8);
+
+		bytes[write] = (byte)(l >> 56);
+		write = (write + 1) % bytes.length;
+		bytes[write] = (byte)(l >> 48);
+		write = (write + 1) % bytes.length;
+		bytes[write] = (byte)(l >> 40);
+		write = (write + 1) % bytes.length;
+		bytes[write] = (byte)(l >> 32);
+		write = (write + 1) % bytes.length;
+		bytes[write] = (byte)(l >> 24);
+		write = (write + 1) % bytes.length;
+		bytes[write] = (byte)(l >> 16);
+		write = (write + 1) % bytes.length;
+		bytes[write] = (byte)(l >> 8);
+		write = (write + 1) % bytes.length;
+		bytes[write] = (byte)l;
+		write = (write + 1) % bytes.length;
+
+		size += 4;
+	}
+
 	public void writeBytes(byte[] bytes, int size)
 	{
 		ensureSpace(size);
