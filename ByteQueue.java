@@ -58,7 +58,7 @@ public class ByteQueue
 		bytes[write] = (byte)l;
 		write = (write + 1) % bytes.length;
 
-		size += 4;
+		size += 8;
 	}
 
 	public void writeFloat(float f)
