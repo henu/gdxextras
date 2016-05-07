@@ -1,5 +1,7 @@
 package fi.henu.gdxextras;
 
+import java.nio.ByteBuffer;
+
 public class ByteQueue
 {
 	public int getSize()
@@ -59,6 +61,13 @@ public class ByteQueue
 		size += 4;
 	}
 
+	public void writeFloat(float f)
+	{
+		tmp_bb.clear();
+		tmp_bb.putFloat(f);
+		writeBytes(tmp_bb.array(), 4);
+	}
+
 	public void writeBytes(byte[] bytes, int size)
 	{
 		ensureSpace(size);
@@ -100,6 +109,8 @@ public class ByteQueue
 	private int read;
 	private int write;
 	private int size;
+
+	private final ByteBuffer tmp_bb = ByteBuffer.allocate(4);
 
 	private void ensureSpace(int needed_empty_space)
 	{
