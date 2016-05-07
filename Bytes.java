@@ -63,11 +63,7 @@ public class Bytes
 
 	public void push(Bytes bytes)
 	{
-		if (bytes.items > 0) {
-			ensureAvailable(bytes.items);
-			System.arraycopy(bytes.buf, 0, buf, items, bytes.items);
-			items += bytes.items;
-		}
+		pushBytes(bytes.buf, 0, bytes.items);
 	}
 
 	// This will also push length of string to bytes, when encoded with
@@ -93,9 +89,14 @@ public class Bytes
 
 	public void pushBytes(byte[] bytes)
 	{
-		ensureAvailable(bytes.length);
-		System.arraycopy(bytes, 0, buf, items, bytes.length);
-		items += bytes.length;
+		pushBytes(bytes, 0, bytes.length);
+	}
+
+	public void pushBytes(byte[] bytes, int ofs, int len)
+	{
+		ensureAvailable(len);
+		System.arraycopy(bytes, ofs, buf, items, len);
+		items += len;
 	}
 
 	// Ensures there is specific amount of empty space available
