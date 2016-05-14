@@ -4,7 +4,6 @@ import java.nio.ByteBuffer;
 
 public class IVector2 implements Byteserializable
 {
-
 	public int x, y;
 
 	public IVector2()
