@@ -164,6 +164,11 @@ public class Mathutils
 		}
 	}
 
+	public static double root(double num, double root)
+	{
+		return Math.pow(Math.E, Math.log(num) / root);
+	}
+
 	// Temporary variables. These are used by multiple methods, so
 	// do not expect that value is kept if you do internal call!
 	// TODO: Get rid of these so things can be done in multiple threads!
