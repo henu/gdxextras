@@ -9,6 +9,16 @@ public class ByteQueue
 		return size;
 	}
 
+	public void writeByte(byte b)
+	{
+		ensureSpace(1);
+
+		bytes[write] = b;
+		write = (write + 1) % bytes.length;
+
+		size += 1;
+	}
+
 	public void writeShort(short s)
 	{
 		ensureSpace(2);
