@@ -85,6 +85,17 @@ public class Textinput extends Widget
 		}
 	}
 
+	public void setEnabled(boolean enabled)
+	{
+		content.stopListeningOfKeyboard();
+		content.enabled = enabled;
+	}
+
+	public boolean isEnabled()
+	{
+		return content.enabled;
+	}
+
 	@Override
 	protected void doRendering(SpriteBatch batch, ShapeRenderer shapes)
 	{
@@ -117,6 +128,8 @@ public class Textinput extends Widget
 			text = "";
 			cursor = 0;
 			password_text = null;
+
+			enabled = true;
 		}
 
 		public void scrollSoCursorIsShown()
@@ -162,6 +175,10 @@ public class Textinput extends Widget
 
 		public void keyTyped(char character)
 		{
+			if (!enabled) {
+				return;
+			}
+
 			// Backspace
 			if (character == 0x08) {
 				if (cursor > 0) {
@@ -212,6 +229,10 @@ public class Textinput extends Widget
 
 		public boolean pointerDown(int pointer_id, Vector2 pos)
 		{
+			if (!enabled) {
+				return false;
+			}
+
 			BitmapFont font = getStyle().font;
 			font.getData().setScale(getStyle().scaling);
 
@@ -353,6 +374,8 @@ temp_layout = new GlyphLayout(font, "_", getStyle().color, 0, Align.left, false)
 		public GlyphLayout text_layout;
 		public int cursor;
 		public String password_text;
+
+		public boolean enabled;
 	}
 
 	private static TextinputStyle default_style;
