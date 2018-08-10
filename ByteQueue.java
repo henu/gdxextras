@@ -101,6 +101,10 @@ public class ByteQueue
 			throw new RuntimeException("Not enough bytes!");
 		}
 
+		if (size <= 0) {
+			return;
+		}
+
 		int first_part_length = Math.min(size, this.bytes.length - read);
 		System.arraycopy(bytes, read, result, 0, first_part_length);
 		read = (read + first_part_length) % bytes.length;
