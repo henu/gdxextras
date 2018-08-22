@@ -146,13 +146,10 @@ public class Gui implements InputProcessor
 	@Override
 	public boolean keyDown(int keycode)
 	{
-		if (keycode == Keys.BACK) {
-			if (eventlistener == null) {
-				return false;
-			}
-			return eventlistener.handleGuiEvent(GuiEvent.fromKeypress(Keys.BACK));
+		if (eventlistener == null) {
+			return false;
 		}
-		return false;
+		return eventlistener.handleGuiEvent(GuiEvent.fromKeypress(keycode));
 	}
 
 	@Override
