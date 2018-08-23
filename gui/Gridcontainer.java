@@ -102,8 +102,10 @@ public class Gridcontainer extends Widget
 			if (col_id == cols) {
 				col_id = 0;
 				pos_x = 0;
-				pos_y -= heights[row_id];
 				row_id ++;
+				if (row_id < heights.length) {
+					pos_y -= heights[row_id];
+				}
 			}
 		}
 	}
