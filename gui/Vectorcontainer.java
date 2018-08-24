@@ -7,7 +7,6 @@ import com.badlogic.gdx.utils.Array;
 
 public class Vectorcontainer extends Widget
 {
-
 	public enum Direction {
 		HORIZONTAL, VERTICAL
 	}
@@ -36,6 +35,13 @@ public class Vectorcontainer extends Widget
 		markToNeedReposition();
 	}
 
+	public void addWidget(Widget widget, int index)
+	{
+		widgets.insert(index, widget);
+		addChild(widget);
+		markToNeedReposition();
+	}
+
 	public void removeWidget(Widget widget)
 	{
 		widgets.removeValue(widget, true);
@@ -52,6 +58,11 @@ public class Vectorcontainer extends Widget
 			removeChild(widget);
 		}
 		widgets.clear();
+	}
+
+	public int getWidgetsCount()
+	{
+		return widgets.size;
 	}
 
 	public void setBackground(Texture tex)
