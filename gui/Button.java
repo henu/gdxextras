@@ -55,6 +55,11 @@ public class Button extends Widget
 		label_layout = null;
 	}
 
+	public boolean isHilight()
+	{
+		return hilight;
+	}
+
 	public boolean isEnabled()
 	{
 		return enabled;
