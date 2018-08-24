@@ -56,6 +56,11 @@ public abstract class ScreenStackGame extends Game
 		}
 	}
 
+	public Screen getTopScreen()
+	{
+		return screens.get(screens.size - 1);
+	}
+
 	@Override
 	public void render ()
 	{
