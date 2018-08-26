@@ -23,6 +23,13 @@ public class Widgetstack extends Widget
 		markToNeedReposition();
 	}
 
+	public void addWidget(Widget widget, int index)
+	{
+		widgets.insert(index, widget);
+		addChild(widget, index);
+		markToNeedReposition();
+	}
+
 	public void removeWidget(Widget widget)
 	{
 		int pos = widgets.indexOf(widget, true);
@@ -32,6 +39,11 @@ public class Widgetstack extends Widget
 		widgets.removeIndex(pos);
 		removeChild(widget);
 		markToNeedReposition();
+	}
+
+	public int getWidgetsSize()
+	{
+		return widgets.size;
 	}
 
 	protected void doRepositioning()
@@ -61,5 +73,4 @@ public class Widgetstack extends Widget
 	}
 
 	private final Array<Widget> widgets = new Array<Widget>(true, 0, Widget.class);
-
 }

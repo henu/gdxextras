@@ -477,6 +477,13 @@ public abstract class Widget
 		widget.setGui(gui);
 	}
 
+	protected void addChild(Widget widget, int index)
+	{
+		children.insert(index, widget);
+		widget.parent = this;
+		widget.setGui(gui);
+	}
+
 	protected void removeChild(Widget widget)
 	{
 		boolean removed = children.removeValue(widget, true);

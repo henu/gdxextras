@@ -38,7 +38,7 @@ public class Vectorcontainer extends Widget
 	public void addWidget(Widget widget, int index)
 	{
 		widgets.insert(index, widget);
-		addChild(widget);
+		addChild(widget, index);
 		markToNeedReposition();
 	}
 
@@ -60,7 +60,7 @@ public class Vectorcontainer extends Widget
 		widgets.clear();
 	}
 
-	public int getWidgetsCount()
+	public int getWidgetsSize()
 	{
 		return widgets.size;
 	}
