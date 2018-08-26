@@ -123,6 +123,7 @@ public class Vectorcontainer extends Widget
 			extra_space_left = getHeight();
 		}
 		int expanding_widgets_left = 0;
+		int non_expandings_that_can_be_resized = 0;
 		for (int widget_id = 0; widget_id < widgets.size; widget_id ++) {
 			Widget widget = widgets_buf[widget_id];
 			if (widget.isShrunken()) {
@@ -130,9 +131,11 @@ public class Vectorcontainer extends Widget
 			} else if (dir == Direction.HORIZONTAL && widget.getHorizontalExpandingForRepositioning() == 0) {
 				widgets_sizes[widget_id] = widget.getMinWidth();
 				extra_space_left -= widget.getMinWidth();
+				++ non_expandings_that_can_be_resized;
 			} else if (dir == Direction.VERTICAL && widget.getVerticalExpandingForRepositioning() == 0) {
 				widgets_sizes[widget_id] = widget.getMinHeight(getWidth());
 				extra_space_left -= widget.getMinHeight(getWidth());
+				++ non_expandings_that_can_be_resized;
 			} else {
 				widgets_sizes[widget_id] = -1f;
 				++ expanding_widgets_left;
@@ -143,53 +146,69 @@ public class Vectorcontainer extends Widget
 		// The space is spreaded evenly, and it might be possible, that some Widgets are too large
 		// to fit into this space. In these cases, their size is set to whatever it is in minimum,
 		// and this size is reduced from extra space.
-		while (expanding_widgets_left > 0) {
-			// Calculate how much space should be reserved for each expanding point
-			float space_per_expanding = extra_space_left / total_expanding;
-			// Check if there are widgets, that are too large to fit to the given space
-			boolean too_big_ones_found = false;
-			for (int widget_id = 0; widget_id < widgets.size; widget_id ++) {
-				// Skip those, that already have their size set
-				if (widgets_sizes[widget_id] >= 0f) continue;
+		if (expanding_widgets_left > 0) {
+			while (expanding_widgets_left > 0) {
+				// Calculate how much space should be reserved for each expanding point
+				float space_per_expanding = extra_space_left / total_expanding;
+				// Check if there are widgets, that are too large to fit to the given space
+				boolean too_big_ones_found = false;
+				for (int widget_id = 0; widget_id < widgets.size; widget_id++) {
+					// Skip those, that already have their size set
+					if (widgets_sizes[widget_id] >= 0f) continue;
 
-				Widget widget = widgets_buf[widget_id];
-				int expanding_points;
-				float widget_min_size;
-				if (dir == Direction.HORIZONTAL) {
-					expanding_points = widget.getHorizontalExpandingForRepositioning();
-					widget_min_size = widget.getMinWidth();
-				} else {
-					expanding_points = widget.getVerticalExpandingForRepositioning();
-					widget_min_size = widget.getMinHeight(getWidth());
+					Widget widget = widgets_buf[widget_id];
+					int expanding_points;
+					float widget_min_size;
+					if (dir == Direction.HORIZONTAL) {
+						expanding_points = widget.getHorizontalExpandingForRepositioning();
+						widget_min_size = widget.getMinWidth();
+					} else {
+						expanding_points = widget.getVerticalExpandingForRepositioning();
+						widget_min_size = widget.getMinHeight(getWidth());
+					}
+
+					float size = expanding_points * space_per_expanding;
+					if (size < widget_min_size) {
+						widgets_sizes[widget_id] = widget_min_size;
+						too_big_ones_found = true;
+						extra_space_left -= widget_min_size;
+						total_expanding -= expanding_points;
+						-- expanding_widgets_left;
+					}
 				}
+				// If any of the Widgets was too big, then start over again
+				if (too_big_ones_found) continue;
 
-				float size = expanding_points * space_per_expanding;
-				if (size < widget_min_size) {
-					widgets_sizes[widget_id] = widget_min_size;
-					too_big_ones_found = true;
-					extra_space_left -= widget_min_size;
-					total_expanding -= expanding_points;
-					-- expanding_widgets_left;
+				// Now every remaining expanding widget should fit to the extra space
+				for (int widget_id = 0; widget_id < widgets.size; widget_id++) {
+					// Skip those, that already have their size set
+					if (widgets_sizes[widget_id] >= 0f) continue;
+
+					Widget widget = widgets_buf[widget_id];
+					int expanding_points;
+					if (dir == Direction.HORIZONTAL) {
+						expanding_points = widget.getHorizontalExpandingForRepositioning();
+					} else {
+						expanding_points = widget.getVerticalExpandingForRepositioning();
+					}
+					widgets_sizes[widget_id] = expanding_points * space_per_expanding;
+				}
+				break;
+			}
+		}
+		// If there are only non-expanding widgets and
+		// still space left, then make widgets bigger
+		else if (extra_space_left > 0 && non_expandings_that_can_be_resized > 0) {
+			float space_per_widget = extra_space_left / non_expandings_that_can_be_resized;
+			for (int widget_id = 0; widget_id < widgets.size; widget_id ++) {
+				Widget widget = widgets_buf[widget_id];
+				if (!widget.isShrunken()) {
+					if ((dir == Direction.HORIZONTAL && widget.getHorizontalExpandingForRepositioning() == 0) ||
+					    (dir == Direction.VERTICAL && widget.getVerticalExpandingForRepositioning() == 0)) {
+						widgets_sizes[widget_id] += space_per_widget;
+					}
 				}
 			}
-			// If any of the Widgets was too big, then start over again
-			if (too_big_ones_found) continue;
-
-			// Now every remaining expanding widget should fit to the extra space
-			for (int widget_id = 0; widget_id < widgets.size; widget_id ++) {
-				// Skip those, that already have their size set
-				if (widgets_sizes[widget_id] >= 0f) continue;
-
-				Widget widget = widgets_buf[widget_id];
-				int expanding_points;
-				if (dir == Direction.HORIZONTAL) {
-					expanding_points = widget.getHorizontalExpandingForRepositioning();
-				} else {
-					expanding_points = widget.getVerticalExpandingForRepositioning();
-				}
-				widgets_sizes[widget_id] = expanding_points * space_per_expanding;
-			}
-			break;
 		}
 
 		// Do the actual repositioning
