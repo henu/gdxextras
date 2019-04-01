@@ -95,6 +95,75 @@ public class ByteQueue
 		this.size += size;
 	}
 
+	public byte readByte()
+	{
+		if (size < 1) {
+			throw new RuntimeException("Not enough bytes!");
+		}
+		byte result = bytes[read];
+		read = (read + 1) % bytes.length;
+		-- size;
+		return result;
+	}
+
+	public short readShort()
+	{
+		if (size < 2) {
+			throw new RuntimeException("Not enough bytes!");
+		}
+		short result = 0;
+		result += bytes[read] << 8;
+		read = (read + 1) % bytes.length;
+		result += bytes[read];
+		read = (read + 1) % bytes.length;
+		size -= 2;
+		return result;
+	}
+
+	public int readInt()
+	{
+		if (size < 4) {
+			throw new RuntimeException("Not enough bytes!");
+		}
+		int result = 0;
+		result += (bytes[read] & 0xff) << 24;
+		read = (read + 1) % bytes.length;
+		result += (bytes[read] & 0xff) << 16;
+		read = (read + 1) % bytes.length;
+		result += (bytes[read] & 0xff) << 8;
+		read = (read + 1) % bytes.length;
+		result += (bytes[read] & 0xff);
+		read = (read + 1) % bytes.length;
+		size -= 4;
+		return result;
+	}
+
+	public long readLong()
+	{
+		if (size < 8) {
+			throw new RuntimeException("Not enough bytes!");
+		}
+		long result = 0;
+		result += (long)bytes[read] << 56;
+		read = (read + 1) % bytes.length;
+		result += (long)bytes[read] << 48;
+		read = (read + 1) % bytes.length;
+		result += (long)bytes[read] << 40;
+		read = (read + 1) % bytes.length;
+		result += (long)bytes[read] << 32;
+		read = (read + 1) % bytes.length;
+		result += bytes[read] << 24;
+		read = (read + 1) % bytes.length;
+		result += bytes[read] << 16;
+		read = (read + 1) % bytes.length;
+		result += bytes[read] << 8;
+		read = (read + 1) % bytes.length;
+		result += bytes[read];
+		read = (read + 1) % bytes.length;
+		size -= 8;
+		return result;
+	}
+
 	public void readBytes(byte[] result, int size)
 	{
 		if (size > this.size) {
