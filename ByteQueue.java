@@ -164,6 +164,13 @@ public class ByteQueue
 		return result;
 	}
 
+	public float readFloat()
+	{
+		tmp_bb.clear();
+		readBytes(tmp_bb.array(), 4);
+		return tmp_bb.getFloat();
+	}
+
 	public void readBytes(byte[] result, int size)
 	{
 		if (size > this.size) {
