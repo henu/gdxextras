@@ -78,21 +78,38 @@ public class ByteQueue
 		writeBytes(tmp_bb.array(), 4);
 	}
 
-	public void writeBytes(byte[] bytes, int size)
+	public void writeBytes(byte[] bytes, int offset, int size)
 	{
 		ensureSpace(size);
 
 		int first_part_length = Math.min(size, this.bytes.length - write);
-		System.arraycopy(bytes, 0, this.bytes, write, first_part_length);
+		System.arraycopy(bytes, offset, this.bytes, write, first_part_length);
 		write = (write + first_part_length) % this.bytes.length;
 
 		int second_part_length = size - first_part_length;
 		if (second_part_length > 0) {
-			System.arraycopy(bytes, first_part_length, this.bytes, 0, second_part_length);
+			System.arraycopy(bytes, offset + first_part_length, this.bytes, 0, second_part_length);
 			write = second_part_length;
 		}
 
 		this.size += size;
+	}
+
+	public void writeBytes(byte[] bytes, int size)
+	{
+		writeBytes(bytes, 0, size);
+	}
+
+	public void writeBytes(ByteQueue buf)
+	{
+		ensureSpace(buf.size);
+
+		if (buf.read < buf.write) {
+			writeBytes(buf.bytes, buf.read, buf.size);
+		} else {
+			writeBytes(buf.bytes, buf.read, buf.bytes.length - buf.read);
+			writeBytes(buf.bytes, buf.write);
+		}
 	}
 
 	public byte readByte()
@@ -192,6 +209,16 @@ public class ByteQueue
 		}
 
 		this.size -= size;
+	}
+
+	public ByteQueue readBytequeue(int size)
+	{
+		ByteQueue result = new ByteQueue();
+		result.bytes = new byte[size];
+		result.write = size;
+		result.size = size;
+		readBytes(result.bytes, size);
+		return result;
 	}
 
 	private byte[] bytes;
