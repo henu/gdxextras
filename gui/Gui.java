@@ -149,7 +149,7 @@ public class Gui implements InputProcessor
 		if (eventlistener == null) {
 			return false;
 		}
-		return eventlistener.handleGuiEvent(GuiEvent.fromKeypress(keycode));
+		return eventlistener.handleGuiEvent(GuiEvent.fromKeyPress(keycode));
 	}
 
 	@Override
@@ -165,8 +165,10 @@ public class Gui implements InputProcessor
 	@Override
 	public boolean keyUp(int keycode)
 	{
-		// TODO Auto-generated method stub
-		return false;
+		if (eventlistener == null) {
+			return false;
+		}
+		return eventlistener.handleGuiEvent(GuiEvent.fromKeyRelease(keycode));
 	}
 
 	@Override
