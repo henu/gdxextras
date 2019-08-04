@@ -141,6 +141,27 @@ public class Connection
 		return socket.isClosed() || socket.isOutputShutdown() || socket.isInputShutdown();
 	}
 
+	Connection(Socket socket)
+	{
+		this.socket = socket;
+
+		reader = new Reader(this);
+		writer = new Writer();
+
+		reader_thread = new Thread(reader);
+		writer_thread = new Thread(writer);
+
+		// This is remote connection, so set local stuff null
+		local_conn_server_end = null;
+		local_conn_client_end = null;
+
+		received_messages = new RingBuffer<NetworkMessage>();
+
+		// Start threads
+		reader_thread.start();
+		writer_thread.start();
+	}
+
 	private class Reader implements Runnable
 	{
 		public final ByteQueue queue;
