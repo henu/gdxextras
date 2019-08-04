@@ -113,7 +113,7 @@ public class Connection
 			assert writer != null;
 			synchronized (writer.queue) {
 				writer.queue.writeInt(msg.type);
-				if (msg.data != null) {
+				if (msg.data != null && msg.data.getSize() > 0) {
 					writer.queue.writeInt(msg.data.getSize());
 					writer.queue.writeBytes(msg.data);
 				} else {
