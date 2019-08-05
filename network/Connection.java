@@ -90,6 +90,9 @@ public class Connection
 			reader_thread = null;
 		}
 		if (writer_thread != null) {
+			synchronized (writer.queue) {
+				writer.queue.notify();
+			}
 			try {
 				writer_thread.join();
 			}
