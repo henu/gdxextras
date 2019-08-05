@@ -193,6 +193,7 @@ public class Connection
 				try {
 					buf_size = socket.getInputStream().read(buf);
 				} catch (IOException e) {
+					closed = true;
 					return;
 				}
 				if (buf_size < 0) {
@@ -272,7 +273,6 @@ public class Connection
 							queue.wait();
 						}
 						catch (InterruptedException e) {
-							return;
 						}
 					}
 				}
@@ -283,6 +283,7 @@ public class Connection
 						socket.getOutputStream().write(buf, 0, buf_size);
 					}
 					catch (IOException e) {
+						closed = true;
 						return;
 					}
 				}
