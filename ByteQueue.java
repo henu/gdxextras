@@ -1,5 +1,6 @@
 package fi.henu.gdxextras;
 
+import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
 
 public class ByteQueue
@@ -112,6 +113,20 @@ public class ByteQueue
 		}
 	}
 
+	public void writeString(String str)
+	{
+		byte[] utf8;
+		try {
+			utf8 = str.getBytes("UTF8");
+		}
+		catch (UnsupportedEncodingException e) {
+			throw new RuntimeException("Unable to encode UTF8!");
+		}
+		ensureSpace(4 + utf8.length);
+		writeInt(utf8.length);
+		writeBytes(utf8, utf8.length);
+	}
+
 	public byte readByte()
 	{
 		if (size < 1) {
@@ -219,6 +234,19 @@ public class ByteQueue
 		result.size = size;
 		readBytes(result.bytes, size);
 		return result;
+	}
+
+	public String readString()
+	{
+		int utf8_len = readInt();
+		byte[] utf8 = new byte[utf8_len];
+		readBytes(utf8, utf8_len);
+		try {
+			return new String(utf8, 0, utf8_len, "UTF8");
+		}
+		catch (UnsupportedEncodingException e) {
+			throw new RuntimeException("Unable to decode UTF8!");
+		}
 	}
 
 	private byte[] bytes;
