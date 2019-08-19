@@ -54,16 +54,16 @@ public class Label extends Widget
 	protected void doRendering(SpriteBatch batch, ShapeRenderer shapes)
 	{
 		// Get font and scale it correctly
-		BitmapFont font = getStyle().font;
+		BitmapFont font = getStyle().getFont();
 		font.getData().setScale(1);
-		float lineheight = 	font.getLineHeight();
-		font.getData().setScale(getStyle().height / lineheight);
+		float lineheight = font.getLineHeight();
+		font.getData().setScale(getStyle().getHeight() / lineheight);
 
 		if (!multiline) {
-			if (getStyle().shadow != null) {
-				renderLineWithAlignment(batch, text, font, getPositionX() + getStyle().shadow.x, getPositionY() + getStyle().shadow.y, getWidth(), Color.BLACK);
+			if (getStyle().getShadow() != null && getStyle().getShadow().x != 0 && getStyle().getShadow().y != 0) {
+				renderLineWithAlignment(batch, text, font, getPositionX() + getStyle().getShadow().x, getPositionY() + getStyle().getShadow().y, getWidth(), Color.BLACK);
 			}
-			renderLineWithAlignment(batch, text, font, getPositionX(), getPositionY(), getWidth(), getStyle().color);
+			renderLineWithAlignment(batch, text, font, getPositionX(), getPositionY(), getWidth(), getStyle().getColor());
 		} else {
 			// Read all lines first
 			Array<String> lines = new Array<String>(true, 0, String.class);
@@ -83,13 +83,13 @@ public class Label extends Widget
 				}
 			}
 			// Now render lines
-			float draw_y = getPositionY() + (lines.size - 1) * getStyle().height;
+			float draw_y = getPositionY() + (lines.size - 1) * getStyle().getHeight();
 			for (int line = 0; line < lines.size; ++ line) {
-				if (getStyle().shadow != null) {
-					renderLineWithAlignment(batch, lines.get(line), font, getPositionX() + getStyle().shadow.x, draw_y + getStyle().shadow.y, getWidth(), Color.BLACK);
+				if (getStyle().getShadow() != null && getStyle().getShadow().x != 0 && getStyle().getShadow().y != 0) {
+					renderLineWithAlignment(batch, lines.get(line), font, getPositionX() + getStyle().getShadow().x, draw_y + getStyle().getShadow().y, getWidth(), Color.BLACK);
 				}
-				renderLineWithAlignment(batch, lines.get(line), font, getPositionX(), draw_y, getWidth(), getStyle().color);
-				draw_y -= getStyle().height;
+				renderLineWithAlignment(batch, lines.get(line), font, getPositionX(), draw_y, getWidth(), getStyle().getColor());
+				draw_y -= getStyle().getHeight();
 			}
 		}
 	}
@@ -97,10 +97,10 @@ public class Label extends Widget
 	protected float doGetMinWidth()
 	{
 		// Get font and scale it correctly
-		BitmapFont font = getStyle().font;
+		BitmapFont font = getStyle().getFont();
 		font.getData().setScale(1);
-		float lineheight = 	font.getLineHeight();
-		font.getData().setScale(getStyle().height / lineheight);
+		float lineheight = font.getLineHeight();
+		font.getData().setScale(getStyle().getHeight() / lineheight);
 
 		// Calculate minimum width
 		if (!multiline) {
@@ -131,13 +131,13 @@ public class Label extends Widget
 	protected float doGetMinHeight(float width)
 	{
 		if (!multiline) {
-			return getStyle().height;
+			return getStyle().getHeight();
 		} else {
 			// Get font and scale it correctly
-			BitmapFont font = getStyle().font;
+			BitmapFont font = getStyle().getFont();
 			font.getData().setScale(1);
-			float lineheight = 	font.getLineHeight();
-			font.getData().setScale(getStyle().height / lineheight);
+			float lineheight = font.getLineHeight();
+			font.getData().setScale(getStyle().getHeight() / lineheight);
 
 			int text_ofs = 0;
 			int lines = 0;
@@ -155,7 +155,7 @@ public class Label extends Widget
 					}
 				}
 			}
-			return lines * getStyle().height;
+			return lines * getStyle().getHeight();
 		}
 	}
 
@@ -177,13 +177,13 @@ text_layout = new GlyphLayout(font, text, color, 0, Align.left, false);
 
 		float text_width = text_layout.width;
 		if (text_align == Alignment.LEFT) {
-			font.draw(batch, text_layout, pos_x, pos_y + getStyle().height);
+			font.draw(batch, text_layout, pos_x, pos_y + getStyle().getHeight());
 		} else {
 			float extra_space = width - text_width;
 			if (text_align == Alignment.RIGHT) {
-				font.draw(batch, text_layout, pos_x + extra_space, pos_y + getStyle().height);
+				font.draw(batch, text_layout, pos_x + extra_space, pos_y + getStyle().getHeight());
 			} else {
-				font.draw(batch, text_layout, pos_x + extra_space / 2, pos_y + getStyle().height);
+				font.draw(batch, text_layout, pos_x + extra_space / 2, pos_y + getStyle().getHeight());
 			}
 		}
 	}
