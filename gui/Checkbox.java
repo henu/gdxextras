@@ -14,9 +14,16 @@ public class Checkbox extends Widget
 
 	public Checkbox()
 	{
+		enabled = true;
 	}
 
 	public Checkbox(boolean checked)
+	{
+		this.checked = checked;
+		enabled = true;
+	}
+
+	public void setChecked(boolean checked)
 	{
 		this.checked = checked;
 	}
@@ -26,11 +33,23 @@ public class Checkbox extends Widget
 		return checked;
 	}
 
+	public void setEnabled(boolean enabled)
+	{
+		this.enabled = enabled;
+	}
+
+	public boolean getEnabled()
+	{
+		return enabled;
+	}
+
 	@Override
 	public boolean pointerDown(int pointer_id, Vector2 pos)
 	{
-		checked = !checked;
-		fireEvent();
+		if (enabled) {
+			checked = !checked;
+			fireEvent();
+		}
 		return false;
 	}
 
@@ -68,6 +87,8 @@ public class Checkbox extends Widget
 	}
 
 	private boolean checked;
+
+	private boolean enabled;
 
 	private static CheckboxStyle default_style;
 
