@@ -12,6 +12,7 @@ public class Server implements Runnable
 	{
 		conns = new Array<Connection>(false, 0);
 		new_conns = new Array<Connection>(false, 0);
+		sleep_cond = new Object();
 
 		listening_socket = null;
 
@@ -24,6 +25,7 @@ public class Server implements Runnable
 	{
 		conns = new Array<Connection>(false, 0);
 		new_conns = new Array<Connection>(false, 0);
+		sleep_cond = new Object();
 
 		try {
 			listening_socket = new ServerSocket(port);
@@ -82,6 +84,19 @@ public class Server implements Runnable
 		}
 	}
 
+	// Like traditional sleep function, but awakes
+	// if there are any received messages waiting.
+	public void sleep(long millis)
+	{
+		synchronized (sleep_cond) {
+			try {
+				sleep_cond.wait(millis);
+			}
+			catch (InterruptedException e) {
+			}
+		}
+	}
+
 	@Override
 	public void run()
 	{
@@ -110,7 +125,7 @@ public class Server implements Runnable
 					break;
 				}
 
-				Connection conn = new Connection(client_socket);
+				Connection conn = new Connection(this, client_socket);
 				synchronized (conns) {
 					conns.add(conn);
 				}
@@ -131,10 +146,17 @@ public class Server implements Runnable
 		}
 	}
 
+	Object getSleepCondition()
+	{
+		return sleep_cond;
+	}
+
 	private final Array<Connection> conns;
 	private final Array<Connection> new_conns;
 
 	private ServerSocket listening_socket;
+
+	private final Object sleep_cond;
 
 	private Thread thread;
 	private boolean keep_running;

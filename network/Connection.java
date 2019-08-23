@@ -10,8 +10,11 @@ public class Connection
 {
 	public Connection(Server server)
 	{
+		// This is client side connection, so it must not know about server
+		this.server = null;
+
 		// Create another end of local connection
-		local_conn_server_end = new Connection(this);
+		local_conn_server_end = new Connection(server, this);
 		local_conn_client_end = null;
 
 		// Inform server about this
@@ -29,6 +32,8 @@ public class Connection
 
 	public Connection(String host, int port)
 	{
+		server = null;
+
 		try {
 			socket = new Socket(host, port);
 		}
@@ -144,8 +149,9 @@ public class Connection
 		return socket.isClosed() || socket.isOutputShutdown() || socket.isInputShutdown();
 	}
 
-	Connection(Socket socket)
+	Connection(Server server, Socket socket)
 	{
+		this.server = server;
 		this.socket = socket;
 
 		reader = new Reader(this);
@@ -231,6 +237,12 @@ public class Connection
 					synchronized (conn.received_messages) {
 						conn.received_messages.add(new_msg);
 					}
+					// Inform server that there are new messages available
+					if (server != null) {
+						synchronized (server.getSleepCondition()) {
+							server.getSleepCondition().notify();
+						}
+					}
 				}
 			}
 		}
@@ -291,6 +303,8 @@ public class Connection
 		}
 	}
 
+	private final Server server;
+
 	// For local connection
 	private final Connection local_conn_server_end;
 	private final Connection local_conn_client_end;
@@ -305,8 +319,9 @@ public class Connection
 
 	private final RingBuffer<NetworkMessage> received_messages;
 
-	private Connection(Connection local_conn_client_end)
+	private Connection(Server server, Connection local_conn_client_end)
 	{
+		this.server = server;
 		local_conn_server_end = null;
 		this.local_conn_client_end = local_conn_client_end;
 		socket = null;
