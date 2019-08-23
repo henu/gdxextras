@@ -13,6 +13,32 @@ public class Connection
 		// This is client side connection, so it must not know about server
 		this.server = null;
 
+		message_handler = null;
+
+		// Create another end of local connection
+		local_conn_server_end = new Connection(server, this);
+		local_conn_client_end = null;
+
+		// Inform server about this
+		server.register_local_connection_server_end(local_conn_server_end);
+
+		// This is local connection, so set remote stuff null
+		socket = null;
+		reader = null;
+		writer = null;
+		reader_thread = null;
+		writer_thread = null;
+
+		received_messages = new RingBuffer<NetworkMessage>();
+	}
+
+	public Connection(Server server, MessageHandler message_handler)
+	{
+		// This is client side connection, so it must not know about server
+		this.server = null;
+
+		this.message_handler = message_handler;
+
 		// Create another end of local connection
 		local_conn_server_end = new Connection(server, this);
 		local_conn_client_end = null;
@@ -33,6 +59,36 @@ public class Connection
 	public Connection(String host, int port)
 	{
 		server = null;
+		message_handler = null;
+
+		try {
+			socket = new Socket(host, port);
+		}
+		catch (IOException e) {
+			throw new RuntimeException("Connection failed!");
+		}
+
+		reader = new Reader(this);
+		writer = new Writer();
+
+		reader_thread = new Thread(reader);
+		writer_thread = new Thread(writer);
+
+		// This is remote connection, so set local stuff null
+		local_conn_server_end = null;
+		local_conn_client_end = null;
+
+		received_messages = new RingBuffer<NetworkMessage>();
+
+		// Start threads
+		reader_thread.start();
+		writer_thread.start();
+	}
+
+	public Connection(String host, int port, MessageHandler message_handler)
+	{
+		server = null;
+		this.message_handler = message_handler;
 
 		try {
 			socket = new Socket(host, port);
@@ -154,6 +210,8 @@ public class Connection
 		this.server = server;
 		this.socket = socket;
 
+		message_handler = server.getMessageHandler();
+
 		reader = new Reader(this);
 		writer = new Writer();
 
@@ -234,6 +292,11 @@ public class Connection
 					if (new_msg == null) {
 						break;
 					}
+					// Check if message handler would like to consume the message
+					if (message_handler != null && message_handler.consumeReceivedMessage(conn, new_msg)) {
+						continue;
+					}
+					// Add message to queue
 					synchronized (conn.received_messages) {
 						conn.received_messages.add(new_msg);
 					}
@@ -305,6 +368,8 @@ public class Connection
 
 	private final Server server;
 
+	private final MessageHandler message_handler;
+
 	// For local connection
 	private final Connection local_conn_server_end;
 	private final Connection local_conn_client_end;
@@ -322,6 +387,7 @@ public class Connection
 	private Connection(Server server, Connection local_conn_client_end)
 	{
 		this.server = server;
+		message_handler = server.getMessageHandler();
 		local_conn_server_end = null;
 		this.local_conn_client_end = local_conn_client_end;
 		socket = null;

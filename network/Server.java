@@ -10,6 +10,23 @@ public class Server implements Runnable
 {
 	public Server()
 	{
+		message_handler = null;
+
+		conns = new Array<Connection>(false, 0);
+		new_conns = new Array<Connection>(false, 0);
+		sleep_cond = new Object();
+
+		listening_socket = null;
+
+		keep_running = true;
+		thread = new Thread(this);
+		thread.start();
+	}
+
+	public Server(MessageHandler message_handler)
+	{
+		this.message_handler = message_handler;
+
 		conns = new Array<Connection>(false, 0);
 		new_conns = new Array<Connection>(false, 0);
 		sleep_cond = new Object();
@@ -23,6 +40,28 @@ public class Server implements Runnable
 
 	public Server(int port)
 	{
+		message_handler = null;
+
+		conns = new Array<Connection>(false, 0);
+		new_conns = new Array<Connection>(false, 0);
+		sleep_cond = new Object();
+
+		try {
+			listening_socket = new ServerSocket(port);
+		}
+		catch (IOException e) {
+			throw new RuntimeException("Unable to listen port " + port + "!");
+		}
+
+		keep_running = true;
+		thread = new Thread(this);
+		thread.start();
+	}
+
+	public Server(int port, MessageHandler message_handler)
+	{
+		this.message_handler = message_handler;
+
 		conns = new Array<Connection>(false, 0);
 		new_conns = new Array<Connection>(false, 0);
 		sleep_cond = new Object();
@@ -151,12 +190,19 @@ public class Server implements Runnable
 		return sleep_cond;
 	}
 
+	MessageHandler getMessageHandler()
+	{
+		return message_handler;
+	}
+
 	private final Array<Connection> conns;
 	private final Array<Connection> new_conns;
 
 	private ServerSocket listening_socket;
 
 	private final Object sleep_cond;
+
+	private final MessageHandler message_handler;
 
 	private Thread thread;
 	private boolean keep_running;
