@@ -10,6 +10,12 @@ public class ByteQueue
 		return size;
 	}
 
+	public void writeBoolean(boolean b)
+	{
+		if (b) writeByte((byte)1);
+		else writeByte((byte)0);
+	}
+
 	public void writeByte(byte b)
 	{
 		ensureSpace(1);
@@ -125,6 +131,11 @@ public class ByteQueue
 		ensureSpace(4 + utf8.length);
 		writeInt(utf8.length);
 		writeBytes(utf8, utf8.length);
+	}
+
+	public boolean readBoolean()
+	{
+		return readByte() != 0;
 	}
 
 	public byte readByte()
