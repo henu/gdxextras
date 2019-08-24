@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 
@@ -30,6 +31,11 @@ public class Label extends Widget
 		markToNeedReposition();
 	}
 
+	public String getText()
+	{
+		return text;
+	}
+
 	public void setTextAlignment(Alignment align)
 	{
 		text_align = align;
@@ -48,6 +54,20 @@ public class Label extends Widget
 	public void setStyle(LabelStyle style)
 	{
 		this.style = style;
+	}
+
+	public void setEventListener(Eventlistener event_listener)
+	{
+		this.event_listener = event_listener;
+	}
+
+	@Override
+	public boolean pointerDown(int pointer_id, Vector2 pos)
+	{
+		if (event_listener != null) {
+			event_listener.handleGuiEvent(GuiEvent.fromWidget(this, 0));
+		}
+		return false;
 	}
 
 	@Override
@@ -169,6 +189,8 @@ public class Label extends Widget
 	private boolean multiline;
 
 	private LabelStyle style;
+
+	private Eventlistener event_listener;
 
 	private void renderLineWithAlignment(SpriteBatch batch, String text, BitmapFont font, float pos_x, float pos_y, float width, Color color)
 	{

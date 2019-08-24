@@ -65,6 +65,11 @@ public class Vectorcontainer extends Widget
 		return widgets.size;
 	}
 
+	public Widget getWidget(int idx)
+	{
+		return widgets.get(idx);
+	}
+
 	public void setBackground(Texture tex)
 	{
 		background_tex = tex;
