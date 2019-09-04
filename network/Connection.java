@@ -10,6 +10,8 @@ public class Connection
 {
 	public Connection(Server server)
 	{
+		sleep_cond = new Object();
+
 		// This is client side connection, so it must not know about server
 		this.server = null;
 
@@ -34,6 +36,8 @@ public class Connection
 
 	public Connection(Server server, MessageHandler message_handler)
 	{
+		sleep_cond = new Object();
+
 		// This is client side connection, so it must not know about server
 		this.server = null;
 
@@ -58,6 +62,8 @@ public class Connection
 
 	public Connection(String host, int port)
 	{
+		sleep_cond = new Object();
+
 		server = null;
 		message_handler = null;
 
@@ -87,6 +93,8 @@ public class Connection
 
 	public Connection(String host, int port, MessageHandler message_handler)
 	{
+		sleep_cond = new Object();
+
 		server = null;
 		this.message_handler = message_handler;
 
@@ -112,6 +120,19 @@ public class Connection
 		// Start threads
 		reader_thread.start();
 		writer_thread.start();
+	}
+
+	// Like traditional sleep function, but awakes
+	// if there are any received messages waiting.
+	public void sleep(long millis)
+	{
+		synchronized (sleep_cond) {
+			try {
+				sleep_cond.wait(millis);
+			}
+			catch (InterruptedException e) {
+			}
+		}
 	}
 
 	public void close()
@@ -207,6 +228,8 @@ public class Connection
 
 	Connection(Server server, Socket socket)
 	{
+		sleep_cond = new Object();
+
 		this.server = server;
 		this.socket = socket;
 
@@ -300,11 +323,14 @@ public class Connection
 					synchronized (conn.received_messages) {
 						conn.received_messages.add(new_msg);
 					}
-					// Inform server that there are new messages available
+					// Inform possible sleepers that there are new messages available
 					if (server != null) {
 						synchronized (server.getSleepCondition()) {
-							server.getSleepCondition().notify();
+							server.getSleepCondition().notifyAll();
 						}
+					}
+					synchronized (sleep_cond) {
+						sleep_cond.notifyAll();
 					}
 				}
 			}
@@ -384,8 +410,12 @@ public class Connection
 
 	private final RingBuffer<NetworkMessage> received_messages;
 
+	private final Object sleep_cond;
+
 	private Connection(Server server, Connection local_conn_client_end)
 	{
+		sleep_cond = new Object();
+
 		this.server = server;
 		message_handler = server.getMessageHandler();
 		local_conn_server_end = null;
