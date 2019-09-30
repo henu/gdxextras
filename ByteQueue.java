@@ -109,13 +109,15 @@ public class ByteQueue
 
 	public void writeBytes(ByteQueue buf)
 	{
-		ensureSpace(buf.size);
+		if (buf.size > 0) {
+			ensureSpace(buf.size);
 
-		if (buf.read < buf.write) {
-			writeBytes(buf.bytes, buf.read, buf.size);
-		} else {
-			writeBytes(buf.bytes, buf.read, buf.bytes.length - buf.read);
-			writeBytes(buf.bytes, buf.write);
+			if (buf.read < buf.write) {
+				writeBytes(buf.bytes, buf.read, buf.size);
+			} else {
+				writeBytes(buf.bytes, buf.read, buf.bytes.length - buf.read);
+				writeBytes(buf.bytes, buf.write);
+			}
 		}
 	}
 
@@ -155,9 +157,9 @@ public class ByteQueue
 			throw new RuntimeException("Not enough bytes!");
 		}
 		short result = 0;
-		result += bytes[read] << 8;
+		result += (bytes[read] & 0xff) << 8;
 		read = (read + 1) % bytes.length;
-		result += bytes[read];
+		result += (bytes[read] & 0xff);
 		read = (read + 1) % bytes.length;
 		size -= 2;
 		return result;
@@ -187,21 +189,21 @@ public class ByteQueue
 			throw new RuntimeException("Not enough bytes!");
 		}
 		long result = 0;
-		result += (long)bytes[read] << 56;
+		result += (long)(bytes[read] & 0xff) << 56;
 		read = (read + 1) % bytes.length;
-		result += (long)bytes[read] << 48;
+		result += (long)(bytes[read] & 0xff) << 48;
 		read = (read + 1) % bytes.length;
-		result += (long)bytes[read] << 40;
+		result += (long)(bytes[read] & 0xff) << 40;
 		read = (read + 1) % bytes.length;
-		result += (long)bytes[read] << 32;
+		result += (long)(bytes[read] & 0xff) << 32;
 		read = (read + 1) % bytes.length;
-		result += bytes[read] << 24;
+		result += (long)(bytes[read] & 0xff) << 24;
 		read = (read + 1) % bytes.length;
-		result += bytes[read] << 16;
+		result += (long)(bytes[read] & 0xff) << 16;
 		read = (read + 1) % bytes.length;
-		result += bytes[read] << 8;
+		result += (long)(bytes[read] & 0xff) << 8;
 		read = (read + 1) % bytes.length;
-		result += bytes[read];
+		result += (long)(bytes[read] & 0xff);
 		read = (read + 1) % bytes.length;
 		size -= 8;
 		return result;
