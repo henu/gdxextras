@@ -116,7 +116,7 @@ public class Server implements Runnable
 	public Connection get_new_connection()
 	{
 		synchronized (new_conns) {
-			if (new_conns.isEmpty()) {
+			if (new_conns.size == 0) {
 				return null;
 			}
 			return new_conns.pop();

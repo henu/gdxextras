@@ -36,7 +36,7 @@ public class SocketPacketWrapper
 	public Message readMessageIfAvailable()
 	{
 		synchronized (reader.msg_queue) {
-			if (reader.msg_queue.isEmpty()) {
+			if (reader.msg_queue.size == 0) {
 				return null;
 			}
 			return reader.msg_queue.removeIndex(0);
