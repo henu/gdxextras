@@ -192,9 +192,10 @@ public class ScrollZoomArea extends Widget
 		unregisterPointerListener(pointer_id);
 	}
 
-	public void scrolled(int amount)
+	@Override
+	public void scrolled(float amount_x, float amount_y)
 	{
-		touch_zoom *= Math.pow(1.25, -amount);
+		touch_zoom *= Math.pow(1.25, -amount_y);
 	}
 
 	@Override

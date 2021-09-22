@@ -217,7 +217,7 @@ public abstract class Widget
 
 	// When scrolling of mouse wheel is applied. This event is always delivered
 	// to one under mouse, no matter if some Widget tries to steal focus.
-	public void scrolled(int amount)
+	public void scrolled(float amount_x, float amount_y)
 	{
 	}
 

@@ -172,11 +172,11 @@ public class Gui implements InputProcessor
 	}
 
 	@Override
-	public boolean scrolled(int amount)
+	public boolean scrolled(float amount_x, float amount_y)
 	{
 		Widget mouse_topmost = getTopmostWidget(mouse_last_pos);
 		if (mouse_topmost != null) {
-			mouse_topmost.scrolled(amount);
+			mouse_topmost.scrolled(amount_x, amount_y);
 			return true;
 		}
 
