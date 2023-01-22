@@ -23,6 +23,16 @@ public class Mathutils
 		result.add(pos_x, pos_y, pos_z);
 	}
 
+	// If point is at the back side of plane, then distance is negative.
+	// Note, that distance is measured in length of plane_normal, so if you
+	// want it to be measured in basic units, then normalize plane_normal!
+	public static float distanceToPlane(float point_x, float point_y, float normal_x, float normal_y)
+	{
+		float dp_nn = dotProduct(normal_x, normal_y, normal_x, normal_y);
+		assert Math.abs(dp_nn) > 0.0001;
+		return (dotProduct(normal_x, normal_y, point_x, point_y)) / dp_nn;
+	}
+
 	// Returns angle between two vectors. The result is thus [0 - 180]
 	public static float angleBetweenVectors(Vector3 v1, Vector3 v2)
 	{
@@ -169,10 +179,14 @@ public class Mathutils
 		return Math.pow(Math.E, Math.log(num) / root);
 	}
 
+	public static float dotProduct(float v1_x, float v1_y, float v2_x, float v2_y)
+	{
+		return v1_x * v2_x + v1_y * v2_y;
+	}
+
 	// Temporary variables. These are used by multiple methods, so
 	// do not expect that value is kept if you do internal call!
 	// TODO: Get rid of these so things can be done in multiple threads!
 	private static final Vector3 v3tmp1 = new Vector3();
 	private static final Vector3 v3tmp2 = new Vector3();
-
 }
