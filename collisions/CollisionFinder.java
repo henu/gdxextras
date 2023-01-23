@@ -4,6 +4,7 @@ import com.badlogic.gdx.utils.Array;
 
 public class CollisionFinder
 {
+	// Collision is added from the perspective of sphere, ie. the normal will point towards it
 	public static boolean boxSphereCollision(Array<Collision2D> colls, float box_width, float box_height, float sphere_x, float sphere_y, float sphere_radius, float extra_margin)
 	{
 		float half_w = box_width / 2;
@@ -89,6 +90,22 @@ public class CollisionFinder
 			return true;
 		}
 
+		return false;
+	}
+
+	// Collision is added from the perspective of sphere #2, ie. the normal will point towards it
+	public static boolean sphereSphereCollision(Array<Collision2D> colls, float sphere1_radius, float sphere2_x, float sphere2_y, float sphere2_radius, float extra_margin)
+	{
+		float distance = (float)Math.sqrt(sphere2_x * sphere2_x + sphere2_y * sphere2_y);
+		if (distance > 0.00001) {
+			float depth = sphere1_radius + sphere2_radius - distance;
+			if (depth > -extra_margin) {
+				float normal_x = sphere2_x / distance;
+				float normal_y = sphere2_y / distance;
+				colls.add(new Collision2D(normal_x, normal_y, depth));
+				return true;
+			}
+		}
 		return false;
 	}
 }
