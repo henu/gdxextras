@@ -16,18 +16,25 @@ public class Label extends Widget
 		default_style = style;
 	}
 
+	public static LabelStyle getDefaultStyle()
+	{
+		return default_style;
+	}
+
 	public Label()
 	{
 		super();
 		text = "";
 		text_align = Alignment.LEFT;
 		multiline = false;
+		text_layout_height = -1;
 	}
 
 	public void setText(String text)
 	{
 		this.text = text;
 		text_layout = null;
+		text_layout_height = -1;
 		markToNeedReposition();
 	}
 
@@ -40,6 +47,7 @@ public class Label extends Widget
 	{
 		text_align = align;
 		text_layout = null;
+		text_layout_height = -1;
 	}
 
 	public void setMultiline(boolean multiline)
@@ -49,6 +57,7 @@ public class Label extends Widget
 		}
 		this.multiline = multiline;
 		text_layout = null;
+		text_layout_height = -1;
 	}
 
 	public void setStyle(LabelStyle style)
@@ -124,8 +133,9 @@ public class Label extends Widget
 
 		// Calculate minimum width
 		if (!multiline) {
-			if (text_layout == null) {
+			if (text_layout == null || text_layout_height != getStyle().getHeight()) {
 				text_layout = new GlyphLayout(font, text);
+				text_layout_height = getStyle().getHeight();
 			}
 			return text_layout.width;
 		} else {
@@ -184,6 +194,7 @@ public class Label extends Widget
 	private String text;
 	private Alignment text_align;
 	private GlyphLayout text_layout;
+	private float text_layout_height;
 
 	// This also tells if multiple lines are supported. Null means not.
 	private boolean multiline;
