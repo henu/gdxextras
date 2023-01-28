@@ -18,6 +18,11 @@ public class Button extends Widget
 		default_style = style;
 	}
 
+	public static ButtonStyle getDefaultStyle()
+	{
+		return default_style;
+	}
+
 	public Button()
 	{
 		super();
