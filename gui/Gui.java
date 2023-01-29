@@ -11,13 +11,24 @@ import com.badlogic.gdx.utils.Array;
 
 public class Gui implements InputProcessor
 {
-
-	public enum Anchor {
-		LEFT, RIGHT, TOP, BOTTOM, CENTER
-	}
-
 	public Gui()
 	{
+	}
+
+	// Automatically scale GUI, so that the diagonal is always the given
+	// in GUI units. If you give for example diagonal 1000 and the real
+	// pixel based diagonal is 2000, then the GUI will have 200 % scaling.
+	public void setAutomaticScaling(float diagonal)
+	{
+		if (diagonal < 1) {
+			throw new RuntimeException("Diagonal must be at least one!");
+		}
+		auto_scaling_by_diagonal = diagonal;
+	}
+
+	public void disableAutomaticScaling()
+	{
+		auto_scaling_by_diagonal = -1;
 	}
 
 	public void close()
@@ -51,22 +62,57 @@ public class Gui implements InputProcessor
 
 	public void setScreenSize(int width, int height)
 	{
-		// Mark new screen size and order repositioning
-		screen_width = width;
-		screen_height = height;
-		if (widget != null) {
-			widget.markToNeedReposition();
+		// If GUI is automatically scaled by screen diagonal
+		if (auto_scaling_by_diagonal > 0) {
+			// Calculate scaling
+			float diagonal = (float)Math.sqrt(width * width + height * height);
+			float scaling = diagonal / auto_scaling_by_diagonal;
+			// Mark new screen size and order repositioning
+			width_in_pixels = width;
+			height_in_pixels = height;
+			width_in_gui_units = width / scaling;
+			height_in_gui_units = height / scaling;
+			if (widget != null) {
+				widget.markToNeedReposition();
+			}
+			// Update projection of Spritebatch and Shaperenderer
+			Matrix4 projection_matrix = new Matrix4();
+			projection_matrix.setToOrtho2D(0, 0, width_in_gui_units, height_in_gui_units);
+			batch.setProjectionMatrix(projection_matrix);
+			shaperenderer.setProjectionMatrix(projection_matrix);
 		}
-		// Update projection of Spritebatch and Shaperenderer
-		batch_projmatrix.setToOrtho2D(0, 0, width, height);
-		batch.setProjectionMatrix(batch_projmatrix);
-		shaperenderer.setProjectionMatrix(batch_projmatrix);
+		// If there is no automatic scaling
+		else {
+			// Mark new screen size and order repositioning
+			width_in_pixels = width;
+			height_in_pixels = height;
+			width_in_gui_units = width;
+			height_in_gui_units = height;
+			if (widget != null) {
+				widget.markToNeedReposition();
+			}
+			// Update projection of Spritebatch and Shaperenderer
+			Matrix4 projection_matrix = new Matrix4();
+			projection_matrix.setToOrtho2D(0, 0, width, height);
+			batch.setProjectionMatrix(projection_matrix);
+			shaperenderer.setProjectionMatrix(projection_matrix);
+		}
+	}
+
+	public float getWidthInGuiUnits()
+	{
+		return width_in_gui_units;
+	}
+
+	public float getHeightInGuiUnits()
+	{
+		return height_in_gui_units;
 	}
 
 	public void repositionWidgets()
 	{
 		if (widget != null) {
-			widget.repositionIfNeeded(0, 0, screen_width, screen_height);
+			widget.repositionIfNeeded(0, 0, width_in_gui_units, height_in_gui_units);
 		}
 	}
 
@@ -186,8 +232,8 @@ public class Gui implements InputProcessor
 	public boolean touchDown(int x, int y, int pointer_id, int button)
 	{
 		// Swap coordinates and get topmost widget
-		v2tmp.x = x;
-		v2tmp.y = screen_height - y;
+		v2tmp.x = x * width_in_gui_units / width_in_pixels;
+		v2tmp.y = (height_in_pixels - y) * height_in_gui_units / height_in_pixels;
 		Widget topmost = getTopmostWidget(v2tmp);
 		storeTopmostWidget(pointer_id, topmost);
 
@@ -219,8 +265,8 @@ public class Gui implements InputProcessor
 		// immediately after input event! This is necessary for example when
 		// dragging stuff.
 		// Swap coordinates and get topmost widget
-		v2tmp.x = x;
-		v2tmp.y = screen_height - y;
+		v2tmp.x = x * width_in_gui_units / width_in_pixels;
+		v2tmp.y = (height_in_pixels - y) * height_in_gui_units / height_in_pixels;
 		Widget topmost = getTopmostWidget(v2tmp);
 		storeTopmostWidget(pointer_id, topmost);
 
@@ -237,8 +283,8 @@ public class Gui implements InputProcessor
 	{
 		// Mouse over is not supported for widgets, but store coordinates so
 		// scroll wheel can be applied to correct Widget.
-		mouse_last_pos.x = x;
-		mouse_last_pos.y = screen_height - y;
+		mouse_last_pos.x = x * width_in_gui_units / width_in_pixels;
+		mouse_last_pos.y = (height_in_pixels - y) * height_in_gui_units / height_in_pixels;
 		return false;
 	}
 
@@ -246,8 +292,8 @@ public class Gui implements InputProcessor
 	public boolean touchUp(int x, int y, int pointer_id, int button)
 	{
 		// Swap coordinates and get topmost widget
-		v2tmp.x = x;
-		v2tmp.y = screen_height - y;
+		v2tmp.x = x * width_in_gui_units / width_in_pixels;
+		v2tmp.y = (height_in_pixels - y) * height_in_gui_units / height_in_pixels;
 		Widget topmost = getTopmostWidget(v2tmp);
 		storeTopmostWidget(pointer_id, topmost);
 
@@ -309,11 +355,14 @@ public class Gui implements InputProcessor
 		}
 	}
 
-	private int screen_width = 0;
-	private int screen_height = 0;
+	private float auto_scaling_by_diagonal;
+
+	private int width_in_pixels = 0;
+	private int height_in_pixels = 0;
+	private float width_in_gui_units = 0;
+	private float height_in_gui_units = 0;
 
 	private SpriteBatch batch = new SpriteBatch();
-	private final Matrix4 batch_projmatrix = new Matrix4();
 	private ShapeRenderer shaperenderer = new ShapeRenderer();
 
 	// The Widget and the possible pointerlistener. If pointerlistener
