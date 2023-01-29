@@ -128,16 +128,18 @@ public class Button extends Widget
 			batch.setColor(style.bg_color);
 		}
 		// Render background
-		renderHorizontalBar(batch, style.region_left, style.side_padding, style.region_right, style.side_padding, style.tex_center, pixel_height, getPositionX(), getPositionY(), getWidth(), getHeight(), style.bg_scaling);
+		renderHorizontalBar(batch, style.region_left, style.region_right, style.tex_center, pixel_height, getPositionX(), getPositionY(), getWidth(), style.bg_scaling);
 		// Render possible hilights
 		if (pressed && enabled) {
 			batch.setColor(style.bg_color_pressed);
-			renderHorizontalBar(batch, style.region_hilight_left, style.side_padding, style.region_hilight_right, style.side_padding, style.tex_hilight_center, pixel_height, getPositionX(), getPositionY(), getWidth(), getHeight(), style.bg_scaling);
+			renderHorizontalBar(batch, style.region_hilight_left, style.region_hilight_right, style.tex_hilight_center, pixel_height, getPositionX(), getPositionY(), getWidth(), style.bg_scaling);
 		}
 		if (hilight) {
 			batch.setColor(1, 1, 1, 1);
-			renderHorizontalBar(batch, style.region_hilight_left, style.side_padding, style.region_hilight_right, style.side_padding, style.tex_hilight_center, pixel_height, getPositionX(), getPositionY(), getWidth(), getHeight(), style.bg_scaling);
+			renderHorizontalBar(batch, style.region_hilight_left, style.region_hilight_right, style.tex_hilight_center, pixel_height, getPositionX(), getPositionY(), getWidth(), style.bg_scaling);
 		}
+
+		float left_region_width = style.region_left.getRegionWidth() * style.bg_scaling;
 
 		// Render possible icon
 		if (icon != null) {
@@ -146,7 +148,7 @@ public class Button extends Widget
 			} else {
 				batch.setColor(style.icon_color);
 			}
-			renderFromCenter(batch, icon, getPositionX() + style.side_padding * style.bg_scaling, getCenterY(), style.bg_scaling);
+			renderFromCenter(batch, icon, getPositionX() + left_region_width + style.side_padding * style.bg_scaling, getCenterY(), style.bg_scaling);
 		}
 
 		batch.setColor(1, 1, 1, 1);
@@ -170,7 +172,7 @@ public class Button extends Widget
 				label_layout = new GlyphLayout(style.font, label, font_color, 0, Align.left, false);
 			}
 
-			float draw_x = getPositionX() + style.side_padding * style.bg_scaling;
+			float draw_x = getPositionX() + left_region_width + style.side_padding * style.bg_scaling;
 			if (icon != null) {
 				draw_x += style.side_padding * style.bg_scaling;
 			}
@@ -182,7 +184,9 @@ public class Button extends Widget
 	protected float doGetMinWidth()
 	{
 		ButtonStyle style = getStyle();
-		float min_width = style.side_padding * 2f * style.bg_scaling;
+		int left_region_width = Math.max(style.region_left.getRegionWidth(), style.region_hilight_left.getRegionWidth());
+		int right_region_width = Math.max(style.region_left.getRegionWidth(), style.region_hilight_left.getRegionWidth());
+		float min_width = (style.side_padding * 2f + left_region_width + right_region_width) * style.bg_scaling;
 		if (label != null) {
 			BitmapFont font = style.font;
 			font.getData().setScale(style.label_scaling);

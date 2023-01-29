@@ -569,18 +569,18 @@ public abstract class Widget
 
 	// Renders region
 	// TODO: Code own class for these Widget rendering helpers!
-	protected static void renderHorizontalBar(SpriteBatch batch, AtlasRegion region_left, float region_left_realwidth, AtlasRegion region_right, float region_right_realwidth, Texture tex_center, float realheight, float x, float y, float width, float height, float scale)
+	protected static void renderHorizontalBar(SpriteBatch batch, AtlasRegion region_left, AtlasRegion region_right, Texture tex_center, float real_height, float x, float y, float width, float scale)
 	{
-		float left_end_width = region_left_realwidth * scale;
-		float right_end_width = region_right_realwidth * scale;
+		float left_end_width = region_left.getRegionWidth() * scale;
+		float right_end_width = region_right.getRegionWidth() * scale;
 		float center_width = width - left_end_width - right_end_width;
 
 		if (center_width > 0) {
-			float center_vert_padding = ((tex_center.getHeight() - realheight) / 2) * scale;
+			float center_vert_padding = ((tex_center.getHeight() - real_height) / 2) * scale;
 			batch.draw(tex_center, x + left_end_width, y - center_vert_padding, center_width, tex_center.getHeight() * scale, 0, 1, center_width / tex_center.getWidth(), 0);
 		}
-		render(batch, region_left, x + (region_left_realwidth - region_left.originalWidth) * scale, y + (realheight - region_left.originalHeight) / 2 * scale, scale);
-		render(batch, region_right, x + width - right_end_width, y + (realheight - region_right.originalHeight) / 2 * scale, scale);
+		render(batch, region_left, x, y + (real_height - region_left.originalHeight) / 2 * scale, scale);
+		render(batch, region_right, x + width - right_end_width, y + (real_height - region_right.originalHeight) / 2 * scale, scale);
 	}
 
 	protected static void render(SpriteBatch batch, AtlasRegion region, float x, float y, float scale)
