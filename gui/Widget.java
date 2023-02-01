@@ -544,14 +544,16 @@ public abstract class Widget
 // TODO: This does not affect to pointing events yet!
 	protected void enableArealimitForChildren(float pos_x, float pos_y, float width, float height)
 	{
+		float scaling = gui.getScaling();
+
 		children_arealimit = true;
 		if (children_arealimit_pos == null) {
 			children_arealimit_pos = new Vector2();
 			children_arealimit_size = new Vector2();
 		}
 
-		children_arealimit_pos.set(pos_x, pos_y);
-		children_arealimit_size.set(width, height);
+		children_arealimit_pos.set(pos_x * scaling, pos_y * scaling);
+		children_arealimit_size.set(width * scaling, height * scaling);
 	}
 
 	protected void disableArealimitForChildren()
@@ -662,6 +664,7 @@ public abstract class Widget
 	private Eventlistener eventlistener;
 
 	private boolean children_arealimit = false;
+	// These are measured in pixels, not in GUI units
 	private Vector2 children_arealimit_pos = null;
 	private Vector2 children_arealimit_size = null;
 

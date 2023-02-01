@@ -31,6 +31,11 @@ public class Gui implements InputProcessor
 		auto_scaling_by_diagonal = -1;
 	}
 
+	public float getScaling()
+	{
+		return scaling;
+	}
+
 	public void close()
 	{
 		if (batch != null) {
@@ -66,7 +71,7 @@ public class Gui implements InputProcessor
 		if (auto_scaling_by_diagonal > 0) {
 			// Calculate scaling
 			float diagonal = (float)Math.sqrt(width * width + height * height);
-			float scaling = diagonal / auto_scaling_by_diagonal;
+			scaling = diagonal / auto_scaling_by_diagonal;
 			// Mark new screen size and order repositioning
 			width_in_pixels = width;
 			height_in_pixels = height;
@@ -96,6 +101,8 @@ public class Gui implements InputProcessor
 			projection_matrix.setToOrtho2D(0, 0, width, height);
 			batch.setProjectionMatrix(projection_matrix);
 			shaperenderer.setProjectionMatrix(projection_matrix);
+			// Reset scaling
+			scaling = 1;
 		}
 	}
 
@@ -356,6 +363,7 @@ public class Gui implements InputProcessor
 	}
 
 	private float auto_scaling_by_diagonal;
+	private float scaling;
 
 	private int width_in_pixels = 0;
 	private int height_in_pixels = 0;
@@ -388,5 +396,4 @@ public class Gui implements InputProcessor
 		}
 		widgets_topmost.set(pointer_id, topmost);
 	}
-
 }
