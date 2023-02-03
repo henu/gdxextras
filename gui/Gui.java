@@ -8,11 +8,14 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.IntMap;
 
 public class Gui implements InputProcessor
 {
 	public Gui()
 	{
+		key_press_handlers = new IntMap<>();
+		key_release_handlers = new IntMap<>();
 	}
 
 	// Automatically scale GUI, so that the diagonal is always the given
@@ -48,9 +51,37 @@ public class Gui implements InputProcessor
 		}
 	}
 
+	// TODO: Try to get rid of this function! It would be better to use function pointers and callbacks!
+	@Deprecated
 	public void setEventlistener(Eventlistener eventlistener)
 	{
 		this.eventlistener = eventlistener;
+		// If event listener was set, then clear all specific key handlers
+		if (eventlistener != null) {
+			key_press_handlers.clear();
+		}
+	}
+
+	public void setKeyPressEventHandler(int keycode, Eventlistener handler)
+	{
+		if (handler != null) {
+			key_press_handlers.put(keycode, handler);
+			// Make sure the generic event listener is not set
+			eventlistener = null;
+		} else {
+			key_press_handlers.remove(keycode);
+		}
+	}
+
+	public void setKeyReleaseEventHandler(int keycode, Eventlistener handler)
+	{
+		if (handler != null) {
+			key_release_handlers.put(keycode, handler);
+			// Make sure the generic event listener is not set
+			eventlistener = null;
+		} else {
+			key_release_handlers.remove(keycode);
+		}
 	}
 
 	public void setWidget(Widget widget)
@@ -198,6 +229,12 @@ public class Gui implements InputProcessor
 	@Override
 	public boolean keyDown(int keycode)
 	{
+		// Check for individual key press handler
+		Eventlistener key_press_handler = key_press_handlers.get(keycode);
+		if (key_press_handler != null) {
+			return key_press_handler.handleGuiEvent(GuiEvent.fromKeyPress(keycode));
+		}
+
 		if (eventlistener == null) {
 			return false;
 		}
@@ -217,6 +254,12 @@ public class Gui implements InputProcessor
 	@Override
 	public boolean keyUp(int keycode)
 	{
+		// Check for individual key release handler
+		Eventlistener key_release_handler = key_release_handlers.get(keycode);
+		if (key_release_handler != null) {
+			return key_release_handler.handleGuiEvent(GuiEvent.fromKeyRelease(keycode));
+		}
+
 		if (eventlistener == null) {
 			return false;
 		}
@@ -382,6 +425,10 @@ public class Gui implements InputProcessor
 
 	// Listener for special events, like back button, etc.
 	private Eventlistener eventlistener = null;
+
+	// Handlers of specific keys;
+	private IntMap<Eventlistener> key_press_handlers;
+	private IntMap<Eventlistener> key_release_handlers;
 
 	// Mouse position is used to find correct
 	// Widget to receive scroll wheel events.
