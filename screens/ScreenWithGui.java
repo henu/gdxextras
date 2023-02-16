@@ -3,12 +3,20 @@ package fi.henu.gdxextras.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Matrix4;
 
 import fi.henu.gdxextras.gui.Eventlistener;
 import fi.henu.gdxextras.gui.Gui;
 
 public abstract class ScreenWithGui implements Screen
 {
+	public ScreenWithGui()
+	{
+		super();
+		batch = new SpriteBatch();
+	}
+
 	@Override
 	public void render(float delta)
 	{
@@ -30,6 +38,14 @@ public abstract class ScreenWithGui implements Screen
 	{
 		makeSureGuiExists();
 		gui.setScreenSize(width, height);
+		// Map 1 pixel to 1 unit and Y axis up.
+		float[] projection_matrix = {
+			2f / width, 0f, 0f, 0f,
+			0f, 2f / height, 0f, 0f,
+			0f, 0f, -2f, 0f,
+			-1f, -1f, -1f, 1f
+		};
+		batch.setProjectionMatrix(new Matrix4(projection_matrix));
 	}
 
 	@Override
@@ -61,12 +77,30 @@ public abstract class ScreenWithGui implements Screen
 	public void dispose()
 	{
 		gui.close();
+		batch.dispose();
+		batch = null;
 	}
 
 	protected Gui getGui()
 	{
 		makeSureGuiExists();
 		return gui;
+	}
+
+	protected SpriteBatch getSpriteBatch()
+	{
+		if (batch == null) {
+			return null;
+		}
+		if (!batch.isDrawing()) {
+			batch.begin();
+		}
+		return batch;
+	}
+
+	protected void endSpriteBatch()
+	{
+		batch.end();
 	}
 
 	protected void setKeyPressEventHandler(int keycode, Eventlistener handler)
@@ -96,6 +130,9 @@ public abstract class ScreenWithGui implements Screen
 	protected abstract void buildGui(Gui gui);
 
 	private Gui gui;
+
+	// Default batch for sprite rendering. This is not needed by GUI, it is just a general help.
+	SpriteBatch batch;
 
 	private void makeSureGuiExists()
 	{
