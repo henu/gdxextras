@@ -26,6 +26,16 @@ public class Mathutils
 	// If point is at the back side of plane, then distance is negative.
 	// Note, that distance is measured in length of plane_normal, so if you
 	// want it to be measured in basic units, then normalize plane_normal!
+	public static float distanceToPlane(float point_x, float point_y, float point_z, float normal_x, float normal_y, float normal_z)
+	{
+		float dp_nn = dotProduct(normal_x, normal_y, normal_z, normal_x, normal_y, normal_z);
+		assert Math.abs(dp_nn) > 0.0001;
+		return (dotProduct(normal_x, normal_y, normal_z, point_x, point_y, point_z)) / dp_nn;
+	}
+
+	// If point is at the back side of plane, then distance is negative.
+	// Note, that distance is measured in length of plane_normal, so if you
+	// want it to be measured in basic units, then normalize plane_normal!
 	public static float distanceToPlane(float point_x, float point_y, float normal_x, float normal_y)
 	{
 		float dp_nn = dotProduct(normal_x, normal_y, normal_x, normal_y);
@@ -182,6 +192,26 @@ public class Mathutils
 	public static float dotProduct(float v1_x, float v1_y, float v2_x, float v2_y)
 	{
 		return v1_x * v2_x + v1_y * v2_y;
+	}
+
+	public static float dotProduct(float v1_x, float v1_y, float v1_z, float v2_x, float v2_y, float v2_z)
+	{
+		return v1_x * v2_x + v1_y * v2_y + v1_z * v2_z;
+	}
+
+	public static float crossProductX(float v1_x, float v1_y, float v1_z, float v2_x, float v2_y, float v2_z)
+	{
+		return v1_y * v2_z - v1_z * v2_y;
+	}
+
+	public static float crossProductY(float v1_x, float v1_y, float v1_z, float v2_x, float v2_y, float v2_z)
+	{
+		return v1_z * v2_x - v1_x * v2_z;
+	}
+
+	public static float crossProductZ(float v1_x, float v1_y, float v1_z, float v2_x, float v2_y, float v2_z)
+	{
+		return v1_x * v2_y - v1_y * v2_x;
 	}
 
 	// Temporary variables. These are used by multiple methods, so
