@@ -5,10 +5,11 @@ import com.badlogic.gdx.math.Vector3;
 
 public interface Renderer
 {
-	void render(SpriteBatch batch, Vector3 pos);
+	void render(SpriteBatch batch, Vector3 pos, Camera camera);
 
-	float getBoundsTop(Vector3 pos);
-	float getBoundsRight(Vector3 pos);
-	float getBoundsBottom(Vector3 pos);
-	float getBoundsLeft(Vector3 pos);
+	// Return bounds, measured in game units, not in pixels.
+	float getBoundsTop(Vector3 pos, Camera camera);
+	float getBoundsRight(Vector3 pos, Camera camera);
+	float getBoundsBottom(Vector3 pos, Camera camera);
+	float getBoundsLeft(Vector3 pos, Camera camera);
 }

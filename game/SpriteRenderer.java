@@ -21,40 +21,55 @@ public class SpriteRenderer implements Renderer
 	}
 
 	@Override
-	public void render(SpriteBatch batch, Vector3 pos)
+	public void render(SpriteBatch batch, Vector3 pos, Camera camera)
 	{
-// TODO: Check what projection is in use!
-		float draw_w = region.getRegionWidth() * scale_x;
-		float draw_h = region.getRegionHeight() * scale_y;
-		batch.draw(region, pos.x - draw_w / 2f, pos.z - draw_h / 2f, draw_w, draw_h);
+		if (camera.isSideCamera()) {
+			float draw_w = region.getRegionWidth() * scale_x;
+			float draw_h = region.getRegionHeight() * scale_y;
+			batch.draw(region, pos.x - draw_w / 2f, pos.z - draw_h / 2f, draw_w, draw_h);
+			return;
+		}
+		throw new RuntimeException("Unsupported camera type!");
 	}
 
 	@Override
-	public float getBoundsTop(Vector3 pos)
+	public float getBoundsTop(Vector3 pos, Camera camera)
 	{
-		float draw_h = region.getRegionHeight() * scale_y;
-		return pos.z + draw_h / 2f;
+		if (camera.isSideCamera()) {
+			float draw_h = region.getRegionHeight() * scale_y;
+			return pos.z + draw_h / 2f;
+		}
+		throw new RuntimeException("Unsupported camera type!");
 	}
 
 	@Override
-	public float getBoundsRight(Vector3 pos)
+	public float getBoundsRight(Vector3 pos, Camera camera)
 	{
-		float draw_w = region.getRegionWidth() * scale_x;
-		return pos.x + draw_w / 2f;
+		if (camera.isSideCamera()) {
+			float draw_w = region.getRegionWidth() * scale_x;
+			return pos.x + draw_w / 2f;
+		}
+		throw new RuntimeException("Unsupported camera type!");
 	}
 
 	@Override
-	public float getBoundsBottom(Vector3 pos)
+	public float getBoundsBottom(Vector3 pos, Camera camera)
 	{
-		float draw_h = region.getRegionHeight() * scale_y;
-		return pos.z - draw_h / 2f;
+		if (camera.isSideCamera()) {
+			float draw_h = region.getRegionHeight() * scale_y;
+			return pos.z - draw_h / 2f;
+		}
+		throw new RuntimeException("Unsupported camera type!");
 	}
 
 	@Override
-	public float getBoundsLeft(Vector3 pos)
+	public float getBoundsLeft(Vector3 pos, Camera camera)
 	{
-		float draw_w = region.getRegionWidth() * scale_x;
-		return pos.x - draw_w / 2f;
+		if (camera.isSideCamera()) {
+			float draw_w = region.getRegionWidth() * scale_x;
+			return pos.x - draw_w / 2f;
+		}
+		throw new RuntimeException("Unsupported camera type!");
 	}
 
 	private final TextureRegion region;

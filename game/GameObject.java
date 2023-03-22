@@ -1,5 +1,6 @@
 package fi.henu.gdxextras.game;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
@@ -150,7 +151,7 @@ public class GameObject
 	public void render(SpriteBatch batch)
 	{
 		if (renderer != null) {
-			renderer.render(batch, pos);
+			renderer.render(batch, pos, world.getCamera());
 		}
 	}
 
@@ -207,17 +208,19 @@ public class GameObject
 			throw new RuntimeException("Unable to check if in viewport, because there is no GameWorld!");
 		}
 
-		// Get viewport properties
-		float vp_top = world.getCamera().getViewportTop();
-		float vp_right = world.getCamera().getViewportRight();
-		float vp_bottom = world.getCamera().getViewportBottom();
-		float vp_left = world.getCamera().getViewportLeft();
+		Camera camera = world.getCamera();
+
+		// Calculate viewport properties
+		float vp_left = -camera.getScroll().x;
+		float vp_bottom = -camera.getScroll().y;
+		float vp_right = vp_left + Gdx.graphics.getWidth() / camera.getScaling();
+		float vp_top = vp_bottom + Gdx.graphics.getHeight() / camera.getScaling();
 
 		// Get renderer properties
-		float r_top = renderer.getBoundsTop(pos);
-		float r_right = renderer.getBoundsRight(pos);
-		float r_bottom = renderer.getBoundsBottom(pos);
-		float r_left = renderer.getBoundsLeft(pos);
+		float r_top = renderer.getBoundsTop(pos, camera);
+		float r_right = renderer.getBoundsRight(pos, camera);
+		float r_bottom = renderer.getBoundsBottom(pos, camera);
+		float r_left = renderer.getBoundsLeft(pos, camera);
 
 		// Check if fully inside
 		if (r_top <= vp_top && r_right <= vp_right && r_bottom >= vp_bottom && r_left >= vp_left) {

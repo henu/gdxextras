@@ -1,22 +1,17 @@
 package fi.henu.gdxextras.game;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Matrix4;
+import com.badlogic.gdx.math.Vector2;
 
 public class Camera
 {
 	public Camera()
 	{
 		camera_type = CT_NOTHING;
+		scaling = 1;
+		scroll = new Vector2(0, 0);
 		projection_matrix = new Matrix4();
-	}
-
-	public void setViewport(float left, float bottom, float right, float top)
-	{
-		viewport_left = left;
-		viewport_bottom = bottom;
-		viewport_right = right;
-		viewport_top = top;
-		recalculateProjectionMatrix();
 	}
 
 	public void setSideCamera()
@@ -25,24 +20,33 @@ public class Camera
 		recalculateProjectionMatrix();
 	}
 
-	public float getViewportTop()
+	public void setScaling(float scaling)
 	{
-		return viewport_top;
+		this.scaling = scaling;
+		recalculateProjectionMatrix();
 	}
 
-	public float getViewportRight()
+	// This is measured in game units, not in screen pixels. So for example
+	// if scaling is 2, then scrolling 100 means scrolling 200 real pixels.
+	public void setScroll(float x, float y)
 	{
-		return viewport_right;
+		scroll.set(x, y);
+		recalculateProjectionMatrix();
 	}
 
-	public float getViewportBottom()
+	public boolean isSideCamera()
 	{
-		return viewport_bottom;
+		return camera_type == CT_SIDE_CAMERA;
 	}
 
-	public float getViewportLeft()
+	public float getScaling()
 	{
-		return viewport_left;
+		return scaling;
+	}
+
+	public Vector2 getScroll()
+	{
+		return scroll;
 	}
 
 	public Matrix4 getProjectionMatrix()
@@ -53,30 +57,29 @@ public class Camera
 	private static final short CT_NOTHING = 0;
 	private static final short CT_SIDE_CAMERA = 1;
 
+	// Camera type. This is set usually only once
 	private short camera_type;
 
-	private final Matrix4 projection_matrix;
+	// Camera scaling and scrolling. These are changed often
+	private float scaling;
+	private final Vector2 scroll;
 
-	private float viewport_top;
-	private float viewport_right;
-	private float viewport_bottom;
-	private float viewport_left;
+	// This is a result of scaling, scrolling and window size
+	private final Matrix4 projection_matrix;
 
 	private void recalculateProjectionMatrix()
 	{
 		if (camera_type == CT_SIDE_CAMERA) {
-			float viewport_width = viewport_right - viewport_left;
-			float viewport_height = viewport_top - viewport_bottom;
-			if (viewport_width > 0 && viewport_height > 0) {
-				float[] projection_matrix_raw = {
-						2f / viewport_width, 0f, 0f, 0f,
-						0f, 2f / viewport_height, 0f, 0f,
-						0f, 0f, -2f, 0f,
-						-1f, -1f, -1f, 1f
-				};
-				projection_matrix.set(projection_matrix_raw);
-				projection_matrix.translate(-viewport_left, -viewport_bottom, 0);
-			}
+			float viewport_width = Gdx.graphics.getWidth() / scaling;
+			float viewport_height = Gdx.graphics.getHeight() / scaling;
+			float[] projection_matrix_raw = {
+				2f / viewport_width, 0f, 0f, 0f,
+				0f, 2f / viewport_height, 0f, 0f,
+				0f, 0f, -2f, 0f,
+				-1f, -1f, -1f, 1f
+			};
+			projection_matrix.set(projection_matrix_raw);
+			projection_matrix.translate(scroll.x, scroll.y, 0);
 			return;
 		}
 
