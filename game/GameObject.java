@@ -208,10 +208,10 @@ public class GameObject
 		}
 
 		// Get viewport properties
-		float vp_top = world.getViewportTop();
-		float vp_right = world.getViewportRight();
-		float vp_bottom = world.getViewportBottom();
-		float vp_left = world.getViewportLeft();
+		float vp_top = world.getCamera().getViewportTop();
+		float vp_right = world.getCamera().getViewportRight();
+		float vp_bottom = world.getCamera().getViewportBottom();
+		float vp_left = world.getCamera().getViewportLeft();
 
 		// Get renderer properties
 		float r_top = renderer.getBoundsTop(pos);

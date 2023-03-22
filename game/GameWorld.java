@@ -1,7 +1,6 @@
 package fi.henu.gdxextras.game;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.utils.Array;
 
 import java.util.HashSet;
@@ -20,6 +19,7 @@ public class GameWorld
 		batch = new SpriteBatch();
 
 		controls = new Controls();
+		camera = new Camera();
 	}
 
 	public void dispose()
@@ -35,44 +35,9 @@ public class GameWorld
 		collision_extra_margin = extra_margin;
 	}
 
-	public void setViewport(float left, float bottom, float right, float top)
+	public Camera getCamera()
 	{
-		viewport_left = left;
-		viewport_bottom = bottom;
-		viewport_right = right;
-		viewport_top = top;
-
-		// Scale projection, so Y axis is up, and the whole level fits to
-		// the screen and the bottom of the lowest tile is at the origin
-		float[] projection_matrix_raw = {
-				2f / (right - left), 0f, 0f, 0f,
-				0f, 2f / (top - bottom), 0f, 0f,
-				0f, 0f, -2f, 0f,
-				-1f, -1f, -1f, 1f
-		};
-		Matrix4 projection_matrix = new Matrix4(projection_matrix_raw);
-		projection_matrix.translate(-left, -bottom, 0);
-		batch.setProjectionMatrix(projection_matrix);
-	}
-
-	public float getViewportLeft()
-	{
-		return viewport_left;
-	}
-
-	public float getViewportBottom()
-	{
-		return viewport_bottom;
-	}
-
-	public float getViewportRight()
-	{
-		return viewport_right;
-	}
-
-	public float getViewportTop()
-	{
-		return viewport_top;
+		return camera;
 	}
 
 	public Controls getControls()
@@ -160,6 +125,7 @@ public class GameWorld
 	public void render()
 	{
 		if (batch != null) {
+			batch.setProjectionMatrix(camera.getProjectionMatrix());
 			batch.begin();
 			for (int obj_i = 0; obj_i < objs.size; ++obj_i) {
 				GameObject obj = objs.get(obj_i);
@@ -229,7 +195,7 @@ public class GameWorld
 
 	private SpriteBatch batch;
 
-	private float viewport_left, viewport_bottom, viewport_right, viewport_top;
+	private final Camera camera;
 
 	private final Controls controls;
 
