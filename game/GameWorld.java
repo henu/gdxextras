@@ -125,6 +125,10 @@ public class GameWorld
 	public void render()
 	{
 		if (batch != null) {
+
+			// Let camera sort objects, if needed
+			camera.sortObjectsBeforeRendering(objs);
+
 			batch.setProjectionMatrix(camera.getProjectionMatrix());
 			batch.begin();
 			for (int obj_i = 0; obj_i < objs.size; ++obj_i) {
