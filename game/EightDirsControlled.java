@@ -37,6 +37,10 @@ public class EightDirsControlled implements Movement
 	{
 		Vector3 pos = obj.getPosition();
 
+		final float SIN_45 = 0.707106781f;
+
+		boolean isometric = obj.getGameWorld().getCamera().isIsometricCamera();
+
 		boolean key_up = controls.isUpPressed();
 		boolean key_right = controls.isRightPressed();
 		boolean key_down = controls.isDownPressed();
@@ -44,52 +48,88 @@ public class EightDirsControlled implements Movement
 		if (key_up && !key_down) {
 			if (key_right && !key_left) {
 				if ((enabled_dir_flags & FLAG_UP_RIGHT) != 0) {
-					pos.x += speed * delta;
-					pos.z += speed * delta;
+					if (isometric) {
+						pos.z += speed * delta;
+					} else {
+						pos.x += speed * delta * SIN_45;
+						pos.z += speed * delta * SIN_45;
+					}
 				}
 				return;
 			}
 			if (key_left && !key_right) {
 				if ((enabled_dir_flags & FLAG_UP_LEFT) != 0) {
-					pos.x -= speed * delta;
-					pos.z += speed * delta;
+					if (isometric) {
+						pos.x -= speed * delta;
+					} else {
+						pos.x -= speed * delta * SIN_45;
+						pos.z += speed * delta * SIN_45;
+					}
 				}
 				return;
 			}
 			if ((enabled_dir_flags & FLAG_UP) != 0) {
-				pos.z += speed * delta;
+				if (isometric) {
+					pos.x -= speed * delta * SIN_45;
+					pos.z += speed * delta * SIN_45;
+				} else {
+					pos.z += speed * delta;
+				}
 			}
 			return;
 		}
 		if (key_down && !key_up) {
 			if (key_right && !key_left) {
 				if ((enabled_dir_flags & FLAG_DOWN_RIGHT) != 0) {
-					pos.x += speed * delta;
-					pos.z -= speed * delta;
+					if (isometric) {
+						pos.x += speed * delta;
+					} else {
+						pos.x += speed * delta * SIN_45;
+						pos.z -= speed * delta * SIN_45;
+					}
 				}
 				return;
 			}
 			if (key_left && !key_right) {
 				if ((enabled_dir_flags & FLAG_DOWN_LEFT) != 0) {
-					pos.x -= speed * delta;
-					pos.z -= speed * delta;
+					if (isometric) {
+						pos.z -= speed * delta;
+					} else {
+						pos.x -= speed * delta * SIN_45;
+						pos.z -= speed * delta * SIN_45;
+					}
 				}
 				return;
 			}
 			if ((enabled_dir_flags & FLAG_DOWN) != 0) {
-				pos.z -= speed * delta;
+				if (isometric) {
+					pos.x += speed * delta * SIN_45;
+					pos.z -= speed * delta * SIN_45;
+				} else {
+					pos.z -= speed * delta;
+				}
 			}
 			return;
 		}
 		if (key_right && !key_left) {
 			if ((enabled_dir_flags & FLAG_RIGHT) != 0) {
-				pos.x += speed * delta;
+				if (isometric) {
+					pos.x += speed * delta * SIN_45;
+					pos.z += speed * delta * SIN_45;
+				} else {
+					pos.x += speed * delta;
+				}
 			}
 			return;
 		}
 		if (key_left && !key_right) {
 			if ((enabled_dir_flags & FLAG_LEFT) != 0) {
-				pos.x -= speed * delta;
+				if (isometric) {
+					pos.x -= speed * delta * SIN_45;
+					pos.z -= speed * delta * SIN_45;
+				} else {
+					pos.x -= speed * delta;
+				}
 			}
 		}
 	}

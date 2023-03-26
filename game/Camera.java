@@ -89,7 +89,7 @@ public class Camera
 		float pos_tiles_x = pos.x / isometric_tile_world_width;
 		float pos_tiles_y = pos.y / isometric_tile_world_height;
 		float pos_tiles_z = pos.z / isometric_tile_world_width;
-		return (pos_tiles_x + pos_tiles_z) * isometric_tile_render_width / 2 + pos_tiles_y * isometric_tile_render_heightstep;
+		return (pos_tiles_x + pos_tiles_z) * isometric_tile_render_width / 2;
 	}
 
 	public float getIsometricDrawY(Vector3 pos)

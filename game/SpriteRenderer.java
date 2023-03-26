@@ -6,6 +6,15 @@ import com.badlogic.gdx.math.Vector3;
 
 public class SpriteRenderer implements Renderer
 {
+	public SpriteRenderer(TextureRegion region)
+	{
+		this.region = region;
+		scale_x = 1;
+		scale_y = 1;
+		region_x_offset = 0;
+		region_y_offset = 0;
+	}
+
 	public SpriteRenderer(TextureRegion region, float scale)
 	{
 		this.region = region;
