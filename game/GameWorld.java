@@ -1,5 +1,7 @@
 package fi.henu.gdxextras.game;
 
+import com.badlogic.gdx.Application;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.Array;
 
@@ -16,7 +18,9 @@ public class GameWorld
 		collision_extra_margin = -1;
 		objs_to_destroy = new HashSet<>();
 
-		batch = new SpriteBatch();
+		if (Gdx.app.getType() != Application.ApplicationType.HeadlessDesktop) {
+			batch = new SpriteBatch();
+		}
 
 		controls = new Controls();
 		camera = new Camera();
