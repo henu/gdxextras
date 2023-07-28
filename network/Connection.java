@@ -209,7 +209,7 @@ public class Connection
 		}
 	}
 
-	public NetworkMessage get_received_message()
+	public NetworkMessage getReceivedMessage()
 	{
 		synchronized (received_messages) {
 			if (received_messages.empty()) {

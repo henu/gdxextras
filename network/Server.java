@@ -113,7 +113,7 @@ public class Server implements Runnable
 		}
 	}
 
-	public Connection get_new_connection()
+	public Connection getNewConnection()
 	{
 		synchronized (new_conns) {
 			if (new_conns.size == 0) {
