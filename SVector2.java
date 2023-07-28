@@ -116,4 +116,18 @@ public class SVector2 implements Byteserializable
 		bytes.pushShort(x);
 		bytes.pushShort(y);
 	}
+
+	@Override
+	public void serialize(ByteQueue data)
+	{
+		data.writeShort(x);
+		data.writeShort(y);
+	}
+
+	@Override
+	public void deserialize(ByteQueue data)
+	{
+		x = data.readShort();
+		y = data.readShort();
+	}
 }

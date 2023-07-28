@@ -116,4 +116,18 @@ public class IVector2 implements Byteserializable
 		bytes.pushInt(x);
 		bytes.pushInt(y);
 	}
+
+	@Override
+	public void serialize(ByteQueue data)
+	{
+		data.writeInt(x);
+		data.writeInt(y);
+	}
+
+	@Override
+	public void deserialize(ByteQueue data)
+	{
+		x = data.readInt();
+		y = data.readInt();
+	}
 }
