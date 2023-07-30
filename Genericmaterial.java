@@ -1,8 +1,5 @@
 package fi.henu.gdxextras;
 
-import java.util.ArrayList;
-import java.util.Map;
-import java.util.TreeSet;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Mesh;
@@ -13,6 +10,10 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.JsonReader;
 import com.badlogic.gdx.utils.OrderedMap;
+
+import java.util.ArrayList;
+import java.util.Map;
+import java.util.TreeSet;
 
 public class Genericmaterial
 {

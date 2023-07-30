@@ -1,11 +1,11 @@
 package fi.henu.gdxextras;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.math.collision.BoundingBox;
+
+import java.util.ArrayList;
+import java.util.Iterator;
 
 public class Scenenode {
 

@@ -1,11 +1,12 @@
 package fi.henu.gdxextras;
 
-import java.util.ArrayList;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Mesh;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
+
+import java.util.ArrayList;
 
 public class Renderable
 {

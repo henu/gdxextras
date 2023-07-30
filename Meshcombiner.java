@@ -1,10 +1,5 @@
 package fi.henu.gdxextras;
 
-import java.nio.FloatBuffer;
-import java.nio.ShortBuffer;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
 import com.badlogic.gdx.graphics.Mesh;
 import com.badlogic.gdx.graphics.VertexAttribute;
 import com.badlogic.gdx.graphics.VertexAttributes;
@@ -12,6 +7,12 @@ import com.badlogic.gdx.graphics.VertexAttributes.Usage;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
+
+import java.nio.FloatBuffer;
+import java.nio.ShortBuffer;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 
 public class Meshcombiner
 {

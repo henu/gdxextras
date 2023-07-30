@@ -1,10 +1,11 @@
 package fi.henu.gdxextras;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.glutils.ShaderProgram;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeSet;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 
 public class Shadermanager
 
