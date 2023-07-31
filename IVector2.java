@@ -125,7 +125,7 @@ public class IVector2 implements Byteserializable
 	}
 
 	@Override
-	public void deserialize(ByteQueue data)
+	public void deserialize(ByteQueue data) throws ByteQueue.InvalidData
 	{
 		x = data.readInt();
 		y = data.readInt();

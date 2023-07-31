@@ -62,7 +62,12 @@ public class RSA
 	public static PrivateKey bytesToPrivateKey(ByteQueue bytes)
 	{
 		byte[] private_key_bytes = new byte[bytes.getSize()];
-		bytes.readBytes(private_key_bytes, bytes.getSize());
+		try {
+			bytes.readBytes(private_key_bytes, bytes.getSize());
+		}
+		// This should never happen, as we are reading all the data there is
+		catch (ByteQueue.InvalidData err) {
+		}
 		return bytesToPrivateKey(private_key_bytes);
 	}
 
@@ -99,7 +104,12 @@ public class RSA
 	public static PublicKey bytesToPublicKey(ByteQueue bytes)
 	{
 		byte[] public_key_bytes = new byte[bytes.getSize()];
-		bytes.readBytes(public_key_bytes, bytes.getSize());
+		try {
+			bytes.readBytes(public_key_bytes, bytes.getSize());
+		}
+		// This should never happen, as we are reading all the data there is
+		catch (ByteQueue.InvalidData err) {
+		}
 		return bytesToPublicKey(public_key_bytes);
 	}
 

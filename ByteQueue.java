@@ -5,6 +5,14 @@ import java.nio.ByteBuffer;
 
 public class ByteQueue
 {
+	public class InvalidData extends Exception
+	{
+		public InvalidData(String msg)
+		{
+			super(msg);
+		}
+	}
+
 	public int getSize()
 	{
 		return size;
@@ -121,29 +129,29 @@ public class ByteQueue
 		}
 	}
 
-	public void writeString(String str)
+	public void writeString(String str) throws InvalidData
 	{
 		byte[] utf8;
 		try {
 			utf8 = str.getBytes("UTF8");
 		}
 		catch (UnsupportedEncodingException e) {
-			throw new RuntimeException("Unable to encode UTF8!");
+			throw new InvalidData("Unable to encode UTF8!");
 		}
 		ensureSpace(4 + utf8.length);
 		writeInt(utf8.length);
 		writeBytes(utf8, utf8.length);
 	}
 
-	public boolean readBoolean()
+	public boolean readBoolean() throws InvalidData
 	{
 		return readByte() != 0;
 	}
 
-	public byte readByte()
+	public byte readByte() throws InvalidData
 	{
 		if (size < 1) {
-			throw new RuntimeException("Not enough bytes!");
+			throw new InvalidData("Not enough bytes!");
 		}
 		byte result = bytes[read];
 		read = (read + 1) % bytes.length;
@@ -151,10 +159,10 @@ public class ByteQueue
 		return result;
 	}
 
-	public short readShort()
+	public short readShort() throws InvalidData
 	{
 		if (size < 2) {
-			throw new RuntimeException("Not enough bytes!");
+			throw new InvalidData("Not enough bytes!");
 		}
 		short result = 0;
 		result += (bytes[read] & 0xff) << 8;
@@ -165,10 +173,10 @@ public class ByteQueue
 		return result;
 	}
 
-	public int readInt()
+	public int readInt() throws InvalidData
 	{
 		if (size < 4) {
-			throw new RuntimeException("Not enough bytes!");
+			throw new InvalidData("Not enough bytes!");
 		}
 		int result = 0;
 		result += (bytes[read] & 0xff) << 24;
@@ -183,10 +191,10 @@ public class ByteQueue
 		return result;
 	}
 
-	public long readLong()
+	public long readLong() throws InvalidData
 	{
 		if (size < 8) {
-			throw new RuntimeException("Not enough bytes!");
+			throw new InvalidData("Not enough bytes!");
 		}
 		long result = 0;
 		result += (long)(bytes[read] & 0xff) << 56;
@@ -209,17 +217,17 @@ public class ByteQueue
 		return result;
 	}
 
-	public float readFloat()
+	public float readFloat() throws InvalidData
 	{
 		tmp_bb.clear();
 		readBytes(tmp_bb.array(), 4);
 		return tmp_bb.getFloat();
 	}
 
-	public void readBytes(byte[] result, int size)
+	public void readBytes(byte[] result, int size) throws InvalidData
 	{
 		if (size > this.size) {
-			throw new RuntimeException("Not enough bytes!");
+			throw new InvalidData("Not enough bytes!");
 		}
 
 		if (size <= 0) {
@@ -239,7 +247,7 @@ public class ByteQueue
 		this.size -= size;
 	}
 
-	public ByteQueue readBytequeue(int size)
+	public ByteQueue readBytequeue(int size) throws InvalidData
 	{
 		ByteQueue result = new ByteQueue();
 		result.bytes = new byte[size];
@@ -249,7 +257,7 @@ public class ByteQueue
 		return result;
 	}
 
-	public String readString()
+	public String readString() throws InvalidData
 	{
 		int utf8_len = readInt();
 		byte[] utf8 = new byte[utf8_len];
@@ -258,7 +266,7 @@ public class ByteQueue
 			return new String(utf8, 0, utf8_len, "UTF8");
 		}
 		catch (UnsupportedEncodingException e) {
-			throw new RuntimeException("Unable to decode UTF8!");
+			throw new InvalidData("Unable to decode UTF8!");
 		}
 	}
 

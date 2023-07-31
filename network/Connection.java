@@ -298,14 +298,24 @@ public class Connection
 					synchronized (queue) {
 						if (!new_message_header_got) {
 							if (queue.getSize() >= 8) {
-								new_message_type = queue.readInt();
-								new_message_len = queue.readInt();
+								try {
+									new_message_type = queue.readInt();
+									new_message_len = queue.readInt();
+								}
+								// This should never happen, as queue size is checked above
+								catch (ByteQueue.InvalidData err) {
+								}
 								new_message_header_got = true;
 							}
 						}
 						if (new_message_header_got && queue.getSize() >= new_message_len) {
 							if (new_message_len > 0) {
-								new_msg = new NetworkMessage(new_message_type, queue.readBytequeue(new_message_len));
+								try {
+									new_msg = new NetworkMessage(new_message_type, queue.readBytequeue(new_message_len));
+								}
+								// This should never happen, as queue size is checked above
+								catch (ByteQueue.InvalidData err) {
+								}
 							} else {
 								new_msg = new NetworkMessage(new_message_type, null);
 							}
@@ -368,7 +378,12 @@ public class Connection
 				synchronized (queue) {
 					buf_size = Math.min(buf.length, queue.getSize());
 					if (buf_size > 0) {
-						queue.readBytes(buf, buf_size);
+						try {
+							queue.readBytes(buf, buf_size);
+						}
+						// This should never happen, as queue size is checked above
+						catch (ByteQueue.InvalidData err) {
+						}
 					} else {
 						try {
 							queue.wait();

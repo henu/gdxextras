@@ -14,7 +14,12 @@ public class Compressor
 
 		// Set input
 		byte[] input = new byte[size];
-		data.readBytes(input, size);
+		try {
+			data.readBytes(input, size);
+		}
+		catch (ByteQueue.InvalidData err) {
+			throw new RuntimeException("Unable to compress data: " + err);
+		}
 		compresser.setInput(input);
 		compresser.finish();
 
@@ -33,7 +38,12 @@ public class Compressor
 
 		// Set input
 		byte[] input = new byte[size];
-		data.readBytes(input, size);
+		try {
+			data.readBytes(input, size);
+		}
+		catch (ByteQueue.InvalidData err) {
+			throw new RuntimeException("Unable to uncompress data: " + err);
+		}
 		decompresser.setInput(input);
 
 		// Decompress
