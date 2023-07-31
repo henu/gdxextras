@@ -37,6 +37,11 @@ public abstract class Widget
 		eventlistener = null;
 	}
 
+	public Gui getGui()
+	{
+		return gui;
+	}
+
 	public void setEventlistener(Eventlistener eventlistener)
 	{
 		this.eventlistener = eventlistener;
