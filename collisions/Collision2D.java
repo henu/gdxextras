@@ -10,6 +10,13 @@ public class Collision2D
 		this.depth = depth;
 	}
 
+	public Collision2D()
+	{
+		normal_x = 1;
+		normal_y = 0;
+		depth = 0;
+	}
+
 	public float getNormalX()
 	{
 		return normal_x;
@@ -23,6 +30,13 @@ public class Collision2D
 	public float getDepth()
 	{
 		return depth;
+	}
+
+	public void setNormal(float normal_x, float normal_y)
+	{
+		assert Math.abs(1 - Math.sqrt(normal_x * normal_x + normal_y * normal_y)) < 0.00001;
+		this.normal_x = normal_x;
+		this.normal_y = normal_y;
 	}
 
 	public void setDepth(float depth)

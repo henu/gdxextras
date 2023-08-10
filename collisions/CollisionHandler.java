@@ -3,6 +3,7 @@ package fi.henu.gdxextras.collisions;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.Pools;
 
 import fi.henu.gdxextras.Mathutils;
 
@@ -10,6 +11,7 @@ public class CollisionHandler
 {
 	// Calculates position delta to get object out of walls. Note, that this function invalidates
 	// depth values of collisions and removes those collisions that does not really hit walls.
+// TODO: Use Pools to get rid of Collisions, so they can be reused!
 	public static void moveOut(Vector3 result, Array<Collision> colls)
 	{
 		if (colls.isEmpty()) {
@@ -231,6 +233,7 @@ public class CollisionHandler
 		}
 		// If none of the collisions were really touching anything, then clear all
 		else {
+			Pools.freeAll(colls);
 			colls.clear();
 			result.setZero();
 			return;
@@ -276,7 +279,7 @@ public class CollisionHandler
 						deepest = colls_i;
 					}
 				}
-				colls.removeIndex(colls_i);
+				Pools.free(colls.removeIndex(colls_i));
 				continue;
 			}
 

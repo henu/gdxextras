@@ -28,6 +28,14 @@ public class Collision
 		this.depth = depth;
 	}
 
+	public Collision()
+	{
+		normal_x = 1;
+		normal_y = 0;
+		normal_z = 0;
+		depth = 0;
+	}
+
 	// Warning, this creates new Vector3 every time. It is only used for debug purposes.
 	public Vector3 getNormal()
 	{
@@ -52,6 +60,14 @@ public class Collision
 	public float getDepth()
 	{
 		return depth;
+	}
+
+	public void setNormal(float normal_x, float normal_y, float normal_z)
+	{
+		assert Math.abs(1 - Math.sqrt(normal_x * normal_x + normal_y * normal_y + normal_z * normal_z)) < 0.00001;
+		this.normal_x = normal_x;
+		this.normal_y = normal_y;
+		this.normal_z = normal_z;
 	}
 
 	public void setDepth(float depth)
