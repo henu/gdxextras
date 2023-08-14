@@ -70,6 +70,32 @@ public class Mathutils
 		return MathUtils.radiansToDegrees * radians;
 	}
 
+	public static float angleBetweenVectors(float v1_x, float v1_y, float v2_x, float v2_y)
+	{
+		float v1_len = (float) Math.sqrt(v1_x * v1_x + v1_y * v1_y);
+		if (v1_len == 0) return 0;
+		float v2_len = (float) Math.sqrt(v2_x * v2_x + v2_y * v2_y);
+		if (v2_len == 0) return 0;
+
+		v1_x /= v1_len;
+		v1_y /= v1_len;
+		v2_x /= v2_len;
+		v2_y /= v2_len;
+
+		float dp_v1n_v2n = v1_x * v2_x + v1_y * v2_y;
+
+		float radians = (float)Math.acos(dp_v1n_v2n);
+		if (Float.isNaN(radians)) {
+			v1_x += v2_x;
+			v1_y += v2_y;
+			if (v1_x * v1_x + v1_y * v1_y > 1.0) {
+				return 0;
+			}
+			return 180;
+		}
+		return MathUtils.radiansToDegrees * radians;
+	}
+
 	// Returns the amount of right hand rotation that needs to be added
 	// to vector #1 so it would become vector #2 when the rotation is
 	// done at given plane. The result is between [-180 - 180]. Note! Positions
