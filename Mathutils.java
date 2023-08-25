@@ -43,6 +43,13 @@ public class Mathutils
 		return (dotProduct(normal_x, normal_y, point_x, point_y)) / dp_nn;
 	}
 
+	public static float distance(float x1, float y1, float x2, float y2)
+	{
+		float x_diff = x2 - x1;
+		float y_diff = y2 - y1;
+		return (float)Math.sqrt(x_diff * x_diff + y_diff * y_diff);
+	}
+
 	// Returns angle between two vectors. The result is thus [0 - 180]
 	public static float angleBetweenVectors(Vector3 v1, Vector3 v2)
 	{
