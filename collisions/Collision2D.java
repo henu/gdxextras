@@ -17,6 +17,13 @@ public class Collision2D
 		depth = 0;
 	}
 
+	public void set(Collision2D coll)
+	{
+		normal_x = coll.normal_x;
+		normal_y = coll.normal_y;
+		depth = coll.depth;
+	}
+
 	public float getNormalX()
 	{
 		return normal_x;
