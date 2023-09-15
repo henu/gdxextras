@@ -247,6 +247,29 @@ public class Mathutils
 		return v1_x * v2_y - v1_y * v2_x;
 	}
 
+	public static boolean linesCollide(float line1_x1, float line1_y1, float line1_x2, float line1_y2, float line2_x1, float line2_y1, float line2_x2, float line2_y2)
+	{
+		float line1_xdiff = line1_x2 - line1_x1;
+		float line1_ydiff = line1_y2 - line1_y1;
+		float line2_xdiff = line2_x2 - line2_x1;
+		float line2_ydiff = line2_y2 - line2_y1;
+		float lines_x1diff = line2_x1 - line1_x1;
+		float lines_y1diff = line2_y1 - line1_y1;
+
+		float denom = line1_xdiff * line2_ydiff - line1_ydiff * line2_xdiff;
+		float num1 = lines_x1diff * line2_ydiff - lines_y1diff * line2_xdiff;
+		float num2 = lines_x1diff * line1_ydiff - lines_y1diff * line1_xdiff;
+
+		if (Math.abs(denom) < MathUtils.FLOAT_ROUNDING_ERROR) {
+			return Math.abs(num1) < MathUtils.FLOAT_ROUNDING_ERROR && Math.abs(num2) < MathUtils.FLOAT_ROUNDING_ERROR;
+		}
+
+		float line1_rel_pos = num1 / denom;
+		float line2_rel_pos = num2 / denom;
+
+		return line1_rel_pos >= 0 && line1_rel_pos <= 1 && line2_rel_pos >= 0 && line2_rel_pos <= 1;
+	}
+
 	// Temporary variables. These are used by multiple methods, so
 	// do not expect that value is kept if you do internal call!
 	// TODO: Get rid of these so things can be done in multiple threads!
