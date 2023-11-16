@@ -3,9 +3,9 @@ package fi.henu.gdxextras.collisions;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.Pools;
 
 import fi.henu.gdxextras.Mathutils;
+import fi.henu.gdxextras.threads.ThreadSafePools;
 
 public class CollisionHandler
 {
@@ -233,7 +233,7 @@ public class CollisionHandler
 		}
 		// If none of the collisions were really touching anything, then clear all
 		else {
-			Pools.freeAll(colls);
+			ThreadSafePools.freeAll(colls, true);
 			colls.clear();
 			result.setZero();
 			return;
@@ -279,7 +279,7 @@ public class CollisionHandler
 						deepest = colls_i;
 					}
 				}
-				Pools.free(colls.removeIndex(colls_i));
+				ThreadSafePools.free(colls.removeIndex(colls_i));
 				continue;
 			}
 
