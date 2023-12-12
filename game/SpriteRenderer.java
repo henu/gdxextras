@@ -2,6 +2,7 @@ package fi.henu.gdxextras.game;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Quaternion;
 import com.badlogic.gdx.math.Vector3;
 
 public class SpriteRenderer implements Renderer
@@ -43,12 +44,26 @@ public class SpriteRenderer implements Renderer
 	}
 
 	@Override
-	public void render(SpriteBatch batch, Vector3 pos, Camera camera)
+	public void render(SpriteBatch batch, Vector3 pos, Quaternion rot, Camera camera)
 	{
 		if (camera.isSideCamera()) {
-			float draw_w = region.getRegionWidth() * scale_x;
-			float draw_h = region.getRegionHeight() * scale_y;
-			batch.draw(region, pos.x - draw_w / 2f - region_x_offset, pos.z - draw_h / 2f - region_y_offset, draw_w, draw_h);
+			if (rot == null) {
+				float draw_w = region.getRegionWidth() * scale_x;
+				float draw_h = region.getRegionHeight() * scale_y;
+				batch.draw(region, pos.x - draw_w / 2f - region_x_offset, pos.z - draw_h / 2f - region_y_offset, draw_w, draw_h);
+			} else {
+				float angle = rot.getAngleAround(0, 1, 0);
+				float draw_w = region.getRegionWidth();
+				float draw_h = region.getRegionHeight();
+				batch.draw(
+					region,
+					pos.x - draw_w / 2f - region_x_offset, pos.z - draw_h / 2f - region_y_offset,
+					region.getRegionWidth() / 2.0f, region.getRegionHeight() / 2.0f,
+					draw_w, draw_h,
+					scale_x, scale_y,
+					angle
+				);
+			}
 			return;
 		}
 
@@ -67,41 +82,53 @@ public class SpriteRenderer implements Renderer
 	}
 
 	@Override
-	public float getBoundsTop(Vector3 pos, Camera camera)
+	public float getBoundsTop(Vector3 pos, Quaternion rot, Camera camera)
 	{
 		if (camera.isSideCamera()) {
-			float draw_h = region.getRegionHeight() * scale_y;
-			return pos.z + draw_h / 2f;
+			if (rot == null) {
+				float draw_h = region.getRegionHeight() * scale_y;
+				return pos.z + draw_h / 2f;
+			}
+			throw new RuntimeException("Getting bounds with rotation is not supported yet!");
 		}
 		throw new RuntimeException("Unsupported camera type!");
 	}
 
 	@Override
-	public float getBoundsRight(Vector3 pos, Camera camera)
+	public float getBoundsRight(Vector3 pos, Quaternion rot, Camera camera)
 	{
 		if (camera.isSideCamera()) {
-			float draw_w = region.getRegionWidth() * scale_x;
-			return pos.x + draw_w / 2f;
+			if (rot == null) {
+				float draw_w = region.getRegionWidth() * scale_x;
+				return pos.x + draw_w / 2f;
+			}
+			throw new RuntimeException("Getting bounds with rotation is not supported yet!");
 		}
 		throw new RuntimeException("Unsupported camera type!");
 	}
 
 	@Override
-	public float getBoundsBottom(Vector3 pos, Camera camera)
+	public float getBoundsBottom(Vector3 pos, Quaternion rot, Camera camera)
 	{
 		if (camera.isSideCamera()) {
-			float draw_h = region.getRegionHeight() * scale_y;
-			return pos.z - draw_h / 2f;
+			if (rot == null) {
+				float draw_h = region.getRegionHeight() * scale_y;
+				return pos.z - draw_h / 2f;
+			}
+			throw new RuntimeException("Getting bounds with rotation is not supported yet!");
 		}
 		throw new RuntimeException("Unsupported camera type!");
 	}
 
 	@Override
-	public float getBoundsLeft(Vector3 pos, Camera camera)
+	public float getBoundsLeft(Vector3 pos, Quaternion rot, Camera camera)
 	{
 		if (camera.isSideCamera()) {
-			float draw_w = region.getRegionWidth() * scale_x;
-			return pos.x - draw_w / 2f;
+			if (rot == null) {
+				float draw_w = region.getRegionWidth() * scale_x;
+				return pos.x - draw_w / 2f;
+			}
+			throw new RuntimeException("Getting bounds with rotation is not supported yet!");
 		}
 		throw new RuntimeException("Unsupported camera type!");
 	}

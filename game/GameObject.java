@@ -2,6 +2,7 @@ package fi.henu.gdxextras.game;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Quaternion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
@@ -10,6 +11,7 @@ import fi.henu.gdxextras.collisions.Collision;
 import fi.henu.gdxextras.collisions.Collision2D;
 import fi.henu.gdxextras.collisions.CollisionHandler;
 import fi.henu.gdxextras.collisions.Shape;
+import fi.henu.gdxextras.threads.ThreadSafePools;
 
 public class GameObject
 {
@@ -47,6 +49,22 @@ public class GameObject
 			tmp_v2.set(pos.x, pos.z);
 		}
 		return tmp_v2;
+	}
+
+	public void setRotation2D(float angle)
+	{
+		if (rot == null) {
+			rot = ThreadSafePools.obtain(Quaternion.class);
+		}
+		rot.set(Vector3.Y, angle);
+	}
+
+	public float getRotation2D()
+	{
+		if (rot == null) {
+			return 0;
+		}
+		return rot.getAngleAround(0, 1, 0);
 	}
 
 	public Movement getMovement()
@@ -151,7 +169,7 @@ public class GameObject
 	public void render(SpriteBatch batch)
 	{
 		if (renderer != null) {
-			renderer.render(batch, pos, world.getCamera());
+			renderer.render(batch, pos, rot, world.getCamera());
 		}
 	}
 
@@ -217,10 +235,10 @@ public class GameObject
 		float vp_top = vp_bottom + Gdx.graphics.getHeight() / camera.getScaling();
 
 		// Get renderer properties
-		float r_top = renderer.getBoundsTop(pos, camera);
-		float r_right = renderer.getBoundsRight(pos, camera);
-		float r_bottom = renderer.getBoundsBottom(pos, camera);
-		float r_left = renderer.getBoundsLeft(pos, camera);
+		float r_top = renderer.getBoundsTop(pos, rot, camera);
+		float r_right = renderer.getBoundsRight(pos, rot, camera);
+		float r_bottom = renderer.getBoundsBottom(pos, rot, camera);
+		float r_left = renderer.getBoundsLeft(pos, rot, camera);
 
 		// Check if fully inside
 		if (r_top <= vp_top && r_right <= vp_right && r_bottom >= vp_bottom && r_left >= vp_left) {
@@ -269,6 +287,7 @@ public class GameObject
 	private GameWorld world;
 
 	private final Vector3 pos;
+	private Quaternion rot;
 
 	private Movement movement;
 	private Shape shape;
