@@ -55,6 +55,12 @@ public class Camera
 		recalculateProjectionMatrix();
 	}
 
+	public void setScroll(GameObject obj)
+	{
+		Vector3 pos = obj.getPosition();
+		setScroll(-pos.x + Gdx.graphics.getWidth() / 2.0f / scaling, -pos.z + Gdx.graphics.getHeight() / 2.0f / scaling);
+	}
+
 	public boolean isSideCamera()
 	{
 		return camera_type == CT_SIDE_CAMERA;

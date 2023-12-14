@@ -8,6 +8,7 @@ import com.badlogic.gdx.utils.Array;
 import java.util.HashSet;
 
 import fi.henu.gdxextras.collisions.Collision;
+import fi.henu.gdxextras.game.layers.Layer;
 
 public class GameWorld
 {
@@ -17,6 +18,8 @@ public class GameWorld
 		colliders_sorting_needed = true;
 		collision_extra_margin = -1;
 		objs_to_destroy = new HashSet<>();
+
+		layers = new Array<>();
 
 		if (Gdx.app.getType() != Application.ApplicationType.HeadlessDesktop) {
 			batch = new SpriteBatch();
@@ -135,12 +138,32 @@ public class GameWorld
 
 			batch.setProjectionMatrix(camera.getProjectionMatrix());
 			batch.begin();
+
+			// Render layers behind the objects
+			int layer_i = 0;
+			while (layer_i < layers.size && layers.get(layer_i).getDepthIndex() >= 0) {
+				layers.get(layer_i ++).render(batch, camera);
+			}
+
+			// Render GameObjects
 			for (int obj_i = 0; obj_i < objs.size; ++obj_i) {
 				GameObject obj = objs.get(obj_i);
 				obj.render(batch);
 			}
+
+			// Render layers in front of the objects
+			while (layer_i < layers.size) {
+				layers.get(layer_i ++).render(batch, camera);
+			}
+
 			batch.end();
 		}
+	}
+
+	public void addLayer(Layer layer)
+	{
+		layers.add(layer);
+		layers.sort();
 	}
 
 	public void addGameObject(GameObject obj)
@@ -200,6 +223,8 @@ public class GameWorld
 	private boolean colliders_sorting_needed;
 
 	private final HashSet<GameObject> objs_to_destroy;
+
+	private final Array<Layer> layers;
 
 	private SpriteBatch batch;
 
