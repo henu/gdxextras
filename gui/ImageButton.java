@@ -4,9 +4,15 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.IntSet;
 
 public class ImageButton extends Widget
 {
+
+	public ImageButton()
+	{
+		pointers_listened = new IntSet();
+	}
 
 	public void setImage(AtlasRegion region)
 	{
@@ -20,33 +26,33 @@ public class ImageButton extends Widget
 		markToNeedReposition();
 	}
 
-	@Override
-	public boolean pointerDown(int pointer_id, Vector2 pos)
+	public boolean isPressed()
 	{
-		if (pointer_id == 0) {
-			clearKeyboardListener();
-			return true;
+		for (IntSet.IntSetIterator i = pointers_listened.iterator(); i.hasNext;) {
+			if (pointerOver(i.next())) {
+				return true;
+			}
 		}
 		return false;
 	}
 
 	@Override
-	public void pointerMove(int pointer_id, Vector2 pos)
+	public boolean pointerDown(int pointer_id, Vector2 pos)
 	{
-		if (pointer_id == 0) {
-			pointerOver(0);
-		}
+		pointers_listened.add(pointer_id);
+// TODO: Why this was here?
+//		clearKeyboardListener();
+		return true;
 	}
 
 	@Override
 	public void pointerUp(int pointer_id, Vector2 pos)
 	{
-		if (pointer_id == 0) {
-			if (pointerOver(0)) {
-				fireEvent();
-			}
-			unregisterPointerListener(pointer_id);
+		if (pointerOver(pointer_id)) {
+			fireEvent();
 		}
+		pointers_listened.remove(pointer_id);
+		unregisterPointerListener(pointer_id);
 	}
 
 	// Returns true if position is over Widget. Position is relative to Widget
@@ -85,4 +91,5 @@ public class ImageButton extends Widget
 	private AtlasRegion region;
 	private float scale;
 
+	private final IntSet pointers_listened;
 }
