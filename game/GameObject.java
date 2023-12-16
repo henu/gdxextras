@@ -174,6 +174,12 @@ public class GameObject
 	}
 
 	// Returns true if object should exist, and false if it should be destroyed
+	public boolean run(float delta, Controls controls)
+	{
+		return true;
+	}
+
+	// Returns true if object should exist, and false if it should be destroyed
 	public boolean handleAfterRun()
 	{
 		return true;

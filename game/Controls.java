@@ -11,6 +11,7 @@ public class Controls
 		pressed_right = Gdx.input.isKeyPressed(Input.Keys.RIGHT) ? 1 : 0;
 		pressed_down = Gdx.input.isKeyPressed(Input.Keys.DOWN) ? 1 : 0;
 		pressed_left = Gdx.input.isKeyPressed(Input.Keys.LEFT) ? 1 : 0;
+		pressed_fire = Gdx.input.isKeyPressed(Input.Keys.CONTROL_RIGHT);
 	}
 
 	public void set(Controls controls)
@@ -19,6 +20,7 @@ public class Controls
 		pressed_right = controls.pressed_right;
 		pressed_down = controls.pressed_down;
 		pressed_left = controls.pressed_left;
+		pressed_fire = controls.pressed_fire;
 	}
 
 	public void setUpPressed(boolean pressed)
@@ -39,6 +41,11 @@ public class Controls
 	public void setLeftPressed(boolean pressed)
 	{
 		pressed_left = pressed ? 1 : 0;
+	}
+
+	public void setFirePressed(boolean pressed)
+	{
+		pressed_fire = pressed;
 	}
 
 	public void setUpPressed(float pressed)
@@ -81,6 +88,11 @@ public class Controls
 		return pressed_left > 0;
 	}
 
+	public boolean isFirePressed()
+	{
+		return pressed_fire;
+	}
+
 	public float getUpPressed()
 	{
 		return pressed_up;
@@ -105,4 +117,5 @@ public class Controls
 	private float pressed_right;
 	private float pressed_down;
 	private float pressed_left;
+	private boolean pressed_fire;
 }

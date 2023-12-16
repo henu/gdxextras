@@ -88,14 +88,17 @@ public class GameWorld
 	{
 		updateControls();
 
-		// Run movement of all GameObjects
+		// Run all GameObjects
 		for (int obj_i = 0; obj_i < objs.size; ++ obj_i) {
 			GameObject obj = objs.get(obj_i);
 			if (!objs_to_destroy.contains(obj)) {
+				Controls obj_controls = null;
 				if (obj == controlled_obj) {
-					obj.runMovement(delta, controls);
-				} else {
-					obj.runMovement(delta, null);
+					obj_controls = controls;
+				}
+				obj.runMovement(delta, obj_controls);
+				if (!obj.run(delta, obj_controls)) {
+					destroyGameObject(obj);
 				}
 			}
 		}
