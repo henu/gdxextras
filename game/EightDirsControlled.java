@@ -35,6 +35,10 @@ public class EightDirsControlled implements Movement
 	@Override
 	public void run(GameObject obj, float delta, Controls controls)
 	{
+		if (controls == null) {
+			return;
+		}
+
 		Vector3 pos = obj.getPosition();
 
 		final float SIN_45 = 0.707106781f;

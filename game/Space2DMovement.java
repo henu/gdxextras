@@ -21,6 +21,11 @@ public class Space2DMovement implements Movement
 	public void run(GameObject obj, float delta, Controls controls)
 	{
 		obj.getPosition().add(vel.x * delta, 0, vel.z * delta);
+
+		if (controls == null) {
+			return;
+		}
+
 		if (controls.isRightPressed() && !controls.isLeftPressed()) {
 			obj.setRotation2D(obj.getRotation2D() - delta * rot_speed * controls.getRightPressed());
 		} else if (controls.isLeftPressed() && !controls.isRightPressed()) {

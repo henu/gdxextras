@@ -74,6 +74,16 @@ public class GameWorld
 		}
 	}
 
+	public void setControlledObject(GameObject obj)
+	{
+		controlled_obj = obj;
+	}
+
+	public GameObject getControlledObject()
+	{
+		return controlled_obj;
+	}
+
 	public void run(float delta)
 	{
 		updateControls();
@@ -82,7 +92,11 @@ public class GameWorld
 		for (int obj_i = 0; obj_i < objs.size; ++ obj_i) {
 			GameObject obj = objs.get(obj_i);
 			if (!objs_to_destroy.contains(obj)) {
-				obj.runMovement(delta, controls);
+				if (obj == controlled_obj) {
+					obj.runMovement(delta, controls);
+				} else {
+					obj.runMovement(delta, null);
+				}
 			}
 		}
 
@@ -243,6 +257,8 @@ public class GameWorld
 
 	private final Controls controls;
 	private Controls overridden_controls;
+
+	private GameObject controlled_obj;
 
 	private int score;
 
