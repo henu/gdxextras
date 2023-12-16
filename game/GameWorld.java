@@ -47,6 +47,19 @@ public class GameWorld
 		return camera;
 	}
 
+	public Controls enabledOverriddenControls()
+	{
+		if (overridden_controls == null) {
+			overridden_controls = new Controls();
+		}
+		return overridden_controls;
+	}
+
+	public void disableOverriddenControls()
+	{
+		overridden_controls = null;
+	}
+
 	public Controls getControls()
 	{
 		return controls;
@@ -54,9 +67,11 @@ public class GameWorld
 
 	public void updateControls()
 	{
-		// Initialize controls from keyboard, and then let subclass to alter it
-		controls.readFromKeyboard();
-		overrideControls(controls);
+		if (overridden_controls != null) {
+			controls.set(overridden_controls);
+		} else {
+			controls.readFromKeyboard();
+		}
 	}
 
 	public void run(float delta)
@@ -210,10 +225,6 @@ public class GameWorld
 		objs_to_destroy.add(obj);
 	}
 
-	protected void overrideControls(Controls controls)
-	{
-	}
-
 	private float collision_extra_margin;
 
 	// Objects are sorted so that first comes those objects
@@ -231,6 +242,7 @@ public class GameWorld
 	private final Camera camera;
 
 	private final Controls controls;
+	private Controls overridden_controls;
 
 	private int score;
 

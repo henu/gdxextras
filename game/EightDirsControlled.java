@@ -45,6 +45,7 @@ public class EightDirsControlled implements Movement
 		boolean key_right = controls.isRightPressed();
 		boolean key_down = controls.isDownPressed();
 		boolean key_left = controls.isLeftPressed();
+// TODO: Use analog controls!
 		if (key_up && !key_down) {
 			if (key_right && !key_left) {
 				if ((enabled_dir_flags & FLAG_UP_RIGHT) != 0) {

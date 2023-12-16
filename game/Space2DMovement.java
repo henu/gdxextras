@@ -22,14 +22,14 @@ public class Space2DMovement implements Movement
 	{
 		obj.getPosition().add(vel.x * delta, 0, vel.z * delta);
 		if (controls.isRightPressed() && !controls.isLeftPressed()) {
-			obj.setRotation2D(obj.getRotation2D() - delta * rot_speed);
+			obj.setRotation2D(obj.getRotation2D() - delta * rot_speed * controls.getRightPressed());
 		} else if (controls.isLeftPressed() && !controls.isRightPressed()) {
-			obj.setRotation2D(obj.getRotation2D() + delta * rot_speed);
+			obj.setRotation2D(obj.getRotation2D() + delta * rot_speed * controls.getLeftPressed());
 		}
 		if (controls.isUpPressed()) {
 			float angle = obj.getRotation2D();
-			vel.x += -MathUtils.sinDeg(angle) * accel * delta;
-			vel.z += MathUtils.cosDeg(angle) * accel * delta;
+			vel.x += -MathUtils.sinDeg(angle) * accel * delta * controls.getUpPressed();
+			vel.z += MathUtils.cosDeg(angle) * accel * delta * controls.getUpPressed();
 			float vel_len = vel.len();
 			if (vel_len > max_vel) {
 				vel.scl(max_vel / vel_len);
