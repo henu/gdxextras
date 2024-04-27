@@ -16,27 +16,6 @@ public abstract class Widget
 		LEFT, RIGHT, TOP, BOTTOM, CENTER
 	}
 
-	protected Widget()
-	{
-		gui = null;
-		parent = null;
-		visible = true;
-		shrunken = false;
-		pointerevents_enabled = true;
-		be_topmost_before_children = false;
-		expanding_horiz = 0;
-		expanding_vert = 0;
-		align = Alignment.CENTER;
-		valign = Alignment.CENTER;
-		fixed_min_width = 0;
-		fixed_min_height = 0;
-		margin = 0;
-		pos = new Vector2(0, 0);
-		size = new Vector2(0, 0);
-		reposition_needed = true;
-		eventlistener = null;
-	}
-
 	public Gui getGui()
 	{
 		return gui;
@@ -445,6 +424,27 @@ public abstract class Widget
 			Widget child = children_buf[child_id];
 			child.setGui(gui);
 		}
+	}
+
+	protected Widget()
+	{
+		gui = null;
+		parent = null;
+		visible = true;
+		shrunken = false;
+		pointerevents_enabled = true;
+		be_topmost_before_children = false;
+		expanding_horiz = 0;
+		expanding_vert = 0;
+		align = Alignment.CENTER;
+		valign = Alignment.CENTER;
+		fixed_min_width = 0;
+		fixed_min_height = 0;
+		margin = 0;
+		pos = new Vector2(0, 0);
+		size = new Vector2(0, 0);
+		reposition_needed = true;
+		eventlistener = null;
 	}
 
 	protected void fireEvent()
