@@ -42,6 +42,33 @@ public abstract class Widget
 		return gui;
 	}
 
+	public void setId(String id)
+	{
+		this.id = id;
+	}
+
+	public String getId()
+	{
+		return id;
+	}
+
+	public Widget findWidget(String id)
+	{
+		if (id == null) {
+			return null;
+		}
+		if (id.equals(this.id)) {
+			return this;
+		}
+		for (Widget child : children) {
+			Widget match = child.findWidget(id);
+			if (match != null) {
+				return match;
+			}
+		}
+		return null;
+	}
+
 	public void setEventlistener(Eventlistener eventlistener)
 	{
 		this.eventlistener = eventlistener;
@@ -646,6 +673,8 @@ public abstract class Widget
 
 	private Gui gui;
 	private Widget parent;
+
+	private String id;
 
 	private Array<Widget> children = new Array<Widget>(true, 0, Widget.class);
 

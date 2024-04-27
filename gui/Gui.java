@@ -39,6 +39,14 @@ public class Gui implements InputProcessor
 		return scaling;
 	}
 
+	public Widget findWidget(String widget_id)
+	{
+		if (widget != null) {
+			return widget.findWidget(widget_id);
+		}
+		return null;
+	}
+
 	public void close()
 	{
 		if (batch != null) {
