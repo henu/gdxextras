@@ -81,7 +81,7 @@ public abstract class ScreenWithGui implements Screen
 		batch = null;
 	}
 
-	protected Gui getGui()
+	public Gui getGui()
 	{
 		makeSureGuiExists();
 		return gui;

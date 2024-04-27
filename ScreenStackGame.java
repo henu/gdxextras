@@ -5,9 +5,11 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.utils.Array;
 
+import fi.henu.gdxextras.testing.InputOverrider;
+import fi.henu.roguelike.testing.TestRunner;
+
 public abstract class ScreenStackGame extends Game
 {
-
 	// Push another screen to the stack
 	public void pushScreen(Screen new_screen)
 	{
@@ -61,13 +63,25 @@ public abstract class ScreenStackGame extends Game
 		return screens.get(screens.size - 1);
 	}
 
+	public void overrideInputs(InputOverrider input_overrider)
+	{
+		this.input_overrider = input_overrider;
+	}
+
 	@Override
-	public void render ()
+	public void render()
 	{
 		// If there are no screens, then quit
 		if (screens.size == 0) {
 			Gdx.app.exit();
 			return;
+		}
+
+		if (input_overrider != null) {
+			if (!input_overrider.run(this)) {
+				input_overrider.dispose();
+				input_overrider = null;
+			}
 		}
 
 		super.render();
@@ -90,4 +104,7 @@ public abstract class ScreenStackGame extends Game
 
 	// Stack of screens
 	private Array<Screen> screens = new Array<Screen>(true, 0, Screen.class);
+
+	// Special testing class, that can generate input events
+	private InputOverrider input_overrider;
 }

@@ -413,6 +413,16 @@ public class Gui implements InputProcessor
 		}
 	}
 
+	public float toTouchSpaceX(float x)
+	{
+		return x * width_in_pixels / width_in_gui_units;
+	}
+
+	public float toTouchSpaceY(float y)
+	{
+		return height_in_pixels - (y / height_in_gui_units * height_in_pixels);
+	}
+
 	private float auto_scaling_by_diagonal;
 	private float scaling;
 
