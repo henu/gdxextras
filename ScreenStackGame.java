@@ -6,7 +6,6 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.utils.Array;
 
 import fi.henu.gdxextras.testing.InputOverrider;
-import fi.henu.roguelike.testing.TestRunner;
 
 public abstract class ScreenStackGame extends Game
 {
