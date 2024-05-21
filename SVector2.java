@@ -18,6 +18,12 @@ public class SVector2 implements Byteserializable
 		this.y = y;
 	}
 
+	public SVector2(int x, int y)
+	{
+		this.x = (short)x;
+		this.y = (short)y;
+	}
+
 	public SVector2(SVector2 v)
 	{
 		x = v.x;
@@ -94,12 +100,24 @@ public class SVector2 implements Byteserializable
 		y *= s;
 	}
 
-	public void sub(SVector2 pos)
+	public void add(SVector2 v)
 	{
-		sub(pos.x, pos.y);
+		add(v.x, v.y);
 	}
 
-	private void sub(short x, short y) {
+	public void add(short x, short y)
+	{
+		this.x += x;
+		this.y += y;
+	}
+
+	public void sub(SVector2 v)
+	{
+		sub(v.x, v.y);
+	}
+
+	public void sub(short x, short y)
+	{
 		this.x -= x;
 		this.y -= y;
 	}
