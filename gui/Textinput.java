@@ -96,6 +96,11 @@ public class Textinput extends Widget
 		return content.enabled;
 	}
 
+	public boolean isContentListeningKeyboard()
+	{
+		return content.listeningKeyboard();
+	}
+
 	@Override
 	protected void doRendering(SpriteBatch batch, ShapeRenderer shapes)
 	{
@@ -242,7 +247,7 @@ public class Textinput extends Widget
 			} else {
 				text_check = password_text;
 			}
-			if (text_check.length() == 0) {
+			if (text_check.isEmpty()) {
 				cursor = 0;
 			} else {
 				// Find correct cursor position with binary search
@@ -293,6 +298,16 @@ public class Textinput extends Widget
 			startListeningOfKeyboard();
 
 			return false;
+		}
+
+		public void updatePasswordText()
+		{
+			assert password_text != null;
+			if (text.isEmpty()) {
+				password_text = "";
+			} else {
+				password_text = String.format("%" + text.length() + "s", "").replace(' ', '*');
+			}
 		}
 
 		@Override
@@ -355,16 +370,6 @@ temp_layout = new GlyphLayout(font, "_", getStyle().color, 0, Align.left, false)
 
 			TextinputStyle textinput_style = getStyle();
 			return textinput_style.font.getLineHeight();
-		}
-
-		public void updatePasswordText()
-		{
-			assert password_text != null;
-			if (text.length() == 0) {
-				password_text = "";
-			} else {
-				password_text = String.format("%" + text.length() + "s", "").replace(' ', '*');
-			}
 		}
 
 		public Textinput textinput;
