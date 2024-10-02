@@ -2,8 +2,6 @@ package fi.henu.gdxextras.collisions;
 
 import com.badlogic.gdx.utils.Array;
 
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
-
 public class Rectangle2DShape implements Shape
 {
 	public Rectangle2DShape(float width, float height)
@@ -19,7 +17,7 @@ public class Rectangle2DShape implements Shape
 	{
 		// Rectangle2D collides Rectangle2D
 		if (shape instanceof Rectangle2DShape) {
-			throw new NotImplementedException();
+			throw new RuntimeException("Rectangle to rectangle collision test not implemented yet!");
 		}
 
 		// Rectangle2D collides Sphere2D
