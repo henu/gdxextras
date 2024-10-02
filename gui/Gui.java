@@ -363,6 +363,14 @@ public class Gui implements InputProcessor
 		return false;
 	}
 
+// TODO: Uncomment this when all projects have newer LibGDX!
+	//@Override
+	public boolean touchCancelled(int x, int y, int pointer_id, int button)
+	{
+// TODO: Replace this temporary solution with real one!
+		return touchUp(x, y, pointer_id, button);
+	}
+
 	// Called by Widget
 	public void generateDragEventToWidgets(Widget widgets, int pointer_id, Vector2 down_pos, Vector2 up_pos)
 	{
