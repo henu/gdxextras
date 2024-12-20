@@ -27,7 +27,7 @@ public class VirtualKeyboardPlaceholder extends Widget
 			return 0;
 		}
 		if (keyboard_visible) {
-			return Gdx.graphics.getHeight() / 2.0f;
+			return Gdx.graphics.getHeight() * 0.518518519f;
 		}
 		return 0;
 	}

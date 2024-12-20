@@ -62,6 +62,21 @@ public class StringUtils
 		return splitted;
 	}
 
+	public static Array<String> split(String str, String delimiter, boolean include_empty)
+	{
+		Array<String> splitted = split(str, delimiter);
+		if (!include_empty) {
+			for (int i = 0; i < splitted.size; ) {
+				if (splitted.get(i).isEmpty()) {
+					splitted.removeIndex(i);
+				} else {
+					++ i;
+				}
+			}
+		}
+		return splitted;
+	}
+
 	public static String capitalize(String str)
 	{
 		return str.substring(0, 1).toUpperCase() + str.substring(1);
