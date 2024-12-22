@@ -140,20 +140,14 @@ public class Label extends Widget
 			return text_layout.width;
 		} else {
 			float result = 0;
-			String word = "";
-			GlyphLayout word_layout;
+			GlyphLayout letter_layout;
 			for (int text_idx = 0; text_idx < text.length(); text_idx ++) {
 				char c = text.charAt(text_idx);
-				if (c == ' ' || c == '\t' || c == '\n') {
-					word_layout = new GlyphLayout(font, word);
-					result = Math.max(result, word_layout.width);
-					word = "";
-				} else {
-					word += c;
+				if (c != '\t' && c != '\n') {
+					letter_layout = new GlyphLayout(font, "" + c);
+					result = Math.max(result, letter_layout.width);
 				}
 			}
-			word_layout = new GlyphLayout(font, word);
-			result = Math.max(result, word_layout.width);
 			return result;
 		}
 	}

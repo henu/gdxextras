@@ -354,13 +354,15 @@ temp_layout = new GlyphLayout(font, "_", getStyle().color, 0, Align.left, false)
 			BitmapFont font = getStyle().font;
 			font.getData().setScale(getStyle().scaling);
 
-			GlyphLayout temp_layout1 = new GlyphLayout(font, "_");
+			GlyphLayout cursor_layout = new GlyphLayout(font, "_");
 
 			if (password_text != null) {
-				GlyphLayout temp_layout2 = new GlyphLayout(font, "*");
-				return temp_layout2.width * password_text.length() + temp_layout1.width;
+				GlyphLayout password_char_layout = new GlyphLayout(font, "*");
+				return password_char_layout.width * password_text.length() + cursor_layout.width;
 			}
-			return temp_layout1.width;
+
+			GlyphLayout text_layout = new GlyphLayout(font, text);
+			return text_layout.width + cursor_layout.width;
 		}
 
 		protected float doGetMinHeight(float width)
