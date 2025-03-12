@@ -246,7 +246,7 @@ public class GameWorld
 
 	// Objects are sorted so that first comes those objects
 	// that move and can collide to other objects.
-	private Array<GameObject> objs;
+	private final Array<GameObject> objs;
 	private int colliders_size;
 	private boolean colliders_sorting_needed;
 

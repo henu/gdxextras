@@ -38,6 +38,6 @@ public class Octree
 		root.toggleFlag(flag_id, value);
 	}
 
-	private OctreeRegion root;
+	private final OctreeRegion root;
 
 }

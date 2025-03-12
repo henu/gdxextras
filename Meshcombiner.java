@@ -205,7 +205,7 @@ public class Meshcombiner
 		transfs.clear();
 	}
 
-	private Array<Mesh> meshes = new Array<Mesh>(false, 0, Mesh.class);
-	private Array<Matrix4> transfs = new Array<Matrix4>(false, 0, Matrix4.class);
+	private final Array<Mesh> meshes = new Array<>(false, 0, Mesh.class);
+	private final Array<Matrix4> transfs = new Array<>(false, 0, Matrix4.class);
 
 }

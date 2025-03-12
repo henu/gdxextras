@@ -91,6 +91,6 @@ public class ClickArea extends Widget
 	private final Vector2 latest_click_pos = new Vector2(0, 0);
 	private int latest_pointer_id = 0;
 
-	private HashMap<Integer, Vector2> pressed_pointers;
+	private final HashMap<Integer, Vector2> pressed_pointers;
 
 }

@@ -233,14 +233,14 @@ text_layout = new GlyphLayout(font, text, color, 0, Align.left, false);
 			// Whitespace or end of input
 			if (c == ' ' || c == '\t' || c == '\n' || text_ofs >= text.length()) {
 				// If there is word
-				if (word.length() > 0) {
+				if (!word.isEmpty()) {
 					// If word fits to the line
 					GlyphLayout temp_layout = new GlyphLayout(font, line + whitespace + word);
 					if (temp_layout.width <= width) {
 						line += whitespace + word;
 					}
 					// If word does not fit and it's the only word
-					else if (line.length() == 0) {
+					else if (line.isEmpty()) {
 						// Word is so long, that it does not fit to one line. We
 						// need to cut it. Use binary search to find good length
 						// quickly. Also include possible whitespace to the line.

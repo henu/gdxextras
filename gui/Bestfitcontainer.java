@@ -40,11 +40,6 @@ public class Bestfitcontainer extends Widget
 		widgets.clear();
 	}
 
-	@Override
-	protected void doRendering(SpriteBatch batch, ShapeRenderer shapes)
-	{
-	}
-
 	protected void doRepositioning()
 	{
 		if (widgets.size == 0) {

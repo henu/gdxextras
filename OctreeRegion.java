@@ -214,8 +214,8 @@ public class OctreeRegion
 		}
 	}
 
-	private Octree octree;
-	private OctreeRegion parent;
+	private final Octree octree;
+	private final OctreeRegion parent;
 
 	// Child id of this region to its parent. If this is 8, then it means that
 	// region has been cleaned and cannot be used anymore. If it is 9, then it
@@ -225,7 +225,7 @@ public class OctreeRegion
 	private BoundingBox bb;
 	private Vector3 bb_center;
 
-	private OctreeRegion[] children;
+	private final OctreeRegion[] children;
 
 	private int flags = 0;
 
