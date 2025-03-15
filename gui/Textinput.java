@@ -387,7 +387,7 @@ temp_layout = new GlyphLayout(font, "_", getStyle().color, 0, Align.left, false)
 
 	private static TextinputStyle default_style;
 
-	private Scrollbox scrollbox;
+	private final Scrollbox scrollbox;
 	Content content;
 
 	private int max_length;

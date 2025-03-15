@@ -126,8 +126,8 @@ public class Renderable
 	private boolean inf_bb;
 
 	// Meshes and materials
-	private Array<Mesh> meshes = new Array<Mesh>(false, 0, Mesh.class);
-	private Array<Genericmaterial> mats = new Array<Genericmaterial>(false, 0, Genericmaterial.class);
+	private Array<Mesh> meshes = new Array<>(false, 0, Mesh.class);
+	private Array<Genericmaterial> mats = new Array<>(false, 0, Genericmaterial.class);
 
 	private Matrix4 mat_modelviewproj = new Matrix4();
 	private Matrix4 matrix_nrm = new Matrix4();

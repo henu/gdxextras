@@ -14,7 +14,7 @@ public class OctreeRegion
 		this.my_id = my_id;
 		bb = new BoundingBox(min, max);
 		bb_center = new Vector3();
-		bb_center = bb.getCenter(bb_center);
+		bb.getCenter(bb_center);
 		// Reset children
 		children = new OctreeRegion[8];
 		for (int child_id = 0; child_id < 8; child_id++) {
@@ -222,8 +222,8 @@ public class OctreeRegion
 	// means that this region is root.
 	private char my_id;
 
-	private BoundingBox bb;
-	private Vector3 bb_center;
+	private final BoundingBox bb;
+	private final Vector3 bb_center;
 
 	private final OctreeRegion[] children;
 

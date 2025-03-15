@@ -140,7 +140,7 @@ public class Gridcontainer extends Widget
 		return min_height;
 	}
 
-	private int cols;
+	private final int cols;
 
 	private final Array<Widget> widgets = new Array<Widget>(true, 0, Widget.class);
 

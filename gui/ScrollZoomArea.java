@@ -221,12 +221,12 @@ public class ScrollZoomArea extends Widget
 	private TouchState touch_state;
 	private boolean touch0_down;
 	private boolean touch1_down;
-	private Vector2 touch0_last;
-	private Vector2 touch1_last;
+	private final Vector2 touch0_last;
+	private final Vector2 touch1_last;
 	private float touch_dst_begin;
 	private float touch_zoom;
 
-	private Vector2 scrolled;
+	private final Vector2 scrolled;
 	private float touch_zoom_baseline;
 
 	private float click_threshold_mm;

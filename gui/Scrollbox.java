@@ -443,8 +443,8 @@ public class Scrollbox extends Widget
 	private Widget widget;
 
 	// These tell what part of the element is hidden
-	private Vector2 scroll_bottomleft = new Vector2(0, 0);
-	private Vector2 scroll_topright = new Vector2(0, 0);
+	private final Vector2 scroll_bottomleft = new Vector2(0, 0);
+	private final Vector2 scroll_topright = new Vector2(0, 0);
 
 	private Alignment origin_horiz;
 	private Alignment origin_vert;
@@ -452,8 +452,8 @@ public class Scrollbox extends Widget
 	private boolean horizontal_scrolling_enabled;
 	private boolean vertical_scrolling_enabled;
 
-	private Vector2 scroll_when_pointer_was_pressed = new Vector2();
-	private Vector2 pointer_down_pos = new Vector2();
+	private final Vector2 scroll_when_pointer_was_pressed = new Vector2();
+	private final Vector2 pointer_down_pos = new Vector2();
 
 	private ScrollboxStyle style;
 

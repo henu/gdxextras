@@ -453,8 +453,8 @@ public class Gui implements InputProcessor
 	private Eventlistener eventlistener = null;
 
 	// Handlers of specific keys;
-	private IntMap<Eventlistener> key_press_handlers;
-	private IntMap<Eventlistener> key_release_handlers;
+	private final IntMap<Eventlistener> key_press_handlers;
+	private final IntMap<Eventlistener> key_release_handlers;
 
 	// Mouse position is used to find correct
 	// Widget to receive scroll wheel events.

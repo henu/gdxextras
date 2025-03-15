@@ -676,7 +676,7 @@ public abstract class Widget
 
 	private String id;
 
-	private Array<Widget> children = new Array<Widget>(true, 0, Widget.class);
+	private final Array<Widget> children = new Array<>(true, 0, Widget.class);
 
 	private boolean visible;
 	private boolean shrunken;
@@ -690,8 +690,8 @@ public abstract class Widget
 
 	private Color background_color;
 
-	private Vector2 pos;
-	private Vector2 size;
+	private final Vector2 pos;
+	private final Vector2 size;
 
 	private boolean reposition_needed;
 

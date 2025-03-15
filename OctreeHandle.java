@@ -167,8 +167,8 @@ public class OctreeHandle extends Transformhandle
 	private Octree octree;
 	private OctreeRegion region;
 
-	private Matrix4 transf = new Matrix4();
-	private BoundingBox bb = new BoundingBox();
+	private final Matrix4 transf = new Matrix4();
+	private final BoundingBox bb = new BoundingBox();
 
 	private boolean update_required;
 

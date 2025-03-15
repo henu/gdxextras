@@ -274,7 +274,7 @@ public class Vectorcontainer extends Widget
 		return min_height;
 	}
 
-	private Direction dir;
+	private final Direction dir;
 
 	private final Array<Widget> widgets = new Array<Widget>(true, 0, Widget.class);
 

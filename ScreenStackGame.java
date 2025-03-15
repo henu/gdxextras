@@ -102,7 +102,7 @@ public abstract class ScreenStackGame extends Game
 	}
 
 	// Stack of screens
-	private Array<Screen> screens = new Array<Screen>(true, 0, Screen.class);
+	private final Array<Screen> screens = new Array<>(true, 0, Screen.class);
 
 	// Special testing class, that can generate input events
 	private InputOverrider input_overrider;
