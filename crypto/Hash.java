@@ -34,4 +34,13 @@ public class Hash
 			throw new RuntimeException("Invalid key!");
 		}
 	}
+
+	public static int djb2(String data)
+	{
+		int hash = 5381;
+		for (int i = 0; i < data.length(); ++ i) {
+			hash = ((hash << 5) + hash) + data.charAt(i);
+		}
+		return hash;
+	}
 }
