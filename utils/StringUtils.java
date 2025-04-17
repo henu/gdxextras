@@ -81,4 +81,17 @@ public class StringUtils
 	{
 		return str.substring(0, 1).toUpperCase() + str.substring(1);
 	}
+
+	public static String substr(String str, int start)
+	{
+		if (start > str.length()) return "";
+		return str.substring(start);
+	}
+
+	public static String substr(String str, int start, int end)
+	{
+		if (start > str.length()) return "";
+		if (end > str.length()) return str.substring(start);
+		return str.substring(start, end);
+	}
 }
