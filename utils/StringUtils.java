@@ -94,4 +94,17 @@ public class StringUtils
 		if (end > str.length()) return str.substring(start);
 		return str.substring(start, end);
 	}
+
+	public static int countSubstrings(String str, String substr)
+	{
+		int count = 0;
+		int idx = 0;
+
+		while ((idx = str.indexOf(substr, idx)) >= 0) {
+			++ count;
+			idx += substr.length();
+		}
+
+		return count;
+	}
 }
