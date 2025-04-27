@@ -48,6 +48,12 @@ public class SVector2 implements Byteserializable
 		this.y = y;
 	}
 
+	public void set(int x, int y)
+	{
+		this.x = (short)x;
+		this.y = (short)y;
+	}
+
 	public String toString()
 	{
 		return "(" + x + ", " + y + ")";
