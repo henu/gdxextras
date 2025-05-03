@@ -86,14 +86,34 @@ public class SVector2 implements Byteserializable
 		return xdiff * xdiff + ydiff * ydiff;
 	}
 
+	public short chebyshevDistanceTo(short x, short y)
+	{
+		return (short)Math.max(Math.abs(this.x - x), Math.abs(this.y - y));
+	}
+
 	public short chebyshevDistanceTo(SVector2 pos)
 	{
 		return chebyshevDistanceTo(pos.x, pos.y);
 	}
 
-	public short chebyshevDistanceTo(short x, short y)
+	public short chebyshevDistanceTo(int x, int y)
 	{
-		return (short)Math.max(Math.abs(this.x - x), Math.abs(this.y - y));
+		return chebyshevDistanceTo((short)x, (short)y);
+	}
+
+	public short manhattanDistanceTo(short x, short y)
+	{
+		return (short)(Math.abs(this.x - x) + Math.abs(this.y - y));
+	}
+
+	public short manhattanDistanceTo(SVector2 pos)
+	{
+		return manhattanDistanceTo(pos.x, pos.y);
+	}
+
+	public short manhattanDistanceTo(int x, int y)
+	{
+		return manhattanDistanceTo((short)x, (short)y);
 	}
 
 	public SVector2 cpy()
