@@ -5,6 +5,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.utils.Array;
 
+import fi.henu.gdxextras.screens.FrameRecorder;
 import fi.henu.gdxextras.testing.InputOverrider;
 
 public abstract class ScreenStackGame extends Game
@@ -83,7 +84,32 @@ public abstract class ScreenStackGame extends Game
 			}
 		}
 
-		super.render();
+// TODO: If there is FrameRecorder, then force screen size!
+		// Override super method completely
+		if (screen != null) {
+			float delta = Gdx.graphics.getDeltaTime();
+			// If there is a frame recorder, then override delta time. Also
+			// sleep if necessary, so the game will not run too fast.
+			if (frame_recorder != null) {
+				float new_delta = 1.0f / frame_recorder.getFps();
+				float sleep = new_delta - delta;
+				if (sleep > 0) {
+					try {
+						Thread.sleep(Math.round(1000 * sleep));
+					}
+					catch (InterruptedException e) {
+						throw new RuntimeException(e);
+					}
+				}
+				delta = new_delta;
+			}
+			screen.render(delta);
+		}
+
+		// If there is a frame recorder, then record this frame
+		if (frame_recorder != null) {
+			frame_recorder.recordFrame();
+		}
 	}
 
 	@Override
@@ -98,7 +124,18 @@ public abstract class ScreenStackGame extends Game
 		}
 		screens.clear();
 		setScreen(null);
+		frame_recorder = null;
 		super.dispose();
+	}
+
+	public void setFrameRecorder(FrameRecorder frame_recorder)
+	{
+		this.frame_recorder = frame_recorder;
+	}
+
+	public FrameRecorder getFrameRecorder()
+	{
+		return frame_recorder;
 	}
 
 	// Stack of screens
@@ -106,4 +143,7 @@ public abstract class ScreenStackGame extends Game
 
 	// Special testing class, that can generate input events
 	private InputOverrider input_overrider;
+
+	// Poor man's video recorder
+	private FrameRecorder frame_recorder;
 }
