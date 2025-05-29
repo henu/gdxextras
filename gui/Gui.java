@@ -319,9 +319,7 @@ public class Gui implements InputProcessor
 	@Override
 	public boolean touchDragged(int x, int y, int pointer_id)
 	{
-		// TODO: In future, let Widgets to force repositioning of Widgets
-		// immediately after input event! This is necessary for example when
-		// dragging stuff.
+// TODO: In future, let Widgets to force repositioning of Widgets immediately after input event! This is necessary for example when dragging stuff.
 		// Swap coordinates and get topmost widget
 		v2tmp.x = x * width_in_gui_units / width_in_pixels;
 		v2tmp.y = (height_in_pixels - y) * height_in_gui_units / height_in_pixels;
@@ -363,12 +361,21 @@ public class Gui implements InputProcessor
 		return false;
 	}
 
-// TODO: Uncomment this when all projects have newer LibGDX!
-	//@Override
+	@Override
 	public boolean touchCancelled(int x, int y, int pointer_id, int button)
 	{
-// TODO: Replace this temporary solution with real one!
-		return touchUp(x, y, pointer_id, button);
+		// Swap coordinates and get topmost widget
+		v2tmp.x = x * width_in_gui_units / width_in_pixels;
+		v2tmp.y = (height_in_pixels - y) * height_in_gui_units / height_in_pixels;
+		Widget topmost = getTopmostWidget(v2tmp);
+		storeTopmostWidget(pointer_id, topmost);
+
+		if (pointer_id < pointerlisteners.size && pointerlisteners.get(pointer_id) != null) {
+			pointerlisteners.get(pointer_id).pointerCancelled(pointer_id, v2tmp);
+			return true;
+		}
+
+		return false;
 	}
 
 	// Called by Widget

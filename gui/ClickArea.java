@@ -71,6 +71,14 @@ public class ClickArea extends Widget
 	}
 
 	@Override
+	public void pointerCancelled(int pointer_id, Vector2 pos)
+	{
+		latest_pointer_id = pointer_id;
+		pressed_pointers.remove(pointer_id);
+		unregisterPointerListener(pointer_id);
+	}
+
+	@Override
 	protected void doRendering(SpriteBatch batch, ShapeRenderer shapes)
 	{
 		// This Widget is invisible

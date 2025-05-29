@@ -65,10 +65,19 @@ public class Knob extends Widget
 		}
 	}
 
+	@Override
 	public void pointerUp(int pointer_id, Vector2 pos)
 	{
 		if (pointer_id == 0) {
 			pointerMove(0, pos);
+			unregisterPointerListener(pointer_id);
+		}
+	}
+
+	@Override
+	public void pointerCancelled(int pointer_id, Vector2 pos)
+	{
+		if (pointer_id == 0) {
 			unregisterPointerListener(pointer_id);
 		}
 	}

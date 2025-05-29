@@ -264,6 +264,7 @@ public class Scrollbox extends Widget
 		}
 	}
 
+	@Override
 	public void pointerUp(int pointer_id, Vector2 pos)
 	{
 		assert pointer_id == 0;
@@ -276,6 +277,14 @@ public class Scrollbox extends Widget
 		if (pos.dst2(pointer_down_pos) <= CLICK_TO_CHILD_DRAG_THRESHOLD * CLICK_TO_CHILD_DRAG_THRESHOLD) {
 			generateDragEventToChildren(widget, pointer_id, pos, pos);
 		}
+	}
+
+	@Override
+	public void pointerCancelled(int pointer_id, Vector2 pos)
+	{
+		assert pointer_id == 0;
+		assert widget != null;
+		unregisterPointerListener(pointer_id);
 	}
 
 	@Override

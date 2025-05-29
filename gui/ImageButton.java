@@ -55,6 +55,13 @@ public class ImageButton extends Widget
 		unregisterPointerListener(pointer_id);
 	}
 
+	@Override
+	public void pointerCancelled(int pointer_id, Vector2 pos)
+	{
+		pointers_listened.remove(pointer_id);
+		unregisterPointerListener(pointer_id);
+	}
+
 	// Returns true if position is over Widget. Position is relative to Widget
 	// and over the rectangle of Widget, so this function is for Widgets that
 	// are not rectangle shaped.

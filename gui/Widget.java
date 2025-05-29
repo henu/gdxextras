@@ -226,6 +226,10 @@ public abstract class Widget
 	{
 	}
 
+	public void pointerCancelled(int pointer_id, Vector2 pos)
+	{
+	}
+
 	// When scrolling of mouse wheel is applied. This event is always delivered
 	// to one under mouse, no matter if some Widget tries to steal focus.
 	public void scrolled(float amount_x, float amount_y)

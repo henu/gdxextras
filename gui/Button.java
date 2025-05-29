@@ -107,6 +107,16 @@ public class Button extends Widget
 		}
 	}
 
+	@Override
+	public void pointerCancelled(int pointer_id, Vector2 pos)
+	{
+		if (pointer_id == 0) {
+			pressed = false;
+			label_layout = null;
+			unregisterPointerListener(pointer_id);
+		}
+	}
+
 	// Returns true if position is over Widget. Position is relative to Widget
 	// and over the rectangle of Widget, so this function is for Widgets that
 	// are not rectangle shaped.

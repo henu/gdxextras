@@ -116,6 +116,16 @@ public class DPad extends Widget
 		}
 	}
 
+	@Override
+	public void pointerCancelled(int pointer_id, Vector2 pos)
+	{
+		if (pointer_id == captured_pointer_id) {
+			captured_pointer_id = -1;
+			value.set(0, 0);
+			unregisterPointerListener(pointer_id);
+		}
+	}
+
 	private static DPadStyle default_style;
 
 	private float dpad_value_curve_strength_x, dpad_value_curve_strength_y;

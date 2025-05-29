@@ -163,6 +163,7 @@ public class ScrollZoomArea extends Widget
 		}
 	}
 
+	@Override
 	public void pointerUp(int pointer_id, Vector2 pos)
 	{
 // TODO: Does this still works? Nowadays each pointer needs to call unregisterPointerListener separately!
@@ -176,6 +177,31 @@ public class ScrollZoomArea extends Widget
 			touch1_down = false;
 			fireEvent(CLICKED);
 		} else if (touch_state == TouchState.SCROLLING) {
+			touch_state = TouchState.NOTHING;
+			touch0_down = false;
+			touch1_down = false;
+		} else if (touch_state == TouchState.ZOOMING) {
+			if (pointer_id == 0) {
+				touch0_down = false;
+			} else {
+				touch1_down = false;
+			}
+			touch_zoom = 1;
+			touch_zoom_baseline = 1;
+			touch_state = TouchState.SCROLLING;
+		}
+		unregisterPointerListener(pointer_id);
+	}
+
+	@Override
+	public void pointerCancelled(int pointer_id, Vector2 pos)
+	{
+// TODO: Does this still works? Nowadays each pointer needs to call unregisterPointerListener separately!
+		// In case of other pointers, do nothing
+		if (pointer_id > 1) {
+			return;
+		}
+		if (touch_state == TouchState.CLICKING || touch_state == TouchState.SCROLLING) {
 			touch_state = TouchState.NOTHING;
 			touch0_down = false;
 			touch1_down = false;
