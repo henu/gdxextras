@@ -107,4 +107,25 @@ public class StringUtils
 
 		return count;
 	}
+
+	public static String slugify(String str)
+	{
+		if (str == null) {
+			return null;
+		}
+		StringBuilder slugbuilder = new StringBuilder();
+		for (int i = 0; i < str.length(); ++ i) {
+			char c = str.charAt(i);
+			if (c >= 'a' && c <= 'z') {
+				slugbuilder.append(c);
+			} else if (c >= 'A' && c <= 'Z') {
+				slugbuilder.append((char)(c - 'A' + 'a'));
+			} else if (c >= '0' && c <= '9') {
+				slugbuilder.append(c);
+			} else if (c == ' ' || c == '-' || c == '_' || c == '.') {
+				slugbuilder.append('_');
+			}
+		}
+		return slugbuilder.toString();
+	}
 }
