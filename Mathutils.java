@@ -1,6 +1,9 @@
 package fi.henu.gdxextras;
 
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Polygon;
+import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Shape2D;
 import com.badlogic.gdx.math.Vector3;
 
 public class Mathutils
@@ -268,6 +271,17 @@ public class Mathutils
 		float line2_rel_pos = num2 / denom;
 
 		return line1_rel_pos >= 0 && line1_rel_pos <= 1 && line2_rel_pos >= 0 && line2_rel_pos <= 1;
+	}
+
+	public static Rectangle getBoundingRectangle(Shape2D shape)
+	{
+		if (shape instanceof Rectangle) {
+			return (Rectangle)shape;
+		}
+		if (shape instanceof Polygon) {
+			return ((Polygon)shape).getBoundingRectangle();
+		}
+		throw new RuntimeException("Other shapes not implemented yet!");
 	}
 
 	// Temporary variables. These are used by multiple methods, so
