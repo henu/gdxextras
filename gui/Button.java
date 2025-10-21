@@ -178,6 +178,7 @@ public class Button extends Widget
 				font_color = style.label_color;
 			}
 
+// TODO: This is not updated if color of the font changes in ButtonStyle!
 			if (label_layout == null) {
 				label_layout = new GlyphLayout(style.font, label, font_color, 0, Align.left, false);
 			}
