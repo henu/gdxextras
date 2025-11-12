@@ -7,7 +7,8 @@ import com.badlogic.gdx.utils.Array;
 
 public class Vectorcontainer extends Widget
 {
-	public enum Direction {
+	public enum Direction
+	{
 		HORIZONTAL, VERTICAL
 	}
 
@@ -51,10 +52,9 @@ public class Vectorcontainer extends Widget
 
 	public void clearWidgets()
 	{
-		Widget[] widgets_buf = widgets.items;
 		int widgets_size = widgets.size;
 		for (int widget_id = 0; widget_id < widgets_size; widget_id++) {
-			Widget widget = widgets_buf[widget_id];
+			Widget widget = widgets.get(widget_id);
 			removeChild(widget);
 		}
 		widgets.clear();
@@ -93,62 +93,131 @@ public class Vectorcontainer extends Widget
 			return;
 		}
 
-		Widget[] widgets_buf = widgets.items;
+		// This array is used to calculate sizes of widgets. For horizontal
+		// container it will contain widths, and for vertical it contains heights.
+		Array<Float> widgets_sizes = calculateWidgetSizes(getWidth(), getHeight());
+		if (widgets_sizes == null) {
+			return;
+		}
 
+		// Do the actual repositioning
+		if (dir == Direction.HORIZONTAL) {
+			float pos_x = 0f;
+			for (int widget_id = 0; widget_id < widgets.size; widget_id++) {
+				Widget widget = widgets.get(widget_id);
+				float child_width = widgets_sizes.get(widget_id);
+				repositionChild(widget, getPositionX() + pos_x, getPositionY() + 0f, child_width, getHeight());
+				pos_x += child_width;
+			}
+		} else {
+			float pos_y = 0f;
+			for (int widget_id = 0; widget_id < widgets.size; widget_id++) {
+				Widget widget = widgets.get(widget_id);
+				float child_height = widgets_sizes.get(widget_id);
+				repositionChild(widget, getPositionX() + 0f, getPositionY() + getHeight() - child_height - pos_y, getWidth(), child_height);
+				pos_y += child_height;
+			}
+		}
+	}
+
+	protected float doGetMinWidth()
+	{
+		float min_width = 0f;
+		int widgets_size = widgets.size;
+		if (dir == Direction.HORIZONTAL) {
+			for (int widget_id = 0; widget_id < widgets_size; widget_id++) {
+				Widget widget = widgets.get(widget_id);
+				min_width += widget.getMinWidth();
+			}
+		} else {
+			for (int widget_id = 0; widget_id < widgets_size; widget_id++) {
+				Widget widget = widgets.get(widget_id);
+				min_width = Math.max(min_width, widget.getMinWidth());
+			}
+		}
+		return min_width;
+	}
+
+	protected float doGetMinHeight(float width)
+	{
+		float min_height = 0f;
+		int widgets_size = widgets.size;
+		if (dir == Direction.HORIZONTAL) {
+			Array<Float> widgets_widths = calculateWidgetSizes(width, 0);
+			if (widgets_widths == null) {
+				return 0;
+			}
+			for (int widget_id = 0; widget_id < widgets_size; widget_id++) {
+				Widget widget = widgets.get(widget_id);
+				min_height = Math.max(min_height, widget.getMinHeight(widgets_widths.get(widget_id)));
+			}
+		} else {
+			for (int widget_id = 0; widget_id < widgets_size; widget_id++) {
+				Widget widget = widgets.get(widget_id);
+				min_height += widget.getMinHeight(width);
+			}
+		}
+		return min_height;
+	}
+
+	private final Direction dir;
+
+	private final Array<Widget> widgets = new Array<>();
+
+	private Texture background_tex;
+
+	private Array<Float> calculateWidgetSizes(float width, float height)
+	{
 		// Calculate total expanding, so relative expandings
 		// of widgets can be calculated.
 		int total_expanding = 0;
 		int non_shrunked_widgets = 0;
-		for (int widget_id = 0; widget_id < widgets.size; widget_id ++) {
-			Widget widget = widgets_buf[widget_id];
+		for (int widget_id = 0; widget_id < widgets.size; widget_id++) {
+			Widget widget = widgets.get(widget_id);
 			if (dir == Direction.HORIZONTAL) {
 				total_expanding += widget.getHorizontalExpandingForRepositioning();
 			} else {
 				total_expanding += widget.getVerticalExpandingForRepositioning();
 			}
 			if (!widget.isShrunken()) {
-				++ non_shrunked_widgets;
+				++non_shrunked_widgets;
 			}
 		}
 		if (non_shrunked_widgets == 0) {
-			return;
+			return null;
 		}
 
-		// This array is used to calculate sizes of widgets
-		if (widgets_sizes == null || widgets_sizes.length != widgets.size) {
-			widgets_sizes = new float[widgets.size];
-		}
-
-		// First set sizes of those Widgets, that are shrunked or have zero expanding. Set
+		// First set sizes of those Widgets, that are shrunken or have zero expanding. Set
 		// other sizes less than zero, to indicate that their size is not yet defined.
 		float extra_space_left;
 		if (dir == Direction.HORIZONTAL) {
-			extra_space_left = getWidth();
+			extra_space_left = width;
 		} else {
-			extra_space_left = getHeight();
+			extra_space_left = height;
 		}
 		int expanding_widgets_left = 0;
 		int non_expandings_that_can_be_resized = 0;
-		for (int widget_id = 0; widget_id < widgets.size; widget_id ++) {
-			Widget widget = widgets_buf[widget_id];
+		Array<Float> widgets_sizes = new Array<>(true, widgets.size);
+		for (int widget_id = 0; widget_id < widgets.size; widget_id++) {
+			Widget widget = widgets.get(widget_id);
 			if (widget.isShrunken()) {
-				widgets_sizes[widget_id] = 0f;
+				widgets_sizes.add(0f);
 			} else if (dir == Direction.HORIZONTAL && widget.getHorizontalExpandingForRepositioning() == 0) {
-				widgets_sizes[widget_id] = widget.getMinWidth();
+				widgets_sizes.add(widget.getMinWidth());
 				extra_space_left -= widget.getMinWidth();
-				++ non_expandings_that_can_be_resized;
+				++non_expandings_that_can_be_resized;
 			} else if (dir == Direction.VERTICAL && widget.getVerticalExpandingForRepositioning() == 0) {
-				widgets_sizes[widget_id] = widget.getMinHeight(getWidth());
+				widgets_sizes.add(widget.getMinHeight(getWidth()));
 				extra_space_left -= widget.getMinHeight(getWidth());
-				++ non_expandings_that_can_be_resized;
+				++non_expandings_that_can_be_resized;
 			} else {
-				widgets_sizes[widget_id] = -1f;
-				++ expanding_widgets_left;
+				widgets_sizes.add(-1f);
+				++expanding_widgets_left;
 			}
 		}
 
 		// Now we will spread the remaining extra space to all those Widgets, that have expanding.
-		// The space is spreaded evenly, and it might be possible, that some Widgets are too large
+		// The space is spread evenly, and it might be possible, that some Widgets are too large
 		// to fit into this space. In these cases, their size is set to whatever it is in minimum,
 		// and this size is reduced from extra space.
 		if (expanding_widgets_left > 0) {
@@ -159,9 +228,9 @@ public class Vectorcontainer extends Widget
 				boolean too_big_ones_found = false;
 				for (int widget_id = 0; widget_id < widgets.size; widget_id++) {
 					// Skip those, that already have their size set
-					if (widgets_sizes[widget_id] >= 0f) continue;
+					if (widgets_sizes.get(widget_id) >= 0f) continue;
 
-					Widget widget = widgets_buf[widget_id];
+					Widget widget = widgets.get(widget_id);
 					int expanding_points;
 					float widget_min_size;
 					if (dir == Direction.HORIZONTAL) {
@@ -174,11 +243,11 @@ public class Vectorcontainer extends Widget
 
 					float size = expanding_points * space_per_expanding;
 					if (size < widget_min_size) {
-						widgets_sizes[widget_id] = widget_min_size;
+						widgets_sizes.set(widget_id, widget_min_size);
 						too_big_ones_found = true;
 						extra_space_left -= widget_min_size;
 						total_expanding -= expanding_points;
-						-- expanding_widgets_left;
+						--expanding_widgets_left;
 					}
 				}
 				// If any of the Widgets was too big, then start over again
@@ -187,16 +256,16 @@ public class Vectorcontainer extends Widget
 				// Now every remaining expanding widget should fit to the extra space
 				for (int widget_id = 0; widget_id < widgets.size; widget_id++) {
 					// Skip those, that already have their size set
-					if (widgets_sizes[widget_id] >= 0f) continue;
+					if (widgets_sizes.get(widget_id) >= 0f) continue;
 
-					Widget widget = widgets_buf[widget_id];
+					Widget widget = widgets.get(widget_id);
 					int expanding_points;
 					if (dir == Direction.HORIZONTAL) {
 						expanding_points = widget.getHorizontalExpandingForRepositioning();
 					} else {
 						expanding_points = widget.getVerticalExpandingForRepositioning();
 					}
-					widgets_sizes[widget_id] = expanding_points * space_per_expanding;
+					widgets_sizes.set(widget_id, expanding_points * space_per_expanding);
 				}
 				break;
 			}
@@ -205,82 +274,17 @@ public class Vectorcontainer extends Widget
 		// still space left, then make widgets bigger
 		else if (extra_space_left > 0 && non_expandings_that_can_be_resized > 0) {
 			float space_per_widget = extra_space_left / non_expandings_that_can_be_resized;
-			for (int widget_id = 0; widget_id < widgets.size; widget_id ++) {
-				Widget widget = widgets_buf[widget_id];
+			for (int widget_id = 0; widget_id < widgets.size; widget_id++) {
+				Widget widget = widgets.get(widget_id);
 				if (!widget.isShrunken()) {
 					if ((dir == Direction.HORIZONTAL && widget.getHorizontalExpandingForRepositioning() == 0) ||
-					    (dir == Direction.VERTICAL && widget.getVerticalExpandingForRepositioning() == 0)) {
-						widgets_sizes[widget_id] += space_per_widget;
+						(dir == Direction.VERTICAL && widget.getVerticalExpandingForRepositioning() == 0)) {
+						widgets_sizes.set(widget_id, widgets_sizes.get(widget_id) + space_per_widget);
 					}
 				}
 			}
 		}
 
-		// Do the actual repositioning
-		if (dir == Direction.HORIZONTAL) {
-			float pos_x = 0f;
-			for (int widget_id = 0; widget_id < widgets.size; widget_id++) {
-				Widget widget = widgets_buf[widget_id];
-				float child_width = widgets_sizes[widget_id];
-				repositionChild(widget, getPositionX() + pos_x, getPositionY() + 0f, child_width, getHeight());
-				pos_x += child_width;
-			}
-		} else {
-			float pos_y = 0f;
-			for (int widget_id = 0; widget_id < widgets.size; widget_id++) {
-				Widget widget = widgets_buf[widget_id];
-				float child_height = widgets_sizes[widget_id];
-				repositionChild(widget, getPositionX() + 0f, getPositionY() + getHeight() - child_height - pos_y, getWidth(), child_height);
-				pos_y += child_height;
-			}
-		}
+		return widgets_sizes;
 	}
-
-	protected float doGetMinWidth()
-	{
-		float min_width = 0f;
-		Widget[] widgets_buf = widgets.items;
-		int widgets_size = widgets.size;
-		if (dir == Direction.HORIZONTAL) {
-			for (int widget_id = 0; widget_id < widgets_size; widget_id++) {
-				Widget widget = widgets_buf[widget_id];
-				min_width += widget.getMinWidth();
-			}
-		} else {
-			for (int widget_id = 0; widget_id < widgets_size; widget_id++) {
-				Widget widget = widgets_buf[widget_id];
-				min_width = Math.max(min_width, widget.getMinWidth());
-			}
-		}
-		return min_width;
-	}
-
-	protected float doGetMinHeight(float width)
-	{
-		float min_height = 0f;
-		Widget[] widgets_buf = widgets.items;
-		int widgets_size = widgets.size;
-		if (dir == Direction.HORIZONTAL) {
-			for (int widget_id = 0; widget_id < widgets_size; widget_id++) {
-				Widget widget = widgets_buf[widget_id];
-				min_height = Math.max(min_height, widget.getMinHeight(width));
-			}
-		} else {
-			for (int widget_id = 0; widget_id < widgets_size; widget_id++) {
-				Widget widget = widgets_buf[widget_id];
-				min_height += widget.getMinHeight(width);
-			}
-		}
-		return min_height;
-	}
-
-	private final Direction dir;
-
-	private final Array<Widget> widgets = new Array<Widget>(true, 0, Widget.class);
-
-	// This is only used when doing repositioning
-	private float[] widgets_sizes;
-
-	private Texture background_tex;
-
 }
