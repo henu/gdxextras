@@ -16,6 +16,8 @@ public abstract class Widget
 		LEFT, RIGHT, TOP, BOTTOM, CENTER
 	}
 
+	public static boolean debug_shapes = false;
+
 	public Gui getGui()
 	{
 		return gui;
@@ -305,6 +307,16 @@ public abstract class Widget
 
 			// Render this Widget
 			doRendering(batch, shapes);
+
+			// If debug shapes are needed
+			if (Widget.debug_shapes) {
+				batch.end();
+				shapes.setColor(Color.RED);
+				shapes.begin(ShapeRenderer.ShapeType.Line);
+				shapes.rect(getPositionX(), getPositionY(), getWidth(), getHeight());
+				shapes.end();
+				batch.begin();
+			}
 
 			// Check if this Widget limits rendering of its children
 			boolean arealimit_was_just_set = false;
