@@ -95,7 +95,7 @@ public class Knob extends Widget
 		// Dimples
 		final int DIMPLES = 8;
 		final float DIMPLE_DISTANCE_FROM_CENTER = (default_knob_diameter / 2f - default_dimple_diameter / 2f - default_dimple_padding) * scale;
-		for (int dimple_id = 0; dimple_id < DIMPLES; dimple_id ++) {
+		for (int dimple_id = 0; dimple_id < DIMPLES; dimple_id++) {
 			float draw_angle = (float)dimple_id / DIMPLES * 360f + angle;
 			float draw_x = getCenterX() - DIMPLE_DISTANCE_FROM_CENTER * MathUtils.sinDeg(draw_angle);
 			float draw_y = getCenterY() + DIMPLE_DISTANCE_FROM_CENTER * MathUtils.cosDeg(draw_angle);

@@ -54,8 +54,15 @@ public class Scrollbox extends Widget
 		origin_vert = origin;
 	}
 
-	public Alignment getHorizontalOrigin() { return origin_horiz; }
-	public Alignment getVerticalOrigin() { return origin_vert; }
+	public Alignment getHorizontalOrigin()
+	{
+		return origin_horiz;
+	}
+
+	public Alignment getVerticalOrigin()
+	{
+		return origin_vert;
+	}
 
 	public void setScroll(Vector2 scroll)
 	{
@@ -320,16 +327,16 @@ public class Scrollbox extends Widget
 			if (left_indicator_alpha > 0f) {
 				batch.setColor(1, 1, 1, left_indicator_alpha);
 				batch.draw(
-						style.scroll_indicator_region,
-						getPositionX(),
-						getPositionY() + getHeight(),
-						0,
-						0,
-						style.scroll_indicator_region.getRegionWidth(),
-						style.scroll_indicator_region.getRegionHeight(),
-						getHeight() / style.scroll_indicator_region.getRegionWidth(),
-						style.scroll_indicator_scaling,
-						-90f
+					style.scroll_indicator_region,
+					getPositionX(),
+					getPositionY() + getHeight(),
+					0,
+					0,
+					style.scroll_indicator_region.getRegionWidth(),
+					style.scroll_indicator_region.getRegionHeight(),
+					getHeight() / style.scroll_indicator_region.getRegionWidth(),
+					style.scroll_indicator_scaling,
+					-90f
 				);
 			}
 
@@ -337,16 +344,16 @@ public class Scrollbox extends Widget
 			if (right_indicator_alpha > 0f) {
 				batch.setColor(1, 1, 1, right_indicator_alpha);
 				batch.draw(
-						style.scroll_indicator_region,
-						getPositionX() + getWidth(),
-						getPositionY(),
-						0,
-						0,
-						style.scroll_indicator_region.getRegionWidth(),
-						style.scroll_indicator_region.getRegionHeight(),
-						getHeight() / style.scroll_indicator_region.getRegionWidth(),
-						style.scroll_indicator_scaling,
-						90f
+					style.scroll_indicator_region,
+					getPositionX() + getWidth(),
+					getPositionY(),
+					0,
+					0,
+					style.scroll_indicator_region.getRegionWidth(),
+					style.scroll_indicator_region.getRegionHeight(),
+					getHeight() / style.scroll_indicator_region.getRegionWidth(),
+					style.scroll_indicator_scaling,
+					90f
 				);
 			}
 

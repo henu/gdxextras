@@ -105,7 +105,7 @@ public class Label extends Widget
 				// Skip whitespace after the line
 				while (text_ofs < text.length() && (text.charAt(text_ofs) == ' ' || text.charAt(text_ofs) == '\t' || text.charAt(text_ofs) == '\n')) {
 					boolean is_endline = (text.charAt(text_ofs) == '\n');
-					++ text_ofs;
+					++text_ofs;
 					if (is_endline) {
 						break;
 					}
@@ -113,7 +113,7 @@ public class Label extends Widget
 			}
 			// Now render lines
 			float draw_y = getPositionY() + (lines.size - 1) * getStyle().getHeight();
-			for (int line = 0; line < lines.size; ++ line) {
+			for (int line = 0; line < lines.size; ++line) {
 				if (getStyle().getShadow() != null && getStyle().getShadow().x != 0 && getStyle().getShadow().y != 0) {
 					renderLineWithAlignment(batch, lines.get(line), font, getPositionX() + getStyle().getShadow().x, draw_y + getStyle().getShadow().y, getWidth(), Color.BLACK);
 				}
@@ -141,7 +141,7 @@ public class Label extends Widget
 		} else {
 			float result = 0;
 			GlyphLayout letter_layout;
-			for (int text_idx = 0; text_idx < text.length(); text_idx ++) {
+			for (int text_idx = 0; text_idx < text.length(); text_idx++) {
 				char c = text.charAt(text_idx);
 				if (c != '\t' && c != '\n') {
 					letter_layout = new GlyphLayout(font, "" + c);
@@ -169,11 +169,11 @@ public class Label extends Widget
 				// Read one line and update counters
 				String line = extractLine(text, text_ofs, font, width);
 				text_ofs += line.length();
-				++ lines;
+				++lines;
 				// Skip whitespace after the line
 				while (text_ofs < text.length() && (text.charAt(text_ofs) == ' ' || text.charAt(text_ofs) == '\t' || text.charAt(text_ofs) == '\n')) {
 					boolean is_endline = (text.charAt(text_ofs) == '\n');
-					++ text_ofs;
+					++text_ofs;
 					if (is_endline) {
 						break;
 					}
@@ -285,7 +285,7 @@ text_layout = new GlyphLayout(font, text, color, 0, Align.left, false);
 			} else {
 				word += c;
 			}
-			++ text_ofs;
+			++text_ofs;
 		}
 	}
 

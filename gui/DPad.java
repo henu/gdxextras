@@ -57,10 +57,10 @@ public class DPad extends Widget
 		// Render the background
 		if (getStyle().region != null) {
 			render(
-					batch, getStyle().region,
-					getPositionX(),
-					getPositionY(),
-					getWidth() / getStyle().region.originalWidth
+				batch, getStyle().region,
+				getPositionX(),
+				getPositionY(),
+				getWidth() / getStyle().region.originalWidth
 			);
 		}
 
@@ -79,10 +79,10 @@ public class DPad extends Widget
 
 			float scale = dpad_region_size / getStyle().center_button_region.originalWidth;
 			render(
-					batch, getStyle().center_button_region,
-					getPositionX() + dpad_margin_size + dpad_margin_size * val_x_limited,
-					getPositionY() + dpad_margin_size + dpad_margin_size * val_y_limited,
-					scale
+				batch, getStyle().center_button_region,
+				getPositionX() + dpad_margin_size + dpad_margin_size * val_x_limited,
+				getPositionY() + dpad_margin_size + dpad_margin_size * val_y_limited,
+				scale
 			);
 		}
 	}

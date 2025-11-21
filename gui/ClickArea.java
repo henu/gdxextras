@@ -28,6 +28,7 @@ public class ClickArea extends Widget
 	{
 		return latest_click_pos;
 	}
+
 	public int getLatestPointerId()
 	{
 		return latest_pointer_id;

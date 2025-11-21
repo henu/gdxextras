@@ -221,11 +221,7 @@ public class Gui implements InputProcessor
 
 	public void setKeyboardListener(Widget listener)
 	{
-		if (listener != null) {
-			Gdx.input.setOnscreenKeyboardVisible(true);
-		} else {
-			Gdx.input.setOnscreenKeyboardVisible(false);
-		}
+		Gdx.input.setOnscreenKeyboardVisible(listener != null);
 		keyboardlistener = listener;
 	}
 
@@ -421,7 +417,7 @@ public class Gui implements InputProcessor
 	// This will silently unregister this Widget as pointerlistener
 	public void widgetRemoved(Widget widget)
 	{
-		for (int pointer_id = 0; pointer_id < pointerlisteners.size; ++ pointer_id) {
+		for (int pointer_id = 0; pointer_id < pointerlisteners.size; ++pointer_id) {
 			if (pointerlisteners.get(pointer_id) == widget) {
 				pointerlisteners.set(pointer_id, null);
 			}

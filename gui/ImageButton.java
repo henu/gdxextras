@@ -28,7 +28,7 @@ public class ImageButton extends Widget
 
 	public boolean isPressed()
 	{
-		for (IntSet.IntSetIterator i = pointers_listened.iterator(); i.hasNext;) {
+		for (IntSet.IntSetIterator i = pointers_listened.iterator(); i.hasNext; ) {
 			if (pointerOver(i.next())) {
 				return true;
 			}

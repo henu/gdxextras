@@ -47,14 +47,14 @@ public class Bestfitcontainer extends Widget
 		Array<Widget> widgets_left = new Array<Widget>(widgets);
 
 		// Remove those Widgets, that are shrunken
-		for (int i = 0; i < widgets_left.size;) {
+		for (int i = 0; i < widgets_left.size; ) {
 			Widget widget = widgets_left.items[i];
 			float widget_w = widget.getMinWidth();
 			float widget_h = widget.getMinHeight(widget_w);
 			if (widget_w == 0 || widget_h == 0) {
 				widgets_left.removeIndex(i);
 			} else {
-				i ++;
+				i++;
 			}
 		}
 
@@ -69,7 +69,7 @@ public class Bestfitcontainer extends Widget
 			// Position first the Widget that has biggest edge/edge ratio
 			float biggest_ratio = 0;
 			int biggest_ratio_i = -1;
-			for (int i = 0; i < widgets_left.size; i ++) {
+			for (int i = 0; i < widgets_left.size; i++) {
 				Widget widget = widgets_left.items[i];
 				float widget_w = widget.getMinWidth();
 				float widget_h = widget.getMinHeight(widget_w);
@@ -192,6 +192,7 @@ public class Bestfitcontainer extends Widget
 			c1 = null;
 			c2 = null;
 		}
+
 		public boolean horizontal_splitline;
 		public float splitline;
 		// Child #1 is before split line and Child #2 after it.

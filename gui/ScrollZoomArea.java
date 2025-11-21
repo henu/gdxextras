@@ -240,7 +240,8 @@ public class ScrollZoomArea extends Widget
 		return 0;
 	}
 
-	private enum TouchState {
+	private enum TouchState
+	{
 		NOTHING, SCROLLING, ZOOMING, CLICKING
 	}
 

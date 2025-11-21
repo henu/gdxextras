@@ -12,7 +12,8 @@ import com.badlogic.gdx.utils.Array;
 
 public abstract class Widget
 {
-	public enum Alignment {
+	public enum Alignment
+	{
 		LEFT, RIGHT, TOP, BOTTOM, CENTER
 	}
 
@@ -101,7 +102,8 @@ public abstract class Widget
 		this.be_topmost_before_children = be_topmost_before_children;
 	}
 
-	public boolean getBeTopmostBeforeChildren() {
+	public boolean getBeTopmostBeforeChildren()
+	{
 		return be_topmost_before_children;
 	}
 
@@ -256,9 +258,9 @@ public abstract class Widget
 
 		// Get real dimensions
 		float real_w, real_h;
-		if (expanding_horiz == 0) real_w = getMinWidth() - margin*2;
+		if (expanding_horiz == 0) real_w = getMinWidth() - margin * 2;
 		else real_w = w;
-		if (expanding_vert == 0) real_h = getMinHeight(real_w + margin*2) - margin*2;
+		if (expanding_vert == 0) real_h = getMinHeight(real_w + margin * 2) - margin * 2;
 		else real_h = h;
 
 		// Calculate real position
@@ -403,9 +405,13 @@ public abstract class Widget
 		return true;
 	}
 
-	protected void doRendering(SpriteBatch batch, ShapeRenderer shapes) { }
+	protected void doRendering(SpriteBatch batch, ShapeRenderer shapes)
+	{
+	}
 
-	protected void doRenderingAfterChildren(SpriteBatch batch, ShapeRenderer shapes) { }
+	protected void doRenderingAfterChildren(SpriteBatch batch, ShapeRenderer shapes)
+	{
+	}
 
 	protected void repositionChild(Widget child, float x, float y, float width, float height)
 	{
@@ -414,14 +420,45 @@ public abstract class Widget
 	}
 
 	// Dimension getters
-	public float getPositionX() { return pos.x; }
-	public float getPositionY() { return pos.y; }
-	public float getCenterX() { return pos.x + size.x / 2; }
-	public float getCenterY() { return pos.y + size.y / 2; }
-	public float getEndX() { return pos.x + size.x; }
-	public float getEndY() { return pos.y + size.y; }
-	public float getWidth() { return size.x; }
-	public float getHeight() { return size.y; }
+	public float getPositionX()
+	{
+		return pos.x;
+	}
+
+	public float getPositionY()
+	{
+		return pos.y;
+	}
+
+	public float getCenterX()
+	{
+		return pos.x + size.x / 2;
+	}
+
+	public float getCenterY()
+	{
+		return pos.y + size.y / 2;
+	}
+
+	public float getEndX()
+	{
+		return pos.x + size.x;
+	}
+
+	public float getEndY()
+	{
+		return pos.y + size.y;
+	}
+
+	public float getWidth()
+	{
+		return size.x;
+	}
+
+	public float getHeight()
+	{
+		return size.y;
+	}
 
 	// This may be only called by Gui and Widget!
 	public void setGui(Gui gui)

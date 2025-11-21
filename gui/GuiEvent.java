@@ -3,14 +3,27 @@ package fi.henu.gdxextras.gui;
 public class GuiEvent
 {
 
-	public Type getType() { return type; }
+	public Type getType()
+	{
+		return type;
+	}
 
 	// For Widget event
-	public Widget getWidget() { return (Widget)obj0; }
-	public int getAction() { return int0; }
+	public Widget getWidget()
+	{
+		return (Widget)obj0;
+	}
+
+	public int getAction()
+	{
+		return int0;
+	}
 
 	// For Key press and release events
-	public int getKeycode() { return int0; }
+	public int getKeycode()
+	{
+		return int0;
+	}
 
 	public static GuiEvent fromWidget(Widget widget, int action)
 	{
@@ -37,7 +50,8 @@ public class GuiEvent
 		return result;
 	}
 
-	public enum Type {
+	public enum Type
+	{
 		WIDGET,
 		KEY_PRESS,
 		KEY_RELEASE,

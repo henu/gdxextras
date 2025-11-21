@@ -189,7 +189,7 @@ public class Textinput extends Widget
 				if (cursor > 0) {
 					text = text.substring(0, cursor - 1) + text.substring(cursor);
 					text_layout = null;
-					-- cursor;
+					--cursor;
 					scrollSoCursorIsShown();
 					textinput.fireEvent(TEXT_CHANGED);
 				}
@@ -223,7 +223,7 @@ public class Textinput extends Widget
 
 				text = text.substring(0, cursor) + character + text.substring(cursor);
 				text_layout = null;
-				cursor ++;
+				cursor++;
 				scrollSoCursorIsShown();
 				textinput.fireEvent(TEXT_CHANGED);
 			}

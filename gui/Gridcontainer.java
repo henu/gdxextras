@@ -98,11 +98,11 @@ public class Gridcontainer extends Widget
 			repositionChild(widget, getPositionX() + pos_x, getPositionY() + pos_y, widths[col_id], heights[row_id]);
 
 			pos_x += widths[col_id];
-			col_id ++;
+			col_id++;
 			if (col_id == cols) {
 				col_id = 0;
 				pos_x = 0;
-				row_id ++;
+				row_id++;
 				if (row_id < heights.length) {
 					pos_y -= heights[row_id];
 				}
@@ -129,7 +129,7 @@ public class Gridcontainer extends Widget
 		for (int widget_id = 0; widget_id < widgets_size; widget_id++) {
 			Widget widget = widgets_buf[widget_id];
 			row_height = Math.max(row_height, widget.getMinHeight(widths[col_id]));
-			col_id ++;
+			col_id++;
 			if (col_id == cols) {
 				min_height += row_height;
 				row_height = 0;
@@ -153,7 +153,7 @@ public class Gridcontainer extends Widget
 	{
 		// Initialize array of column widths
 		float[] widths = new float[cols];
-		for (int col_id = 0; col_id < cols; col_id ++) {
+		for (int col_id = 0; col_id < cols; col_id++) {
 			widths[col_id] = 0;
 		}
 
@@ -175,7 +175,7 @@ public class Gridcontainer extends Widget
 		int rows = getNumOfRows();
 		// Initialize array of row heights
 		float[] heights = new float[rows];
-		for (int row_id = 0; row_id < rows; row_id ++) {
+		for (int row_id = 0; row_id < rows; row_id++) {
 			heights[row_id] = 0;
 		}
 
@@ -187,10 +187,10 @@ public class Gridcontainer extends Widget
 		for (int widget_id = 0; widget_id < widgets_size; widget_id++) {
 			Widget widget = widgets_buf[widget_id];
 			heights[row_id] = Math.max(heights[row_id], widget.getMinHeight(widths[col_id]));
-			col_id ++;
+			col_id++;
 			if (col_id == cols) {
 				col_id = 0;
-				row_id ++;
+				row_id++;
 			}
 		}
 
@@ -200,7 +200,7 @@ public class Gridcontainer extends Widget
 	private float calculateSum(float[] vals)
 	{
 		float result = 0;
-		for (int val_id = 0; val_id < vals.length; val_id ++) {
+		for (int val_id = 0; val_id < vals.length; val_id++) {
 			result += vals[val_id];
 		}
 		return result;
@@ -209,7 +209,7 @@ public class Gridcontainer extends Widget
 	private int calculateSumInt(int[] vals)
 	{
 		int result = 0;
-		for (int val_id = 0; val_id < vals.length; val_id ++) {
+		for (int val_id = 0; val_id < vals.length; val_id++) {
 			result += vals[val_id];
 		}
 		return result;
@@ -227,12 +227,12 @@ public class Gridcontainer extends Widget
 		// Add new width to columns
 		if (total_expanding == 0) {
 			float extra_width_per_column = (total_width - total_width_now) / cols;
-			for (int col_id = 0; col_id < cols; col_id ++) {
+			for (int col_id = 0; col_id < cols; col_id++) {
 				widths[col_id] += extra_width_per_column;
 			}
 		} else {
 			float total_extra_width = total_width - total_width_now;
-			for (int col_id = 0; col_id < cols; col_id ++) {
+			for (int col_id = 0; col_id < cols; col_id++) {
 				widths[col_id] += total_extra_width * expandings[col_id] / total_expanding;
 			}
 		}
@@ -249,7 +249,7 @@ public class Gridcontainer extends Widget
 		// TODO: Take care of vertical expandings!
 		int rows = getNumOfRows();
 		float extra_height_per_row = (total_height - total_height_now) / rows;
-		for (int row_id = 0; row_id < rows; row_id ++) {
+		for (int row_id = 0; row_id < rows; row_id++) {
 			heights[row_id] += extra_height_per_row;
 		}
 
@@ -260,7 +260,7 @@ public class Gridcontainer extends Widget
 	{
 		// Initialize array of expandings
 		int[] expandings = new int[cols];
-		for (int col_id = 0; col_id < cols; col_id ++) {
+		for (int col_id = 0; col_id < cols; col_id++) {
 			expandings[col_id] = 0;
 		}
 
