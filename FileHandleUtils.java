@@ -42,4 +42,37 @@ public class FileHandleUtils
 
 		throw new RuntimeException("Application type not yet supported!");
 	}
+
+	// Returns the more fine tuned place to store the configuration, save, etc. files.
+	public static FileHandle config(String app_name, String path)
+	{
+		// Android
+		if (Gdx.app.getType() == Application.ApplicationType.Android) {
+			return Gdx.files.local(path);
+		}
+		// Desktop
+		if (Gdx.app.getType() == Application.ApplicationType.Desktop) {
+			String os = System.getProperty("os.name").toLowerCase();
+			FileHandle conf_dir_fh;
+			// Windows
+			if (os.contains("win")) {
+				String appdata_path = System.getenv("APPDATA");
+				if (appdata_path != null && !appdata_path.isEmpty()) {
+					conf_dir_fh = Gdx.files.absolute(appdata_path + "/" + app_name);
+				} else {
+					conf_dir_fh = Gdx.files.external(app_name);
+				}
+			}
+			// Mac
+			else if (os.contains("mac")) {
+				conf_dir_fh = Gdx.files.external("Library/Application Support/" + app_name);
+			}
+			// Linux + BSDs
+			else {
+				conf_dir_fh = Gdx.files.external("/.config/" + app_name);
+			}
+			return conf_dir_fh.child(path);
+		}
+		throw new RuntimeException("Application type \"" + Gdx.app.getType() + "\" not yet supported!");
+	}
 }
