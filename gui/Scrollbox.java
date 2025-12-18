@@ -21,6 +21,7 @@ public class Scrollbox extends Widget
 		origin_vert = Alignment.TOP;
 		horizontal_scrolling_enabled = true;
 		vertical_scrolling_enabled = true;
+		mousewheel_speed = 50;
 		// This widget has ability to receive
 		// pointer events before its children.
 		setBeTopmostBeforeChildren(true);
@@ -52,6 +53,16 @@ public class Scrollbox extends Widget
 			throw new RuntimeException("Only TOP and BOTTOM are allowed to vertical origin!");
 		}
 		origin_vert = origin;
+	}
+
+	public void setMousewheelSpeed(float speed)
+	{
+		mousewheel_speed = speed;
+	}
+
+	public float getMousewheelSpeed()
+	{
+		return mousewheel_speed;
 	}
 
 	public Alignment getHorizontalOrigin()
@@ -295,6 +306,38 @@ public class Scrollbox extends Widget
 	}
 
 	@Override
+	public void scrolled(float amount_x, float amount_y)
+	{
+		float old_scroll_bottomleft_x = scroll_bottomleft.x;
+		float old_scroll_bottomleft_y = scroll_bottomleft.y;
+		// X scrolling
+		if (widget.getWidth() + widget.getMargin() * 2 > getWidth()) {
+			scroll_bottomleft.x += amount_x * mousewheel_speed;
+			if (scroll_bottomleft.x < 0) {
+				scroll_bottomleft.x = 0;
+			} else if (scroll_bottomleft.x > widget.getWidth() + widget.getMargin() * 2 - getWidth()) {
+				scroll_bottomleft.x = widget.getWidth() + widget.getMargin() * 2 - getWidth();
+			}
+		}
+		// Y scrolling
+		if (widget.getHeight() + widget.getMargin() * 2 > getHeight()) {
+			scroll_bottomleft.y -= amount_y * mousewheel_speed;
+			if (scroll_bottomleft.y < 0) {
+				scroll_bottomleft.y = 0;
+			} else if (scroll_bottomleft.y > widget.getHeight() + widget.getMargin() * 2 - getHeight()) {
+				scroll_bottomleft.y = widget.getHeight() + widget.getMargin() * 2 - getHeight();
+			}
+		}
+		// Update another scroll value too
+		scroll_topright.x -= scroll_bottomleft.x - old_scroll_bottomleft_x;
+		scroll_topright.y -= scroll_bottomleft.y - old_scroll_bottomleft_y;
+
+		if (old_scroll_bottomleft_x != scroll_bottomleft.x || old_scroll_bottomleft_y != scroll_bottomleft.y) {
+			markToNeedReposition();
+		}
+	}
+
+	@Override
 	protected void doRenderingAfterChildren(SpriteBatch batch, ShapeRenderer shapes)
 	{
 		ScrollboxStyle style = getStyle();
@@ -470,6 +513,8 @@ public class Scrollbox extends Widget
 
 	private final Vector2 scroll_when_pointer_was_pressed = new Vector2();
 	private final Vector2 pointer_down_pos = new Vector2();
+
+	private float mousewheel_speed;
 
 	private ScrollboxStyle style;
 
