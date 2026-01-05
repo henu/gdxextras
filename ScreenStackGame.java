@@ -128,6 +128,15 @@ public abstract class ScreenStackGame extends Game
 		super.dispose();
 	}
 
+	@Override
+	public void resize(int width, int height)
+	{
+		// Force resetting viewport. This fixes display scaling problem on Windows
+		Gdx.gl.glViewport(0, 0, Gdx.graphics.getBackBufferWidth(), Gdx.graphics.getBackBufferHeight());
+
+		super.resize(width, height);
+	}
+
 	public void setFrameRecorder(FrameRecorder frame_recorder)
 	{
 		this.frame_recorder = frame_recorder;
