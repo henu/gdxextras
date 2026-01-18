@@ -91,7 +91,7 @@ public class Videomode implements Comparable<Videomode>
 					}
 				}
 			} else {
-				for (Graphics.DisplayMode displaymode : Gdx.graphics.getDisplayModes()) {
+				for (Graphics.DisplayMode displaymode : Gdx.graphics.getDisplayModes(monitor)) {
 					Videomode videomode = new Videomode(Mode.FULLSCREEN, displaymode.width, displaymode.height, displaymode.refreshRate);
 					if (!result.contains(videomode, false)) {
 						result.add(videomode);
