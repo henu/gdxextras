@@ -1,6 +1,7 @@
 package fi.henu.gdxextras.gui;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -16,6 +17,7 @@ public class Gui implements InputProcessor
 	{
 		key_press_handlers = new IntMap<>();
 		key_release_handlers = new IntMap<>();
+		repeating_key = -1;
 	}
 
 	// Automatically scale GUI, so that the diagonal is always the given
@@ -164,6 +166,11 @@ public class Gui implements InputProcessor
 
 	public void render(GL20 gl)
 	{
+		if (keyboardlistener != null && repeating_key >= 0 && repeating_key_at <= System.currentTimeMillis()) {
+			keyboardlistener.keyTyped((char)repeating_key);
+			repeating_key_at = System.currentTimeMillis() + REPEATING_KEY_TIME_ONGOING;
+		}
+
 		if (batch == null || shaperenderer == null || widget == null) {
 			return;
 		}
@@ -223,6 +230,8 @@ public class Gui implements InputProcessor
 	{
 		Gdx.input.setOnscreenKeyboardVisible(listener != null);
 		keyboardlistener = listener;
+		// Stop repeating key, just to be sure
+		repeating_key = -1;
 	}
 
 	public Widget getKeyboardListener()
@@ -233,6 +242,24 @@ public class Gui implements InputProcessor
 	@Override
 	public boolean keyDown(int keycode)
 	{
+		// Any key, except meta keys, halts possible repeating
+		if (keycode != Input.Keys.SHIFT_RIGHT && keycode != Input.Keys.SHIFT_LEFT && keycode != Input.Keys.CONTROL_RIGHT && keycode != Input.Keys.CONTROL_LEFT && keycode != Input.Keys.ALT_RIGHT && keycode != Input.Keys.ALT_LEFT) {
+			repeating_key = -1;
+		}
+
+		// Some keys are not delivered via keyTyped(), so that needs to be done manually
+		if (keyboardlistener != null) {
+			if (keycode == Input.Keys.LEFT || keycode == Input.Keys.RIGHT) {
+				keyboardlistener.keyTyped((char)keycode);
+
+				// Also start repeating this key
+				repeating_key = keycode;
+				repeating_key_at = System.currentTimeMillis() + REPEATING_KEY_TIME_INITIAL;
+
+				return true;
+			}
+		}
+
 		// Check for individual key press handler
 		Eventlistener key_press_handler = key_press_handlers.get(keycode);
 		if (key_press_handler != null) {
@@ -258,6 +285,11 @@ public class Gui implements InputProcessor
 	@Override
 	public boolean keyUp(int keycode)
 	{
+		// Any key, except meta keys, halts possible repeating
+		if (keycode != Input.Keys.SHIFT_RIGHT && keycode != Input.Keys.SHIFT_LEFT && keycode != Input.Keys.CONTROL_RIGHT && keycode != Input.Keys.CONTROL_LEFT && keycode != Input.Keys.ALT_RIGHT && keycode != Input.Keys.ALT_LEFT) {
+			repeating_key = -1;
+		}
+
 		// Check for individual key release handler
 		Eventlistener key_release_handler = key_release_handlers.get(keycode);
 		if (key_release_handler != null) {
@@ -434,6 +466,10 @@ public class Gui implements InputProcessor
 		return height_in_pixels - (y / height_in_gui_units * height_in_pixels);
 	}
 
+	// TODO: These magic numbers are not very nice. Try to get rid of them.
+	private static final long REPEATING_KEY_TIME_INITIAL = 500;
+	private static final long REPEATING_KEY_TIME_ONGOING = 17;
+
 	private float auto_scaling_by_diagonal;
 	private float scaling;
 
@@ -464,6 +500,11 @@ public class Gui implements InputProcessor
 	private final Vector2 mouse_last_pos = new Vector2(0, 0);
 
 	private final Vector2 v2tmp = new Vector2();
+
+	// LibGDX doesn't include arrows (and maybe some other) in keyTyped(),
+	// so it needs to be done manually. These are used for it.
+	private int repeating_key;
+	private long repeating_key_at;
 
 	private void storeTopmostWidget(int pointer_id, Widget topmost)
 	{

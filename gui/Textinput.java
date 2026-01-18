@@ -1,5 +1,6 @@
 package fi.henu.gdxextras.gui;
 
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
@@ -211,8 +212,14 @@ public class Textinput extends Widget
 			else if (character == 0x09) {
 				textinput.fireEvent(TAB_PRESSED);
 			}
+			// Arrows
+			else if (character == Input.Keys.RIGHT) {
+				cursor = Math.min(cursor + 1, text.length());
+			} else if (character == Input.Keys.LEFT) {
+				cursor = Math.max(cursor - 1, 0);
+			}
 			// Special key
-			else if (character == 0x00) {
+			else if (character < 0x20) {
 			}
 			// Normal key
 			else {
