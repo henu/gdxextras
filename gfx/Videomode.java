@@ -386,6 +386,22 @@ public class Videomode implements Comparable<Videomode>
 		}
 	}
 
+	public static void toggleFullscreen()
+	{
+		Videomode videomode_current = getCurrentVideomode();
+		if (videomode_current.isWindowed()) {
+			for (Videomode videomode : Videomode.getAvailableVideomodes(true)) {
+				if (videomode.isFullscreen()) {
+					videomode.apply();
+					return;
+				}
+			}
+		} else {
+			Videomode videomode_windowed = Videomode.createWindowed();
+			videomode_windowed.apply();
+		}
+	}
+
 	private enum UndecoratedState
 	{
 		UNDECORATED,
