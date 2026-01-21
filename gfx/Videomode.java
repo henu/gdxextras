@@ -386,20 +386,46 @@ public class Videomode implements Comparable<Videomode>
 		}
 	}
 
-	public static void toggleFullscreen()
+	public static Videomode toggleFullscreen()
 	{
 		Videomode videomode_current = getCurrentVideomode();
 		if (videomode_current.isWindowed()) {
-			for (Videomode videomode : Videomode.getAvailableVideomodes(true)) {
-				if (videomode.isFullscreen()) {
-					videomode.apply();
-					return;
+			Graphics.DisplayMode current_displaymode = Gdx.graphics.getDisplayMode();
+			// Get display modes only from current monitor, and select best from them
+			Graphics.DisplayMode best_displaymode = null;
+			for (Graphics.DisplayMode displaymode : Gdx.graphics.getDisplayModes()) {
+				// If display mode is not set
+				if (best_displaymode == null) {
+					best_displaymode = displaymode;
 				}
+				// If wider is found
+				else if (displaymode.width > best_displaymode.width) {
+					best_displaymode = displaymode;
+				}
+				// If taller is found
+				else if (displaymode.width == best_displaymode.width && displaymode.height > best_displaymode.height) {
+					best_displaymode = displaymode;
+				}
+				// If one with current refreshrate is found
+				else if (displaymode.width == best_displaymode.width && displaymode.height == best_displaymode.height && displaymode.refreshRate == current_displaymode.refreshRate) {
+					best_displaymode = displaymode;
+				}
+				// If one with better refreshrate is found
+				else if (displaymode.width == best_displaymode.width && displaymode.height == best_displaymode.height && displaymode.refreshRate > best_displaymode.refreshRate && displaymode.refreshRate < current_displaymode.refreshRate) {
+					best_displaymode = displaymode;
+				}
+			}
+			if (best_displaymode != null) {
+				Videomode videomode = new Videomode(Mode.FULLSCREEN, best_displaymode.width, best_displaymode.height, best_displaymode.refreshRate);
+				videomode.apply();
+				return videomode;
 			}
 		} else {
 			Videomode videomode_windowed = Videomode.createWindowed();
 			videomode_windowed.apply();
+			return videomode_windowed;
 		}
+		return null;
 	}
 
 	private enum UndecoratedState
