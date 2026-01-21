@@ -4,6 +4,7 @@ import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Graphics;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.ObjectSet;
 
 import java.util.Objects;
 
@@ -57,11 +58,16 @@ public class Videomode implements Comparable<Videomode>
 		// Windowed mode
 		result.add(new Videomode(Mode.WINDOWED, -1, -1, -1));
 
+		// Fullscreen modes from current monitor are prioritized. Store them to this
+		// set, so they can be moved forward in queue after the normal sorting.
+		ObjectSet<Videomode> prioritized_fullscreen_modes = new ObjectSet<>();
+
 		// Fullscreen modes
+		Graphics.DisplayMode current_displaymode = Gdx.graphics.getDisplayMode();
 		for (Graphics.Monitor monitor : Gdx.graphics.getMonitors()) {
+			boolean is_current_monitor = monitor.name.equals(Gdx.graphics.getMonitor().name);
 			if (minimal_list) {
 				Graphics.DisplayMode best_displaymode = null;
-				Graphics.DisplayMode current_displaymode = Gdx.graphics.getDisplayMode();
 				for (Graphics.DisplayMode displaymode : Gdx.graphics.getDisplayModes(monitor)) {
 					// If display mode is not set
 					if (best_displaymode == null) {
@@ -86,16 +92,18 @@ public class Videomode implements Comparable<Videomode>
 				}
 				if (best_displaymode != null) {
 					Videomode videomode = new Videomode(Mode.FULLSCREEN, best_displaymode.width, best_displaymode.height, best_displaymode.refreshRate);
-					if (!result.contains(videomode, false)) {
-						result.add(videomode);
+					if (is_current_monitor) {
+						prioritized_fullscreen_modes.add(videomode);
 					}
+					result.add(videomode);
 				}
 			} else {
 				for (Graphics.DisplayMode displaymode : Gdx.graphics.getDisplayModes(monitor)) {
 					Videomode videomode = new Videomode(Mode.FULLSCREEN, displaymode.width, displaymode.height, displaymode.refreshRate);
-					if (!result.contains(videomode, false)) {
-						result.add(videomode);
+					if (is_current_monitor) {
+						prioritized_fullscreen_modes.add(videomode);
 					}
+					result.add(videomode);
 				}
 			}
 		}
@@ -120,21 +128,51 @@ public class Videomode implements Comparable<Videomode>
 				}
 				if (best_displaymode != null) {
 					Videomode videomode = new Videomode(Mode.UNDECORATED, best_displaymode.width, best_displaymode.height, -1);
-					if (!result.contains(videomode, false)) {
-						result.add(videomode);
-					}
+					result.add(videomode);
 				}
 			} else {
 				for (Graphics.DisplayMode displaymode : Gdx.graphics.getDisplayModes(monitor)) {
 					Videomode videomode = new Videomode(Mode.UNDECORATED, displaymode.width, displaymode.height, -1);
-					if (!result.contains(videomode, false)) {
-						result.add(videomode);
+					result.add(videomode);
+				}
+			}
+		}
+
+		// First do normal sorting
+		result.sort();
+
+		// Then move prioritized fullscreen modes towards the front
+		for (int i = 0; i < result.size; ++i) {
+			Videomode videomode = result.get(i);
+			if (videomode.isFullscreen() && prioritized_fullscreen_modes.contains(videomode)) {
+				for (int j = i; j > 0; --j) {
+					Videomode videomode_previous = result.get(j - 1);
+					// If previous videomode is also fullscreen, but not prioritized, then swap them
+					if (videomode_previous.isFullscreen() && !prioritized_fullscreen_modes.contains(videomode_previous)) {
+						result.set(j - 1, videomode);
+						result.set(j, videomode_previous);
+					}
+					// If everything looks good, then exit loop
+					else {
+						break;
 					}
 				}
 			}
 		}
 
-		result.sort();
+		// Remove duplicate videomodes.
+		for (int i = 0; i < result.size; ++i) {
+			Videomode videomode = result.get(i);
+			// Remove duplicates
+			for (int j = i + 1; j < result.size; ) {
+				Videomode videomode2 = result.get(j);
+				if (videomode.equals(videomode2)) {
+					result.removeIndex(j);
+				} else {
+					++j;
+				}
+			}
+		}
 
 		return result;
 	}
