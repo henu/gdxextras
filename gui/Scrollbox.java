@@ -110,6 +110,40 @@ public class Scrollbox extends Widget
 		markToNeedReposition();
 	}
 
+	// 0 is left, 1 is right
+	public void setRelativeScrollX(float x)
+	{
+		float left_hidden = scroll_bottomleft.x;
+		float right_hidden = scroll_topright.x;
+
+		// If scrolling is not possible
+		if (left_hidden <= 0 && right_hidden <= 0) {
+			return;
+		}
+
+		float total_hidden = right_hidden + left_hidden;
+
+		scroll_bottomleft.x = x * total_hidden;
+		scroll_topright.x = total_hidden - scroll_bottomleft.x;
+	}
+
+	// 0 is bottom, 1 is top
+	public void setRelativeScrollY(float y)
+	{
+		float bottom_hidden = scroll_bottomleft.y;
+		float top_hidden = scroll_topright.y;
+
+		// If scrolling is not possible
+		if (bottom_hidden <= 0 && top_hidden <= 0) {
+			return;
+		}
+
+		float total_hidden = top_hidden + bottom_hidden;
+
+		scroll_bottomleft.y = y * total_hidden;
+		scroll_topright.y = total_hidden - scroll_bottomleft.y;
+	}
+
 	public void getScroll(Vector2 result)
 	{
 		result.x = getScrollX();
