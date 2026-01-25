@@ -198,7 +198,28 @@ public class Scrollbox extends Widget
 		return bottom_hidden / total_hidden;
 	}
 
-	// Scrolls show that specific rectangle becomes shown as much
+	// Scrolls, so that the given Widget becomes shown as much as possible.
+	public void showWidget(Widget widget)
+	{
+		doRepositioning();
+
+		// Get absolute position of widget
+		float x = widget.getPositionX();
+		float y = widget.getPositionY();
+
+		// Then reduce position of scrollbox, so it becomes relative to scrollbox
+		x -= getPositionX();
+		y -= getPositionY();
+
+		// This undoes scroll, ie. convert the position to situation where scrolling would be zero
+		x += scroll_bottomleft.x;
+		y += scroll_bottomleft.y;
+
+		// Do the actual showing
+		showRectangle(x, y, widget.getWidth(), widget.getHeight());
+	}
+
+	// Scrolls, so that the given rectangle becomes shown as much
 	// as possible. Coordinates are given relative to Scrollbox.
 	public void showRectangle(float x, float y, float width, float height)
 	{
