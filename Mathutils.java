@@ -8,7 +8,6 @@ import com.badlogic.gdx.math.Vector3;
 
 public class Mathutils
 {
-
 	// Result and pos can be the same
 	public static void posToPlane(Vector3 result, Vector3 pos, Vector3 normal)
 	{
@@ -82,9 +81,9 @@ public class Mathutils
 
 	public static float angleBetweenVectors(float v1_x, float v1_y, float v2_x, float v2_y)
 	{
-		float v1_len = (float) Math.sqrt(v1_x * v1_x + v1_y * v1_y);
+		float v1_len = (float)Math.sqrt(v1_x * v1_x + v1_y * v1_y);
 		if (v1_len == 0) return 0;
-		float v2_len = (float) Math.sqrt(v2_x * v2_x + v2_y * v2_y);
+		float v2_len = (float)Math.sqrt(v2_x * v2_x + v2_y * v2_y);
 		if (v2_len == 0) return 0;
 
 		v1_x /= v1_len;
@@ -282,6 +281,22 @@ public class Mathutils
 			return ((Polygon)shape).getBoundingRectangle();
 		}
 		throw new RuntimeException("Other shapes not implemented yet!");
+	}
+
+	public static int divCeil(int dividend, int divisor)
+	{
+		if (divisor == 0) {
+			throw new ArithmeticException("Division by zero");
+		}
+
+		int quotient = dividend / divisor;
+		int remainder = dividend % divisor;
+
+		if (remainder != 0 && ((dividend ^ divisor) >= 0)) {
+			++quotient;
+		}
+
+		return quotient;
 	}
 
 	// Temporary variables. These are used by multiple methods, so
