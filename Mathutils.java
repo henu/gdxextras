@@ -299,6 +299,20 @@ public class Mathutils
 		return quotient;
 	}
 
+	public static int samplePoisson(float lambda)
+	{
+		float L = (float)Math.exp(-lambda);
+		int k = 0;
+		float p = 1f;
+
+		do {
+			++k;
+			p *= (float)Math.random();
+		} while (p > L);
+
+		return k - 1;
+	}
+
 	// Temporary variables. These are used by multiple methods, so
 	// do not expect that value is kept if you do internal call!
 	// TODO: Get rid of these so things can be done in multiple threads!
