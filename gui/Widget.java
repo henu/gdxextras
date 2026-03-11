@@ -10,6 +10,8 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 
+import fi.henu.gdxextras.utils.GfxUtils;
+
 public abstract class Widget
 {
 	public enum Alignment
@@ -694,9 +696,7 @@ public abstract class Widget
 	// Renders region with angle
 	protected static void renderFromCenter(SpriteBatch batch, AtlasRegion region, float x, float y, float scale, float angle)
 	{
-		float draw_x = x + (region.offsetX - region.originalWidth * 0.5f) * scale;
-		float draw_y = y + (region.offsetY - region.originalHeight * 0.5f) * scale;
-		batch.draw(region, draw_x, draw_y, region.getRegionWidth() / 2 * scale, region.getRegionHeight() / 2 * scale, region.packedWidth * scale, region.packedHeight * scale, 1, 1, angle);
+		GfxUtils.drawRegionFromCenter(batch, region, x, y, scale, scale, angle);
 	}
 
 	protected static void renderToSpace(SpriteBatch batch, AtlasRegion region, float x, float y, float space_width, float space_height, float align_x, float align_y, float scale)
