@@ -18,14 +18,14 @@ public abstract class ScreenWithGui implements Screen
 	}
 
 	@Override
-	public void render(float delta)
+	public void render(float deltatime)
 	{
 		makeSureGuiExists();
 
 		clearScreen();
 
 		// Let user do other rendering
-		renderBeforeGui(delta);
+		renderBeforeGui(deltatime);
 
 		// Render the GUI
 		GL20 gl = Gdx.graphics.getGL20();
@@ -123,7 +123,7 @@ public abstract class ScreenWithGui implements Screen
 		gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 	}
 
-	protected void renderBeforeGui(float delta)
+	protected void renderBeforeGui(float deltatime)
 	{
 	}
 

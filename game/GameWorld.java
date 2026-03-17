@@ -84,7 +84,7 @@ public class GameWorld
 		return controlled_obj;
 	}
 
-	public void run(float delta)
+	public void run(float deltatime)
 	{
 		updateControls();
 
@@ -96,8 +96,8 @@ public class GameWorld
 				if (obj == controlled_obj) {
 					obj_controls = controls;
 				}
-				obj.runMovement(delta, obj_controls);
-				if (!obj.run(delta, obj_controls)) {
+				obj.runMovement(deltatime, obj_controls);
+				if (!obj.run(deltatime, obj_controls)) {
 					destroyGameObject(obj);
 				}
 			}

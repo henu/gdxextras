@@ -33,7 +33,7 @@ public class EightDirsControlled implements Movement
 	private final int enabled_dir_flags;
 
 	@Override
-	public void run(GameObject obj, float delta, Controls controls)
+	public void run(GameObject obj, float deltatime, Controls controls)
 	{
 		if (controls == null) {
 			return;
@@ -54,10 +54,10 @@ public class EightDirsControlled implements Movement
 			if (key_right && !key_left) {
 				if ((enabled_dir_flags & FLAG_UP_RIGHT) != 0) {
 					if (isometric) {
-						pos.z += speed * delta;
+						pos.z += speed * deltatime;
 					} else {
-						pos.x += speed * delta * SIN_45;
-						pos.z += speed * delta * SIN_45;
+						pos.x += speed * deltatime * SIN_45;
+						pos.z += speed * deltatime * SIN_45;
 					}
 				}
 				return;
@@ -65,20 +65,20 @@ public class EightDirsControlled implements Movement
 			if (key_left && !key_right) {
 				if ((enabled_dir_flags & FLAG_UP_LEFT) != 0) {
 					if (isometric) {
-						pos.x -= speed * delta;
+						pos.x -= speed * deltatime;
 					} else {
-						pos.x -= speed * delta * SIN_45;
-						pos.z += speed * delta * SIN_45;
+						pos.x -= speed * deltatime * SIN_45;
+						pos.z += speed * deltatime * SIN_45;
 					}
 				}
 				return;
 			}
 			if ((enabled_dir_flags & FLAG_UP) != 0) {
 				if (isometric) {
-					pos.x -= speed * delta * SIN_45;
-					pos.z += speed * delta * SIN_45;
+					pos.x -= speed * deltatime * SIN_45;
+					pos.z += speed * deltatime * SIN_45;
 				} else {
-					pos.z += speed * delta;
+					pos.z += speed * deltatime;
 				}
 			}
 			return;
@@ -87,10 +87,10 @@ public class EightDirsControlled implements Movement
 			if (key_right && !key_left) {
 				if ((enabled_dir_flags & FLAG_DOWN_RIGHT) != 0) {
 					if (isometric) {
-						pos.x += speed * delta;
+						pos.x += speed * deltatime;
 					} else {
-						pos.x += speed * delta * SIN_45;
-						pos.z -= speed * delta * SIN_45;
+						pos.x += speed * deltatime * SIN_45;
+						pos.z -= speed * deltatime * SIN_45;
 					}
 				}
 				return;
@@ -98,20 +98,20 @@ public class EightDirsControlled implements Movement
 			if (key_left && !key_right) {
 				if ((enabled_dir_flags & FLAG_DOWN_LEFT) != 0) {
 					if (isometric) {
-						pos.z -= speed * delta;
+						pos.z -= speed * deltatime;
 					} else {
-						pos.x -= speed * delta * SIN_45;
-						pos.z -= speed * delta * SIN_45;
+						pos.x -= speed * deltatime * SIN_45;
+						pos.z -= speed * deltatime * SIN_45;
 					}
 				}
 				return;
 			}
 			if ((enabled_dir_flags & FLAG_DOWN) != 0) {
 				if (isometric) {
-					pos.x += speed * delta * SIN_45;
-					pos.z -= speed * delta * SIN_45;
+					pos.x += speed * deltatime * SIN_45;
+					pos.z -= speed * deltatime * SIN_45;
 				} else {
-					pos.z -= speed * delta;
+					pos.z -= speed * deltatime;
 				}
 			}
 			return;
@@ -119,10 +119,10 @@ public class EightDirsControlled implements Movement
 		if (key_right && !key_left) {
 			if ((enabled_dir_flags & FLAG_RIGHT) != 0) {
 				if (isometric) {
-					pos.x += speed * delta * SIN_45;
-					pos.z += speed * delta * SIN_45;
+					pos.x += speed * deltatime * SIN_45;
+					pos.z += speed * deltatime * SIN_45;
 				} else {
-					pos.x += speed * delta;
+					pos.x += speed * deltatime;
 				}
 			}
 			return;
@@ -130,10 +130,10 @@ public class EightDirsControlled implements Movement
 		if (key_left && !key_right) {
 			if ((enabled_dir_flags & FLAG_LEFT) != 0) {
 				if (isometric) {
-					pos.x -= speed * delta * SIN_45;
-					pos.z -= speed * delta * SIN_45;
+					pos.x -= speed * deltatime * SIN_45;
+					pos.z -= speed * deltatime * SIN_45;
 				} else {
-					pos.x -= speed * delta;
+					pos.x -= speed * deltatime;
 				}
 			}
 		}

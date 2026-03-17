@@ -72,10 +72,10 @@ public class GameObject
 		return movement;
 	}
 
-	public void runMovement(float delta, Controls controls)
+	public void runMovement(float deltatime, Controls controls)
 	{
 		if (movement != null) {
-			movement.run(this, delta, controls);
+			movement.run(this, deltatime, controls);
 		}
 	}
 
@@ -174,7 +174,7 @@ public class GameObject
 	}
 
 	// Returns true if object should exist, and false if it should be destroyed
-	public boolean run(float delta, Controls controls)
+	public boolean run(float deltatime, Controls controls)
 	{
 		return true;
 	}

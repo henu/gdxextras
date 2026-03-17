@@ -24,9 +24,9 @@ public class LinearMovement implements Movement
 	}
 
 	@Override
-	public void run(GameObject obj, float delta, Controls controls)
+	public void run(GameObject obj, float deltatime, Controls controls)
 	{
-		obj.getPosition().add(vel.x * delta, vel.y * delta, vel.z * delta);
+		obj.getPosition().add(vel.x * deltatime, vel.y * deltatime, vel.z * deltatime);
 	}
 
 	@Override

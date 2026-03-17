@@ -87,12 +87,12 @@ public abstract class ScreenStackGame extends Game
 // TODO: If there is FrameRecorder, then force screen size!
 		// Override super method completely
 		if (screen != null) {
-			float delta = Gdx.graphics.getDeltaTime();
-			// If there is a frame recorder, then override delta time. Also
+			float deltatime = Gdx.graphics.getDeltaTime();
+			// If there is a frame recorder, then override deltatime. Also
 			// sleep if necessary, so the game will not run too fast.
 			if (frame_recorder != null) {
-				float new_delta = 1.0f / frame_recorder.getFps();
-				float sleep = new_delta - delta;
+				float new_deltatime = 1.0f / frame_recorder.getFps();
+				float sleep = new_deltatime - deltatime;
 				if (sleep > 0) {
 					try {
 						Thread.sleep(Math.round(1000 * sleep));
@@ -101,9 +101,9 @@ public abstract class ScreenStackGame extends Game
 						throw new RuntimeException(e);
 					}
 				}
-				delta = new_delta;
+				deltatime = new_deltatime;
 			}
-			screen.render(delta);
+			screen.render(deltatime);
 		}
 
 		// If there is a frame recorder, then record this frame

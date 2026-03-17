@@ -18,23 +18,23 @@ public class Space2DMovement implements Movement
 	}
 
 	@Override
-	public void run(GameObject obj, float delta, Controls controls)
+	public void run(GameObject obj, float deltatime, Controls controls)
 	{
-		obj.getPosition().add(vel.x * delta, 0, vel.z * delta);
+		obj.getPosition().add(vel.x * deltatime, 0, vel.z * deltatime);
 
 		if (controls == null) {
 			return;
 		}
 
 		if (controls.isRightPressed() && !controls.isLeftPressed()) {
-			obj.setRotation2D(obj.getRotation2D() - delta * rot_speed * controls.getRightPressed());
+			obj.setRotation2D(obj.getRotation2D() - deltatime * rot_speed * controls.getRightPressed());
 		} else if (controls.isLeftPressed() && !controls.isRightPressed()) {
-			obj.setRotation2D(obj.getRotation2D() + delta * rot_speed * controls.getLeftPressed());
+			obj.setRotation2D(obj.getRotation2D() + deltatime * rot_speed * controls.getLeftPressed());
 		}
 		if (controls.isUpPressed()) {
 			float angle = obj.getRotation2D();
-			vel.x += -MathUtils.sinDeg(angle) * accel * delta * controls.getUpPressed();
-			vel.z += MathUtils.cosDeg(angle) * accel * delta * controls.getUpPressed();
+			vel.x += -MathUtils.sinDeg(angle) * accel * deltatime * controls.getUpPressed();
+			vel.z += MathUtils.cosDeg(angle) * accel * deltatime * controls.getUpPressed();
 			float vel_len = vel.len();
 			if (vel_len > max_vel) {
 				vel.scl(max_vel / vel_len);

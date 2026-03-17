@@ -6,7 +6,7 @@ import fi.henu.gdxextras.collisions.Collision;
 
 public interface Movement
 {
-	void run(GameObject obj, float delta, Controls controls);
+	void run(GameObject obj, float deltatime, Controls controls);
 
 	void bounce(Array<Collision> colls);
 }
