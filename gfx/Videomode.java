@@ -33,6 +33,16 @@ public class Videomode implements Comparable<Videomode>
 		default_windowed_height = height;
 	}
 
+	public static int getDefaultWindowedWidth()
+	{
+		return default_windowed_width;
+	}
+
+	public static int getDefaultWindowedHeight()
+	{
+		return default_windowed_height;
+	}
+
 	public static Videomode getCurrentVideomode()
 	{
 		if (Gdx.app.getType() != Application.ApplicationType.Desktop) {
