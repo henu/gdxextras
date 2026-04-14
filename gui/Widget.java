@@ -666,15 +666,15 @@ public abstract class Widget
 
 		if (center_width > 0) {
 			float center_vert_padding = ((tex_center.getHeight() - real_height) / 2) * scale;
-			batch.draw(tex_center, x + left_end_width, y - center_vert_padding, center_width, tex_center.getHeight() * scale, 0, 1, center_width / tex_center.getWidth(), 0);
+			batch.draw(tex_center, Math.round(x + left_end_width), Math.round(y - center_vert_padding), Math.round(center_width), Math.round(tex_center.getHeight() * scale), 0, 1, center_width / tex_center.getWidth(), 0);
 		}
-		render(batch, region_left, x, y + (real_height - region_left.originalHeight) / 2 * scale, scale);
-		render(batch, region_right, x + width - right_end_width, y + (real_height - region_right.originalHeight) / 2 * scale, scale);
+		render(batch, region_left, Math.round(x), Math.round(y + (real_height - region_left.originalHeight) / 2 * scale), scale);
+		render(batch, region_right, Math.round(x + width - right_end_width), Math.round(y + (real_height - region_right.originalHeight) / 2 * scale), scale);
 	}
 
 	protected static void render(SpriteBatch batch, AtlasRegion region, float x, float y, float scale)
 	{
-		batch.draw(region, x + region.offsetX * scale, y + region.offsetY * scale, region.packedWidth * scale, region.packedHeight * scale);
+		batch.draw(region, Math.round(x + region.offsetX * scale), Math.round(y + region.offsetY * scale), Math.round(region.packedWidth * scale), Math.round(region.packedHeight * scale));
 	}
 
 	protected static void render(SpriteBatch batch, AtlasRegion region, float x, float y, float scale_x, float scale_y)
@@ -685,12 +685,12 @@ public abstract class Widget
 		if (scale_y < 0) {
 			y += -scale_y * region.originalHeight;
 		}
-		batch.draw(region, x + region.offsetX * scale_x, y + region.offsetY * scale_y, region.packedWidth * scale_x, region.packedHeight * scale_y);
+		batch.draw(region, Math.round(x + region.offsetX * scale_x), Math.round(y + region.offsetY * scale_y), Math.round(region.packedWidth * scale_x), Math.round(region.packedHeight * scale_y));
 	}
 
 	protected static void renderFromCenter(SpriteBatch batch, AtlasRegion region, float x, float y, float scale)
 	{
-		batch.draw(region, x + (region.offsetX - region.originalWidth * 0.5f) * scale, y + (region.offsetY - region.originalHeight * 0.5f) * scale, region.packedWidth * scale, region.packedHeight * scale);
+		batch.draw(region, Math.round(x + (region.offsetX - region.originalWidth * 0.5f) * scale), Math.round(y + (region.offsetY - region.originalHeight * 0.5f) * scale), Math.round(region.packedWidth * scale), Math.round(region.packedHeight * scale));
 	}
 
 	// Renders region with angle
@@ -710,7 +710,7 @@ public abstract class Widget
 	{
 		float tex_x = width / tex.getWidth() / scale;
 		float tex_y = height / tex.getHeight() / scale;
-		batch.draw(tex, x, y, width, height, 0, tex_y, tex_x, 0);
+		batch.draw(tex, Math.round(x), Math.round(y), Math.round(width), Math.round(height), 0, tex_y, tex_x, 0);
 	}
 
 	// Spawns gray version of given color
