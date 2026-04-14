@@ -62,15 +62,6 @@ public class ImageButton extends Widget
 		unregisterPointerListener(pointer_id);
 	}
 
-	// Returns true if position is over Widget. Position is relative to Widget
-	// and over the rectangle of Widget, so this function is for Widgets that
-	// are not rectangle shaped.
-	@Override
-	public boolean isOver(float x, float y)
-	{
-		return true;
-	}
-
 	@Override
 	protected void doRendering(SpriteBatch batch, ShapeRenderer shapes)
 	{
