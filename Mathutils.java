@@ -313,9 +313,26 @@ public class Mathutils
 		return k - 1;
 	}
 
+    public static boolean pointInsideTriangle(float x, float y, float x1, float y1, float x2, float y2, float x3, float y3)
+    {
+        float d1 = pointSideOfEdge(x, y, x1, y1, x2, y2);
+        float d2 = pointSideOfEdge(x, y, x2, y2, x3, y3);
+        float d3 = pointSideOfEdge(x, y, x3, y3, x1, y1);
+
+        boolean has_negative = (d1 < 0) || (d2 < 0) || (d3 < 0);
+        boolean has_positive = (d1 > 0) || (d2 > 0) || (d3 > 0);
+
+        return !(has_negative && has_positive);
+    }
+
 	// Temporary variables. These are used by multiple methods, so
 	// do not expect that value is kept if you do internal call!
 	// TODO: Get rid of these so things can be done in multiple threads!
 	private static final Vector3 v3tmp1 = new Vector3();
 	private static final Vector3 v3tmp2 = new Vector3();
+
+    private static float pointSideOfEdge(float px, float py, float ax, float ay, float bx, float by)
+    {
+        return (px - bx) * (ay - by) - (ax - bx) * (py - by);
+    }
 }
