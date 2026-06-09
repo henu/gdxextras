@@ -136,6 +136,10 @@ public class Textinput extends Widget
 			password_text = null;
 
 			enabled = true;
+
+			body_layout = new GlyphLayout();
+			cursor_substr_layout = new GlyphLayout();
+			cursor_glyph_layout = new GlyphLayout();
 		}
 
 		public void scrollSoCursorIsShown()
@@ -333,26 +337,22 @@ public class Textinput extends Widget
 				text_to_render = password_text;
 			}
 			if (shadow != null) {
-// TODO: Do not allocate this at every frame!
-GlyphLayout temp_layout = new GlyphLayout(font, text_to_render, Color.BLACK, 0, Align.left, false);
-				font.draw(batch, temp_layout, getPositionX() + shadow.x, getPositionY() + height + shadow.y);
+				body_layout.setText(font, text_to_render, Color.BLACK, 0, Align.left, false);
+				font.draw(batch, body_layout, getPositionX() + shadow.x, getPositionY() + height + shadow.y);
 				if (listeningKeyboard()) {
-// TODO: Do not allocate this at every frame!
-temp_layout = new GlyphLayout(font, text_to_render.substring(0, cursor));
-					float cursor_x = temp_layout.width;
-temp_layout = new GlyphLayout(font, "_", Color.BLACK, 0, Align.left, false);
-					font.draw(batch, temp_layout, getPositionX() + cursor_x + shadow.x, getPositionY() + height + shadow.y);
+					cursor_substr_layout.setText(font, text_to_render.substring(0, cursor));
+					float cursor_x = cursor_substr_layout.width;
+					cursor_glyph_layout.setText(font, "_", Color.BLACK, 0, Align.left, false);
+					font.draw(batch, cursor_glyph_layout, getPositionX() + cursor_x + shadow.x, getPositionY() + height + shadow.y);
 				}
 			}
-// TODO: Do not allocate this at every frame!
-GlyphLayout temp_layout = new GlyphLayout(font, text_to_render, getStyle().color, 0, Align.left, false);
-			font.draw(batch, temp_layout, getPositionX(), getPositionY() + height);
+			body_layout.setText(font, text_to_render, getStyle().color, 0, Align.left, false);
+			font.draw(batch, body_layout, getPositionX(), getPositionY() + height);
 			if (listeningKeyboard()) {
-// TODO: Do not allocate this at every frame!
-temp_layout = new GlyphLayout(font, text_to_render.substring(0, cursor));
-				float cursor_x = temp_layout.width;
-temp_layout = new GlyphLayout(font, "_", getStyle().color, 0, Align.left, false);
-				font.draw(batch, temp_layout, getPositionX() + cursor_x, getPositionY() + height);
+				cursor_substr_layout.setText(font, text_to_render.substring(0, cursor));
+				float cursor_x = cursor_substr_layout.width;
+				cursor_glyph_layout.setText(font, "_", getStyle().color, 0, Align.left, false);
+				font.draw(batch, cursor_glyph_layout, getPositionX() + cursor_x, getPositionY() + height);
 			}
 		}
 
@@ -390,6 +390,10 @@ temp_layout = new GlyphLayout(font, "_", getStyle().color, 0, Align.left, false)
 		public String password_text;
 
 		public boolean enabled;
+
+		private final GlyphLayout body_layout;
+		private final GlyphLayout cursor_substr_layout;
+		private final GlyphLayout cursor_glyph_layout;
 	}
 
 	private static TextinputStyle default_style;

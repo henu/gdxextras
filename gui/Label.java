@@ -28,6 +28,7 @@ public class Label extends Widget
 		text_align = Alignment.LEFT;
 		multiline = false;
 		text_layout_height = -1;
+		render_layout = new GlyphLayout();
 	}
 
 	public void setText(String text)
@@ -190,6 +191,8 @@ public class Label extends Widget
 	private GlyphLayout text_layout;
 	private float text_layout_height;
 
+	private final GlyphLayout render_layout;
+
 	// This also tells if multiple lines are supported. Null means not.
 	private boolean multiline;
 
@@ -199,18 +202,17 @@ public class Label extends Widget
 
 	private void renderLineWithAlignment(SpriteBatch batch, String text, BitmapFont font, float pos_x, float pos_y, float width, Color color)
 	{
-// TODO: Do not allocate this at every call!
-text_layout = new GlyphLayout(font, text, color, 0, Align.left, false);
+		render_layout.setText(font, text, color, 0, Align.left, false);
 
-		float text_width = text_layout.width;
+		float text_width = render_layout.width;
 		if (text_align == Alignment.LEFT) {
-			font.draw(batch, text_layout, pos_x, pos_y + getStyle().getHeight());
+			font.draw(batch, render_layout, pos_x, pos_y + getStyle().getHeight());
 		} else {
 			float extra_space = width - text_width;
 			if (text_align == Alignment.RIGHT) {
-				font.draw(batch, text_layout, pos_x + extra_space, pos_y + getStyle().getHeight());
+				font.draw(batch, render_layout, pos_x + extra_space, pos_y + getStyle().getHeight());
 			} else {
-				font.draw(batch, text_layout, pos_x + extra_space / 2, pos_y + getStyle().getHeight());
+				font.draw(batch, render_layout, pos_x + extra_space / 2, pos_y + getStyle().getHeight());
 			}
 		}
 	}
