@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
+import com.badlogic.gdx.graphics.glutils.HdpiUtils;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
@@ -337,7 +338,7 @@ public abstract class Widget
 					batch.end();
 					gl.glEnable(GL20.GL_SCISSOR_TEST);
 					gl.glEnable(GL20.GL_SCISSOR_BOX);
-					gl.glScissor(renderarea_pos_x, renderarea_pos_y, renderarea_width, renderarea_height);
+					HdpiUtils.glScissor(renderarea_pos_x, renderarea_pos_y, renderarea_width, renderarea_height);
 					batch.begin();
 				} else {
 					boolean update_arealimit = false;
@@ -372,7 +373,7 @@ public abstract class Widget
 
 					if (update_arealimit) {
 						batch.end();
-						gl.glScissor(renderarea_pos_x, renderarea_pos_y, renderarea_width, renderarea_height);
+						HdpiUtils.glScissor(renderarea_pos_x, renderarea_pos_y, renderarea_width, renderarea_height);
 						batch.begin();
 					}
 				}
