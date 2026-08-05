@@ -6,6 +6,8 @@ import com.badlogic.gdx.files.FileHandle;
 
 import java.util.StringTokenizer;
 
+import fi.henu.gdxextras.utils.GeneralUtils;
+
 public class FileHandleUtils
 {
 	public static FileHandle getRelativeFileHandle(FileHandle dir, String relative_path)
@@ -30,11 +32,10 @@ public class FileHandleUtils
 		}
 
 		if (Gdx.app.getType() == Application.ApplicationType.Desktop) {
-			String os = System.getProperty("os.name").toLowerCase();
-			if (os.contains("linux")) {
+			if (GeneralUtils.isLinux()) {
 				return Gdx.files.external(".config/" + app_name);
 			}
-			if (os.contains("win")) {
+			if (GeneralUtils.isWindows()) {
 				return Gdx.files.external("AppData/" + app_name);
 			}
 			return Gdx.files.local("");
@@ -52,10 +53,9 @@ public class FileHandleUtils
 		}
 		// Desktop
 		if (Gdx.app.getType() == Application.ApplicationType.Desktop) {
-			String os = System.getProperty("os.name").toLowerCase();
 			FileHandle conf_dir_fh;
 			// Windows
-			if (os.contains("win")) {
+			if (GeneralUtils.isWindows()) {
 				String appdata_path = System.getenv("APPDATA");
 				if (appdata_path != null && !appdata_path.isEmpty()) {
 					conf_dir_fh = Gdx.files.absolute(appdata_path + "/" + app_name);
@@ -64,7 +64,7 @@ public class FileHandleUtils
 				}
 			}
 			// Mac
-			else if (os.contains("mac")) {
+			else if (GeneralUtils.isMac()) {
 				conf_dir_fh = Gdx.files.external("Library/Application Support/" + app_name);
 			}
 			// Linux + BSDs

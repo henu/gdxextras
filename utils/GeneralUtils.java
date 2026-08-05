@@ -2,11 +2,28 @@ package fi.henu.gdxextras.utils;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.utils.Os;
+import com.badlogic.gdx.utils.SharedLibraryLoader;
 
 import java.util.concurrent.Callable;
 
 public class GeneralUtils
 {
+	public static boolean isWindows()
+	{
+		return SharedLibraryLoader.os == Os.Windows;
+	}
+
+	public static boolean isLinux()
+	{
+		return SharedLibraryLoader.os == Os.Linux;
+	}
+
+	public static boolean isMac()
+	{
+		return SharedLibraryLoader.os == Os.MacOsX;
+	}
+
 	public static final int KB_META_ALT_LEFT = 0x0001;
 	public static final int KB_META_ALT_RIGHT = 0x0002;
 	public static final int KB_META_ALT = 0x0004;
