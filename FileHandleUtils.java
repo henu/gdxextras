@@ -27,10 +27,12 @@ public class FileHandleUtils
 
 	public static FileHandle getConfigFileHandle(String app_name)
 	{
-		if (Gdx.app.getType() == Application.ApplicationType.Android) {
+		// Android and iOS
+		if (Gdx.app.getType() == Application.ApplicationType.Android || Gdx.app.getType() == Application.ApplicationType.iOS) {
 			return Gdx.files.local("");
 		}
 
+		// Desktop
 		if (Gdx.app.getType() == Application.ApplicationType.Desktop) {
 			if (GeneralUtils.isLinux()) {
 				return Gdx.files.external(".config/" + app_name);
@@ -47,8 +49,8 @@ public class FileHandleUtils
 	// Returns the more fine tuned place to store the configuration, save, etc. files.
 	public static FileHandle config(String app_name, String path)
 	{
-		// Android
-		if (Gdx.app.getType() == Application.ApplicationType.Android) {
+		// Android and iOS
+		if (Gdx.app.getType() == Application.ApplicationType.Android || Gdx.app.getType() == Application.ApplicationType.iOS) {
 			return Gdx.files.local(path);
 		}
 		// Desktop
