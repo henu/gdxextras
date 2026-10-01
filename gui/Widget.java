@@ -463,6 +463,23 @@ public abstract class Widget
 		return size.y;
 	}
 
+	// Tells minimum width needed. Includes margins,
+	// so actual width of widget will be thinner.
+	public float getMinWidth()
+	{
+		if (shrunken) return 0;
+		return margin * 2 + Math.max(fixed_min_width, doGetMinWidth());
+	}
+
+	// Tells minimum height needed, when fit to a specific width.
+	// Both result and "width" includes margins, so actual size
+	// of widget will be smaller in both dimensions.
+	public float getMinHeight(float width)
+	{
+		if (shrunken) return 0;
+		return margin * 2 + Math.max(fixed_min_height, doGetMinHeight(width - margin * 2));
+	}
+
 	// This may be only called by Gui and Widget!
 	public void setGui(Gui gui)
 	{
@@ -523,23 +540,6 @@ public abstract class Widget
 		if (parent != null) {
 			parent.markToNeedReposition();
 		}
-	}
-
-	// Tells minimum width needed. Includes margins,
-	// so actual width of widget will be thinner.
-	protected float getMinWidth()
-	{
-		if (shrunken) return 0;
-		return margin * 2 + Math.max(fixed_min_width, doGetMinWidth());
-	}
-
-	// Tells minimum height needed, when fit to a specific width.
-	// Both result and "width" includes margins, so actual size
-	// of widget will be smaller in both dimensions.
-	protected float getMinHeight(float width)
-	{
-		if (shrunken) return 0;
-		return margin * 2 + Math.max(fixed_min_height, doGetMinHeight(width - margin * 2));
 	}
 
 	protected int getHorizontalExpandingForRepositioning()

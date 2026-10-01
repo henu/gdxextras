@@ -87,6 +87,7 @@ public class Vectorcontainer extends Widget
 		}
 	}
 
+	@Override
 	protected void doRepositioning()
 	{
 		if (widgets.size == 0) {
