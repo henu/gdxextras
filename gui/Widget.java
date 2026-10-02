@@ -542,6 +542,14 @@ public abstract class Widget
 		}
 	}
 
+	protected void markToNeedRepositionRecursively()
+	{
+		reposition_needed = true;
+		for (Widget child : children) {
+			child.markToNeedRepositionRecursively();
+		}
+	}
+
 	protected int getHorizontalExpandingForRepositioning()
 	{
 		if (shrunken) return 0;

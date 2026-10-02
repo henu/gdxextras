@@ -119,7 +119,7 @@ public class Gui implements InputProcessor
 			width_in_gui_units = width / scaling;
 			height_in_gui_units = height / scaling;
 			if (widget != null) {
-				widget.markToNeedReposition();
+				widget.markToNeedRepositionRecursively();
 			}
 			// Update projection of Spritebatch and Shaperenderer
 			Matrix4 projection_matrix = new Matrix4();
@@ -135,7 +135,7 @@ public class Gui implements InputProcessor
 			width_in_gui_units = width;
 			height_in_gui_units = height;
 			if (widget != null) {
-				widget.markToNeedReposition();
+				widget.markToNeedRepositionRecursively();
 			}
 			// Update projection of Spritebatch and Shaperenderer
 			Matrix4 projection_matrix = new Matrix4();
