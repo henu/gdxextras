@@ -5,6 +5,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.utils.Os;
 import com.badlogic.gdx.utils.SharedLibraryLoader;
 
+import java.util.Locale;
 import java.util.concurrent.Callable;
 
 public class GeneralUtils
@@ -114,5 +115,15 @@ public class GeneralUtils
 		}
 
 		return true;
+	}
+
+	// Returns the ISO-639 two-letter code of the user's language or null if the language cannot be detected.
+	public static String getLanguage()
+	{
+		String language = Locale.getDefault().getLanguage();
+		if (language.isEmpty()) {
+			return null;
+		}
+		return language;
 	}
 }
