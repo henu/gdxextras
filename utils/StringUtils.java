@@ -128,4 +128,17 @@ public class StringUtils
 		}
 		return slugbuilder.toString();
 	}
+
+	// Replacement for `String.join()`, that MobiVM lacks
+	public static String join(String separator, String[] elements)
+	{
+		StringBuilder result = new StringBuilder();
+		for (int i = 0; i < elements.length; ++ i) {
+			if (i > 0) {
+				result.append(separator);
+			}
+			result.append(elements[i]);
+		}
+		return result.toString();
+	}
 }
