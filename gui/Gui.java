@@ -18,6 +18,7 @@ public class Gui implements InputProcessor
 		key_press_handlers = new IntMap<>();
 		key_release_handlers = new IntMap<>();
 		repeating_key = -1;
+		closed = false;
 	}
 
 	// Automatically scale GUI, so that the diagonal is always the given
@@ -51,6 +52,7 @@ public class Gui implements InputProcessor
 
 	public void close()
 	{
+		closed = true;
 		if (batch != null) {
 			batch.dispose();
 			batch = null;
@@ -242,6 +244,10 @@ public class Gui implements InputProcessor
 	@Override
 	public boolean keyDown(int keycode)
 	{
+		if (closed) {
+			return false;
+		}
+
 		// Any key, except meta keys, halts possible repeating
 		if (keycode != Input.Keys.SHIFT_RIGHT && keycode != Input.Keys.SHIFT_LEFT && keycode != Input.Keys.CONTROL_RIGHT && keycode != Input.Keys.CONTROL_LEFT && keycode != Input.Keys.ALT_RIGHT && keycode != Input.Keys.ALT_LEFT) {
 			repeating_key = -1;
@@ -275,6 +281,10 @@ public class Gui implements InputProcessor
 	@Override
 	public boolean keyTyped(char character)
 	{
+		if (closed) {
+			return false;
+		}
+
 		if (keyboardlistener != null) {
 			keyboardlistener.keyTyped(character);
 			return true;
@@ -285,6 +295,10 @@ public class Gui implements InputProcessor
 	@Override
 	public boolean keyUp(int keycode)
 	{
+		if (closed) {
+			return false;
+		}
+
 		// Any key, except meta keys, halts possible repeating
 		if (keycode != Input.Keys.SHIFT_RIGHT && keycode != Input.Keys.SHIFT_LEFT && keycode != Input.Keys.CONTROL_RIGHT && keycode != Input.Keys.CONTROL_LEFT && keycode != Input.Keys.ALT_RIGHT && keycode != Input.Keys.ALT_LEFT) {
 			repeating_key = -1;
@@ -305,6 +319,10 @@ public class Gui implements InputProcessor
 	@Override
 	public boolean scrolled(float amount_x, float amount_y)
 	{
+		if (closed) {
+			return false;
+		}
+
 		Widget mouse_topmost = getTopmostWidget(mouse_last_pos);
 		if (mouse_topmost != null) {
 			mouse_topmost.scrolled(amount_x, amount_y);
@@ -317,6 +335,10 @@ public class Gui implements InputProcessor
 	@Override
 	public boolean touchDown(int x, int y, int pointer_id, int button)
 	{
+		if (closed) {
+			return false;
+		}
+
 		// Swap coordinates and get topmost widget
 		v2tmp.x = x * width_in_gui_units / width_in_pixels;
 		v2tmp.y = (height_in_pixels - y) * height_in_gui_units / height_in_pixels;
@@ -347,6 +369,10 @@ public class Gui implements InputProcessor
 	@Override
 	public boolean touchDragged(int x, int y, int pointer_id)
 	{
+		if (closed) {
+			return false;
+		}
+
 // TODO: In future, let Widgets to force repositioning of Widgets immediately after input event! This is necessary for example when dragging stuff.
 		// Swap coordinates and get topmost widget
 		v2tmp.x = x * width_in_gui_units / width_in_pixels;
@@ -365,6 +391,10 @@ public class Gui implements InputProcessor
 	@Override
 	public boolean mouseMoved(int x, int y)
 	{
+		if (closed) {
+			return false;
+		}
+
 		// Mouse over is not supported for widgets, but store coordinates so
 		// scroll wheel can be applied to correct Widget.
 		mouse_last_pos.x = x * width_in_gui_units / width_in_pixels;
@@ -375,6 +405,10 @@ public class Gui implements InputProcessor
 	@Override
 	public boolean touchUp(int x, int y, int pointer_id, int button)
 	{
+		if (closed) {
+			return false;
+		}
+
 		// Swap coordinates and get topmost widget
 		v2tmp.x = x * width_in_gui_units / width_in_pixels;
 		v2tmp.y = (height_in_pixels - y) * height_in_gui_units / height_in_pixels;
@@ -392,6 +426,10 @@ public class Gui implements InputProcessor
 	@Override
 	public boolean touchCancelled(int x, int y, int pointer_id, int button)
 	{
+		if (closed) {
+			return false;
+		}
+
 		// Swap coordinates and get topmost widget
 		v2tmp.x = x * width_in_gui_units / width_in_pixels;
 		v2tmp.y = (height_in_pixels - y) * height_in_gui_units / height_in_pixels;
@@ -505,6 +543,8 @@ public class Gui implements InputProcessor
 	// so it needs to be done manually. These are used for it.
 	private int repeating_key;
 	private long repeating_key_at;
+
+	private boolean closed;
 
 	private void storeTopmostWidget(int pointer_id, Widget topmost)
 	{
