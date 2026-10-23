@@ -8,7 +8,7 @@ public class BackgroundWorker
 	{
 		queue = new RingBuffer<Runnable>();
 		threads = new Thread[number_of_threads];
-		for (int i = 0; i < number_of_threads; ++ i) {
+		for (int i = 0; i < number_of_threads; ++i) {
 			Thread thread = new Thread(new Runner());
 			thread.start();
 			threads[i] = thread;
@@ -29,7 +29,7 @@ public class BackgroundWorker
 		synchronized (queue) {
 			queue.notifyAll();
 		}
-		for (int i = 0; i < threads.length; ++ i) {
+		for (int i = 0; i < threads.length; ++i) {
 			if (threads[i] != null) {
 				try {
 					threads[i].join();

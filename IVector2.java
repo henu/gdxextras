@@ -89,7 +89,8 @@ public class IVector2 implements Byteserializable
 		return new IVector2(x, y);
 	}
 
-	public void scl(int i) {
+	public void scl(int i)
+	{
 		x *= i;
 		y *= i;
 	}
@@ -99,7 +100,8 @@ public class IVector2 implements Byteserializable
 		sub(pos.x, pos.y);
 	}
 
-	private void sub(int x, int y) {
+	private void sub(int x, int y)
+	{
 		this.x -= x;
 		this.y -= y;
 	}

@@ -121,7 +121,8 @@ public class SVector2 implements Byteserializable
 		return new SVector2(x, y);
 	}
 
-	public void scl(short s) {
+	public void scl(short s)
+	{
 		x *= s;
 		y *= s;
 	}

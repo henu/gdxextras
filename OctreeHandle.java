@@ -89,6 +89,7 @@ public class OctreeHandle extends Transformhandle
 		// Mark to need update
 		update_required = true;
 	}
+
 	public void translate(Vector3 v)
 	{
 		translate(v.x, v.y, v.z);

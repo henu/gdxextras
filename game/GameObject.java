@@ -101,7 +101,7 @@ public class GameObject
 
 		int result_old_size = result.size;
 		shape.findCollisionsTo(result, obj.shape, obj_rel_pos_x, obj_rel_pos_y, obj_rel_pos_z, extra_margin, false);
-		for (int i = result_old_size; i < result.size; ++ i) {
+		for (int i = result_old_size; i < result.size; ++i) {
 			Collision coll = result.get(i);
 			coll.setCollider(this);
 			coll.setTarget(obj);
@@ -110,7 +110,7 @@ public class GameObject
 
 	public void addCollisions(Array<Collision> colls, boolean flip_colliders, boolean copy_coll)
 	{
-		for (int coll_i = 0; coll_i < colls.size; ++ coll_i) {
+		for (int coll_i = 0; coll_i < colls.size; ++coll_i) {
 			addCollision(colls.get(coll_i), flip_colliders, copy_coll);
 		}
 	}

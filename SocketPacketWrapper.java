@@ -121,7 +121,8 @@ public class SocketPacketWrapper
 				// Read
 				try {
 					buf_size = socket.getInputStream().read(buf);
-				} catch (IOException e) {
+				}
+				catch (IOException e) {
 					return;
 				}
 				if (buf_size < 0) {

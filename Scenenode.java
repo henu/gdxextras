@@ -7,9 +7,11 @@ import com.badlogic.gdx.math.collision.BoundingBox;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-public class Scenenode {
+public class Scenenode
+{
 
-	public Scenenode() {
+	public Scenenode()
+	{
 		parent = null;
 		children = new ArrayList<Scenenode>();
 		transf = new Matrix4();
@@ -26,7 +28,8 @@ public class Scenenode {
 	// as possible from it. After calling this, the scenenode
 	// is unusable. This mimics destroying of object in C++
 	// or other languages where is no garbage collection.
-	public void close() {
+	public void close()
+	{
 		parent = null;
 		Iterator<Scenenode> children_it = children.iterator();
 		while (children_it.hasNext()) {
@@ -39,7 +42,8 @@ public class Scenenode {
 		bb = null;
 	}
 
-	public void setParent(Scenenode parent) {
+	public void setParent(Scenenode parent)
+	{
 		// Remove possible old parent
 		if (this.parent != null) {
 			this.parent.unregisterChild(this);
@@ -54,19 +58,22 @@ public class Scenenode {
 		transformChanged();
 	}
 
-	public void reset() {
+	public void reset()
+	{
 		transf.idt();
 		transformChanged();
 	}
 
 	// Sets boundingbox to new one
-	public void setBoundingbox(BoundingBox bbox) {
+	public void setBoundingbox(BoundingBox bbox)
+	{
 		bb.set(bbox);
 		markTotalBoundingsphereToNeedRecalculation();
 	}
 
 	// Adds boundingbox to existing one
-	public void addBoundingbox(BoundingBox bbox) {
+	public void addBoundingbox(BoundingBox bbox)
+	{
 		if (!bb.isValid()) {
 			bb.set(bbox);
 		} else {
@@ -77,14 +84,16 @@ public class Scenenode {
 
 	Matrix4 result = new Matrix4();
 
-	public void translate(float x, float y, float z) {
+	public void translate(float x, float y, float z)
+	{
 		result.setToTranslation(x, y, z);
 		result.mul(transf);
 		transf.set(result.val);
 		transformChanged();
 	}
 
-	public void rotate(float axis_x, float axis_y, float axis_z, float angle) {
+	public void rotate(float axis_x, float axis_y, float axis_z, float angle)
+	{
 
 		result.setToRotation(axis_x, axis_y, axis_z, angle);
 		result.mul(transf);
@@ -92,32 +101,37 @@ public class Scenenode {
 		transformChanged();
 	}
 
-	public void scale(float x, float y, float z) {
+	public void scale(float x, float y, float z)
+	{
 		result.setToScaling(x, y, z);
 		result.mul(transf);
 		transf.set(result.val);
 		transformChanged();
 	}
 
-	public void translate(Vector3 v) {
+	public void translate(Vector3 v)
+	{
 		translate(v.x, v.y, v.z);
 	}
 
-	public void scale(Vector3 v) {
+	public void scale(Vector3 v)
+	{
 		scale(v.x, v.y, v.z);
 	}
 
-	public void rotate(Vector3 v, float angle) {
+	public void rotate(Vector3 v, float angle)
+	{
 		rotate(v.x, v.y, v.z, angle);
 	}
 
 	// Updates absolute transform. This may be only called if this
 	// Scenenode is a root of scenegraph. This also updates absolute
 	// transforms of all children that need updating.
-	public void updateAbsoluteTransform() {
+	public void updateAbsoluteTransform()
+	{
 		if (parent != null) {
 			throw new RuntimeException(
-					"Only root of scenegraph can be updated!");
+				"Only root of scenegraph can be updated!");
 		}
 
 		// Check if this call is useless
@@ -130,15 +144,17 @@ public class Scenenode {
 		updateAbsoluteTransform(transf);
 	}
 
-	public final Matrix4 getAbsoluteTransform() {
+	public final Matrix4 getAbsoluteTransform()
+	{
 		if (transf_abs_uptodate != UpToDateStatus.YES) {
 			throw new RuntimeException(
-					"Unable to get absolute transform because it is not up to date!");
+				"Unable to get absolute transform because it is not up to date!");
 		}
 		return transf_abs;
 	}
 
-	private enum UpToDateStatus {
+	private enum UpToDateStatus
+	{
 		YES, NO, NO_FOR_CHILDREN
 	}
 
@@ -165,15 +181,17 @@ public class Scenenode {
 	// Boundingbox of just this scenenode. Relative to this Scenenode.
 	BoundingBox bb;
 
-	private void registerChild(Scenenode child) {
+	private void registerChild(Scenenode child)
+	{
 		assert child != null;
 		assert !children.contains(child);
 		// Ensure this will not make loop of parents
 		Scenenode check_parent = this;
 		do {
-			if (child == check_parent)
+			if (child == check_parent) {
 				throw new RuntimeException(
-						"Unable to add child to scenenode, because that would result to loop in scenegraph!");
+					"Unable to add child to scenenode, because that would result to loop in scenegraph!");
+			}
 			check_parent = check_parent.parent;
 		} while (check_parent != null);
 		children.add(child);
@@ -184,7 +202,8 @@ public class Scenenode {
 		markTotalBoundingsphereToNeedRecalculation();
 	}
 
-	private void unregisterChild(Scenenode child) {
+	private void unregisterChild(Scenenode child)
+	{
 		assert child != null;
 		assert children.contains(child);
 		children.remove(child);
@@ -203,7 +222,8 @@ public class Scenenode {
 
 	// Marks that this Scenenode has no parent. Also marks
 	// that absolute transform needs recalculation.
-	private void parentHasClosed() {
+	private void parentHasClosed()
+	{
 		parent = null;
 		transformChangedRaw();
 	}
@@ -211,14 +231,17 @@ public class Scenenode {
 	// Marks transform changed if Scenenode is visible and not already out
 	// of date. Transform is marked out of date for children too, and parent
 	// is informed about this. Also boundingbox is set out of date.
-	private void transformChanged() {
+	private void transformChanged()
+	{
 		// If hidden, then do nothing
-		if (!visible)
+		if (!visible) {
 			return;
+		}
 
 		// If already obsolete, then do nothing
-		if (transf_abs_uptodate == UpToDateStatus.NO)
+		if (transf_abs_uptodate == UpToDateStatus.NO) {
 			return;
+		}
 
 		// Mark all children to need recalculation too
 
@@ -230,8 +253,7 @@ public class Scenenode {
 
 		// Inform parent (and grandparents) also
 		Scenenode infoparent = parent;
-		while (infoparent != null
-				&& infoparent.transf_abs_uptodate == UpToDateStatus.YES) {
+		while (infoparent != null && infoparent.transf_abs_uptodate == UpToDateStatus.YES) {
 			infoparent.transf_abs_uptodate = UpToDateStatus.NO_FOR_CHILDREN;
 			infoparent = infoparent.parent;
 		}
@@ -241,13 +263,16 @@ public class Scenenode {
 
 	// Marks absolute transform out of date but does not inform parent
 	// about this. This method does not take care of boundingbox either.
-	private void transformChangedRaw() {
+	private void transformChangedRaw()
+	{
 		// If absolute transform has already been marked out
 		// of date or if Scenenode is hidden, then do nothing.
-		if (transf_abs_uptodate == UpToDateStatus.NO)
+		if (transf_abs_uptodate == UpToDateStatus.NO) {
 			return;
-		if (!visible)
+		}
+		if (!visible) {
 			return;
+		}
 
 		for (int i = 0, size = children.size(); i < size; i++) {
 			children.get(i).transformChangedRaw();
@@ -255,7 +280,8 @@ public class Scenenode {
 		transf_abs_uptodate = UpToDateStatus.NO;
 	}
 
-	private void markTotalBoundingsphereToNeedRecalculation() {
+	private void markTotalBoundingsphereToNeedRecalculation()
+	{
 		Scenenode totalbb_owner = this;
 		while (totalbb_owner.totalbb_uptodate) {
 			totalbb_owner.totalbb_uptodate = false;
@@ -266,14 +292,14 @@ public class Scenenode {
 		}
 	}
 
-	private void updateAbsoluteTransform(final Matrix4 parent_transf_abs) {
+	private void updateAbsoluteTransform(final Matrix4 parent_transf_abs)
+	{
 		// If hidden, then do nothing
 		if (!visible) {
 			return;
 		}
 
-		assert parent != null
-				|| parent.transf_abs_uptodate != UpToDateStatus.NO;
+		assert parent == null || parent.transf_abs_uptodate != UpToDateStatus.NO;
 		assert transf_abs_uptodate != UpToDateStatus.YES;
 
 		// Update absolute transform if it's really needed
@@ -294,7 +320,8 @@ public class Scenenode {
 		}
 	}
 
-	private void checkIfAllChildrenHasAbsoluteTransformsUpToDate() {
+	private void checkIfAllChildrenHasAbsoluteTransformsUpToDate()
+	{
 		assert transf_abs_uptodate == UpToDateStatus.NO_FOR_CHILDREN;
 		boolean all_up_to_date = true;
 		for (int i = 0, size = children.size(); i < size; i++) {

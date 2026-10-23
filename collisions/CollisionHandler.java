@@ -24,7 +24,7 @@ public class CollisionHandler
 		// Find out what collisions is the deepest one
 		int deepest = 0;
 		float deepest_depth = colls.get(0).getDepth();
-		for (int colls_i = 1; colls_i < colls.size; colls_i ++) {
+		for (int colls_i = 1; colls_i < colls.size; colls_i++) {
 			Collision coll = colls.get(colls_i);
 			if (coll.getDepth() > deepest_depth) {
 				deepest_depth = coll.getDepth();
@@ -61,7 +61,7 @@ public class CollisionHandler
 		float deepest2_nrm_p_x = 0;
 		float deepest2_nrm_p_y = 0;
 		float deepest2_nrm_p_z = 0;
-		for (int colls_i = 0; colls_i < colls.size; ++ colls_i) {
+		for (int colls_i = 0; colls_i < colls.size; ++colls_i) {
 			// Skip deepest collision
 			if (colls_i == deepest) {
 				continue;
@@ -149,7 +149,7 @@ public class CollisionHandler
 		float deepest3_move_x = 0;
 		float deepest3_move_y = 0;
 		float deepest3_move_z = 0;
-		for (int colls_i = 0; colls_i < colls.size; ++ colls_i) {
+		for (int colls_i = 0; colls_i < colls.size; ++colls_i) {
 			// Skip deepest collisions
 			if (colls_i == deepest || colls_i == deepest2) {
 				continue;
@@ -216,7 +216,7 @@ public class CollisionHandler
 		// Find out what collisions is the deepest one
 		int deepest = 0;
 		float deepest_depth = colls.get(0).getDepth();
-		for (int colls_i = 1; colls_i < colls.size; colls_i ++) {
+		for (int colls_i = 1; colls_i < colls.size; colls_i++) {
 			Collision2D coll = colls.get(colls_i);
 			if (coll.getDepth() > deepest_depth) {
 				deepest_depth = coll.getDepth();
@@ -255,7 +255,7 @@ public class CollisionHandler
 		for (int colls_i = 0; colls_i < colls.size; ) {
 			// Skip deepest collision
 			if (colls_i == deepest) {
-				++ colls_i;
+				++colls_i;
 				continue;
 			}
 			Collision2D coll = colls.get(colls_i);
@@ -272,7 +272,7 @@ public class CollisionHandler
 				// "deepest" still points to the correct collision.
 				if (colls.ordered) {
 					if (colls_i < deepest) {
-						-- deepest;
+						--deepest;
 					}
 				} else {
 					if (deepest == colls.size - 1) {
@@ -292,7 +292,7 @@ public class CollisionHandler
 			// If this is zero, then it means that this collision has almost the same normal, as
 			// the already fixed collision. In this case, this does not need fixing, so skip it!
 			if (Math.abs(dp_n_f2v) <= 0.0001) {
-				++ colls_i;
+				++colls_i;
 				continue;
 			}
 			// Calculate how much fix2v should be added, so this collision would be fixed.
@@ -305,7 +305,7 @@ public class CollisionHandler
 				deepest2 = colls_i;
 			}
 
-			++ colls_i;
+			++colls_i;
 		}
 
 		// If new "deepest" collision was found, then fix along fix2v
@@ -318,7 +318,7 @@ public class CollisionHandler
 	// Uses every collision to bounce object
 	public static void bounce(Vector3 vel, Array<Collision> colls)
 	{
-		for (int colls_i = 0; colls_i < colls.size; ++ colls_i) {
+		for (int colls_i = 0; colls_i < colls.size; ++colls_i) {
 			Collision coll = colls.get(colls_i);
 			// This is a doubled "distance" from velocity vector to the "plane"
 			float d = 2 * Mathutils.distanceToPlane(-vel.x, -vel.y, -vel.z, coll.getNormalX(), coll.getNormalY(), coll.getNormalZ());
@@ -331,7 +331,7 @@ public class CollisionHandler
 	// Uses every collision to bounce object
 	public static void bounce(Vector2 vel, Array<Collision2D> colls)
 	{
-		for (int colls_i = 0; colls_i < colls.size; ++ colls_i) {
+		for (int colls_i = 0; colls_i < colls.size; ++colls_i) {
 			Collision2D coll = colls.get(colls_i);
 			// This is a doubled "distance" from velocity vector to the "plane"
 			float d = 2 * Mathutils.distanceToPlane(-vel.x, -vel.y, coll.getNormalX(), coll.getNormalY());

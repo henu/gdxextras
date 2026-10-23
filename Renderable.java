@@ -117,9 +117,20 @@ public class Renderable
 		}
 	}
 
-	public int getNumMeshes() { return meshes.size; }
-	public Mesh getMesh(int mesh_id) { return meshes.get(mesh_id); }
-	public Genericmaterial getMaterial(int mesh_id) { return mats.get(mesh_id); }
+	public int getNumMeshes()
+	{
+		return meshes.size;
+	}
+
+	public Mesh getMesh(int mesh_id)
+	{
+		return meshes.get(mesh_id);
+	}
+
+	public Genericmaterial getMaterial(int mesh_id)
+	{
+		return mats.get(mesh_id);
+	}
 
 	private Transformhandle transfh;
 

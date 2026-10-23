@@ -25,7 +25,7 @@ public class Bytes
 	{
 		ensureAvailable(1);
 		buf[items] = b;
-		items ++;
+		items++;
 	}
 
 	public void pushShort(short s)
@@ -78,7 +78,8 @@ public class Bytes
 		byte[] str_bytes_utf8;
 		try {
 			str_bytes_utf8 = str.getBytes("UTF-8");
-		} catch (UnsupportedEncodingException e) {
+		}
+		catch (UnsupportedEncodingException e) {
 			throw new RuntimeException("Unable to serialize string!");
 		}
 		pushInt(str_bytes_utf8.length);
@@ -134,7 +135,8 @@ public class Bytes
 		buf.get(str_utf8);
 		try {
 			return new String(str_utf8, "UTF-8");
-		} catch (UnsupportedEncodingException e) {
+		}
+		catch (UnsupportedEncodingException e) {
 			throw new RuntimeException("Unable to encode string from bytes with UTF-8!");
 		}
 	}

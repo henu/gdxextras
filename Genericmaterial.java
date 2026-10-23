@@ -26,7 +26,7 @@ public class Genericmaterial
 	}
 
 	@SuppressWarnings("unchecked")
-	public Genericmaterial(FileHandle fh, Map< String, Texture > texs)
+	public Genericmaterial(FileHandle fh, Map<String, Texture> texs)
 	{
 		ensureShadermanagerExists();
 		reset();
@@ -34,7 +34,7 @@ public class Genericmaterial
 		String json_str = fh.readString("utf-8");
 		JsonReader jsonreader = new JsonReader();
 		Object json_raw = jsonreader.parse(json_str);
-		OrderedMap< String, Object > json = (OrderedMap< String, Object >)json_raw;
+		OrderedMap<String, Object> json = (OrderedMap<String, Object>)json_raw;
 		// Extract data from JSON
 		if (json.containsKey("colormap")) {
 			colormap = texs.get(json.get("colormap"));
@@ -49,7 +49,7 @@ public class Genericmaterial
 			round_alpha = (Boolean)json.get("round alpha");
 		}
 		if (json.containsKey("color")) {
-			Array< Object > color_arr = (Array< Object >)json.get("color");
+			Array<Object> color_arr = (Array<Object>)json.get("color");
 			color = new Vector3();
 			color.x = (Float)color_arr.get(0);
 			color.y = (Float)color_arr.get(1);
@@ -63,17 +63,42 @@ public class Genericmaterial
 	}
 
 	// Setters of options
-	public void setColormap(Texture colormap) { this.colormap = colormap; shader = null; }
-	public void setTwosided(boolean twosided) { this.twosided = twosided; shader = null; }
-	public void setShadeless(boolean shadeless) { this.shadeless = shadeless; shader = null; }
-	public void setRoundAlpha(boolean round_alpha) { this.round_alpha = round_alpha; shader = null; }
-	public void setColor(Vector3 color) { this.color.set(color); shader = null; }
+	public void setColormap(Texture colormap)
+	{
+		this.colormap = colormap;
+		shader = null;
+	}
+
+	public void setTwosided(boolean twosided)
+	{
+		this.twosided = twosided;
+		shader = null;
+	}
+
+	public void setShadeless(boolean shadeless)
+	{
+		this.shadeless = shadeless;
+		shader = null;
+	}
+
+	public void setRoundAlpha(boolean round_alpha)
+	{
+		this.round_alpha = round_alpha;
+		shader = null;
+	}
+
+	public void setColor(Vector3 color)
+	{
+		this.color.set(color);
+		shader = null;
+	}
 
 	// Rendering functions
 	private final float[] render_light_color_buf = { 0, 0, 0, 1 };
 	private final float[] render_light_dir_neg_buf = { 0, 0, 0, 1 };
 	private final float[] render_light_ambient_buf = { 0, 0, 0, 1 };
 	private final float[] render_color_buf = { 0, 0, 0, 1 };
+
 	public void render(GL20 gl, Mesh mesh, Matrix4 mat_modelviewproj, Matrix4 mat_nrm, ArrayList<Light> lights, Vector3 ambient_light)
 	{
 
@@ -301,7 +326,7 @@ public class Genericmaterial
 	private void getShader()
 	{
 		// Construct flags
-		TreeSet<String> flags = new TreeSet< String >();
+		TreeSet<String> flags = new TreeSet<String>();
 
 		// Go options through and enable flags
 		if (round_alpha) flags.add("ROUND_ALPHA");

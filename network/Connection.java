@@ -279,7 +279,8 @@ public class Connection
 				// Read
 				try {
 					buf_size = socket.getInputStream().read(buf);
-				} catch (IOException e) {
+				}
+				catch (IOException e) {
 					closed = true;
 					return;
 				}

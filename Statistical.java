@@ -24,7 +24,7 @@ public class Statistical
 		result1.set((float)Math.random() * 2 - 1, (float)Math.random() * 2 - 1, (float)Math.random() * 2 - 1);
 		for (int iter = 0; iter < ITERATIONS; iter++) {
 			temp.set(0, 0, 0);
-			for (int data_ofs = 0; data_ofs < data_size; data_ofs ++) {
+			for (int data_ofs = 0; data_ofs < data_size; data_ofs++) {
 				datapoint.set(data[data_ofs]);
 				float dot_result_datapoint = result1.dot(datapoint);
 				datapoint.scl(dot_result_datapoint);

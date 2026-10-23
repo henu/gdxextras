@@ -41,51 +41,63 @@ public class OctreeRegion
 		// it means, that it cannot be fit to any of the children. This means,
 		// that region must return itself.
 		char child_id = 0;
-		if (test_bb.min.x >= bb_center.x) child_id += 1;
-		else if (test_bb.max.x <= bb_center.x) child_id += 0;
-		else return this;
-		if (test_bb.min.y >= bb_center.y) child_id += 2;
-		else if (test_bb.max.y <= bb_center.y) child_id += 0;
-		else return this;
-		if (test_bb.min.z >= bb_center.z) child_id += 4;
-		else if (test_bb.max.z <= bb_center.z) child_id += 0;
-		else return this;
+		if (test_bb.min.x >= bb_center.x) {
+			child_id += 1;
+		} else if (test_bb.max.x <= bb_center.x) {
+			child_id += 0;
+		} else {
+			return this;
+		}
+		if (test_bb.min.y >= bb_center.y) {
+			child_id += 2;
+		} else if (test_bb.max.y <= bb_center.y) {
+			child_id += 0;
+		} else {
+			return this;
+		}
+		if (test_bb.min.z >= bb_center.z) {
+			child_id += 4;
+		} else if (test_bb.max.z <= bb_center.z) {
+			child_id += 0;
+		} else {
+			return this;
+		}
 
 		// If child does not exist, then create it now
 		if (children[child_id] == null) {
 			switch (child_id) {
-			case 0:
-				find_childmin.set(bb.min.x, bb.min.y, bb.min.z);
-				find_childmax.set(bb_center.x, bb_center.y, bb_center.z);
-				break;
-			case 1:
-				find_childmin.set(bb_center.x, bb.min.y, bb.min.z);
-				find_childmax.set(bb.max.x, bb_center.y, bb_center.z);
-				break;
-			case 2:
-				find_childmin.set(bb.min.x, bb_center.y, bb.min.z);
-				find_childmax.set(bb_center.x, bb.max.y, bb_center.z);
-				break;
-			case 3:
-				find_childmin.set(bb_center.x, bb_center.y, bb.min.z);
-				find_childmax.set(bb.max.x, bb.max.y, bb_center.z);
-				break;
-			case 4:
-				find_childmin.set(bb.min.x, bb.min.y, bb_center.z);
-				find_childmax.set(bb_center.x, bb_center.y, bb.max.z);
-				break;
-			case 5:
-				find_childmin.set(bb_center.x, bb.min.y, bb_center.z);
-				find_childmax.set(bb.max.x, bb_center.y, bb.max.z);
-				break;
-			case 6:
-				find_childmin.set(bb.min.x, bb_center.y, bb_center.z);
-				find_childmax.set(bb_center.x, bb.max.y, bb.max.z);
-				break;
-			case 7:
-				find_childmin.set(bb_center.x, bb_center.y, bb_center.z);
-				find_childmax.set(bb.max.x, bb.max.y, bb.max.z);
-				break;
+				case 0:
+					find_childmin.set(bb.min.x, bb.min.y, bb.min.z);
+					find_childmax.set(bb_center.x, bb_center.y, bb_center.z);
+					break;
+				case 1:
+					find_childmin.set(bb_center.x, bb.min.y, bb.min.z);
+					find_childmax.set(bb.max.x, bb_center.y, bb_center.z);
+					break;
+				case 2:
+					find_childmin.set(bb.min.x, bb_center.y, bb.min.z);
+					find_childmax.set(bb_center.x, bb.max.y, bb_center.z);
+					break;
+				case 3:
+					find_childmin.set(bb_center.x, bb_center.y, bb.min.z);
+					find_childmax.set(bb.max.x, bb.max.y, bb_center.z);
+					break;
+				case 4:
+					find_childmin.set(bb.min.x, bb.min.y, bb_center.z);
+					find_childmax.set(bb_center.x, bb_center.y, bb.max.z);
+					break;
+				case 5:
+					find_childmin.set(bb_center.x, bb.min.y, bb_center.z);
+					find_childmax.set(bb.max.x, bb_center.y, bb.max.z);
+					break;
+				case 6:
+					find_childmin.set(bb.min.x, bb_center.y, bb_center.z);
+					find_childmax.set(bb_center.x, bb.max.y, bb.max.z);
+					break;
+				case 7:
+					find_childmin.set(bb_center.x, bb_center.y, bb_center.z);
+					find_childmax.set(bb.max.x, bb.max.y, bb.max.z);
+					break;
 			}
 			OctreeRegion new_child = new OctreeRegion(find_childmin, find_childmax, octree, this, child_id);
 			children[child_id] = new_child;

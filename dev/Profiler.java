@@ -78,7 +78,7 @@ public class Profiler
 		}
 		sections_sorted.sort();
 		for (ProfilerSection section : sections_sorted) {
-			for (int i = 0; i < depth; ++ i) {
+			for (int i = 0; i < depth; ++i) {
 				result += "  ";
 			}
 			result += section.name + " " + section.total_millis + " ms (" + MathUtils.round(section.total_relative_time * 100) + " %, " + MathUtils.round(section.relative_time * 100) + " %)\n";

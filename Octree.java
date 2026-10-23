@@ -15,6 +15,7 @@ public class Octree
 	}
 
 	private final BoundingBox findregion_realbb = new BoundingBox();
+
 	public OctreeRegion findRegion(BoundingBox bb, Matrix4 transf)
 	{
 		// Calculate real boundingbox

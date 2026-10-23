@@ -5,7 +5,7 @@ import java.nio.ByteBuffer;
 
 public class Deserializer
 {
-	
+
 	// Assumes string is UTF-8 encoded. size_bytes tells how many
 	// bytes are used to represent the number of bytes in string.
 	public static String deserializeString(ByteBuffer serialized, int size_bytes)
@@ -20,11 +20,11 @@ public class Deserializer
 		} else {
 			throw new RuntimeException("Invalid byte count " + size_bytes + " of string length!");
 		}
-		
+
 		// Read bytes
 		byte[] bytes = new byte[len];
 		serialized.get(bytes, 0, len);
-		
+
 		// Do conversion
 		String result;
 		try {

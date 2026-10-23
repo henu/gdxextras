@@ -54,7 +54,7 @@ public class CollisionFinder
 			return false;
 		}
 
-		for (char corner_i = 0; corner_i < 4; ++ corner_i) {
+		for (char corner_i = 0; corner_i < 4; ++corner_i) {
 			float corner_x;
 			float corner_z;
 			if (corner_i == 0) {
@@ -142,7 +142,7 @@ public class CollisionFinder
 			return false;
 		}
 
-		for (char corner_i = 0; corner_i < 4; ++ corner_i) {
+		for (char corner_i = 0; corner_i < 4; ++corner_i) {
 			float corner_x;
 			float corner_y;
 			if (corner_i == 0) {

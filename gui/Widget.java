@@ -261,19 +261,33 @@ public abstract class Widget
 
 		// Get real dimensions
 		float real_w, real_h;
-		if (expanding_horiz == 0) real_w = getMinWidth() - margin * 2;
-		else real_w = w;
-		if (expanding_vert == 0) real_h = getMinHeight(real_w + margin * 2) - margin * 2;
-		else real_h = h;
+		if (expanding_horiz == 0) {
+			real_w = getMinWidth() - margin * 2;
+		} else {
+			real_w = w;
+		}
+		if (expanding_vert == 0) {
+			real_h = getMinHeight(real_w + margin * 2) - margin * 2;
+		} else {
+			real_h = h;
+		}
 
 		// Calculate real position
 		float real_x, real_y;
-		if (expanding_horiz > 0 || align == Alignment.LEFT) real_x = x;
-		else if (align == Alignment.RIGHT) real_x = x + (w - real_w);
-		else real_x = x + (w - real_w) / 2f;
-		if (expanding_vert > 0 || valign == Alignment.BOTTOM) real_y = y;
-		else if (valign == Alignment.TOP) real_y = y + (h - real_h);
-		else real_y = y + (h - real_h) / 2f;
+		if (expanding_horiz > 0 || align == Alignment.LEFT) {
+			real_x = x;
+		} else if (align == Alignment.RIGHT) {
+			real_x = x + (w - real_w);
+		} else {
+			real_x = x + (w - real_w) / 2f;
+		}
+		if (expanding_vert > 0 || valign == Alignment.BOTTOM) {
+			real_y = y;
+		} else if (valign == Alignment.TOP) {
+			real_y = y + (h - real_h);
+		} else {
+			real_y = y + (h - real_h) / 2f;
+		}
 
 		// If position or size differs, then reposition is needed
 		if (real_x != pos.x || real_y != pos.y || real_w != size.x || real_h != size.y) {

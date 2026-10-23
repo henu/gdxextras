@@ -20,8 +20,11 @@ public class ByteQueue
 
 	public void writeBoolean(boolean b)
 	{
-		if (b) writeByte((byte)1);
-		else writeByte((byte)0);
+		if (b) {
+			writeByte((byte)1);
+		} else {
+			writeByte((byte)0);
+		}
 	}
 
 	public void writeByte(byte b)
@@ -155,7 +158,7 @@ public class ByteQueue
 		}
 		byte result = bytes[read];
 		read = (read + 1) % bytes.length;
-		-- size;
+		--size;
 		return result;
 	}
 

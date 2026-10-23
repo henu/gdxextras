@@ -12,7 +12,7 @@ public class StringUtils
 		Random rand = new Random();
 
 		StringBuilder sb = new StringBuilder(length);
-		for (int i = 0; i < length; ++ i) {
+		for (int i = 0; i < length; ++i) {
 			sb.append(chars.charAt(rand.nextInt(chars.length())));
 		}
 		return sb.toString();
@@ -53,7 +53,7 @@ public class StringUtils
 				}
 				// If no match
 				else {
-					substr += str.charAt(i ++);
+					substr += str.charAt(i++);
 				}
 			}
 			substr += str.substring(i);
@@ -70,7 +70,7 @@ public class StringUtils
 				if (splitted.get(i).isEmpty()) {
 					splitted.removeIndex(i);
 				} else {
-					++ i;
+					++i;
 				}
 			}
 		}
@@ -101,7 +101,7 @@ public class StringUtils
 		int idx = 0;
 
 		while ((idx = str.indexOf(substr, idx)) >= 0) {
-			++ count;
+			++count;
 			idx += substr.length();
 		}
 
@@ -114,7 +114,7 @@ public class StringUtils
 			return null;
 		}
 		StringBuilder slugbuilder = new StringBuilder();
-		for (int i = 0; i < str.length(); ++ i) {
+		for (int i = 0; i < str.length(); ++i) {
 			char c = str.charAt(i);
 			if (c >= 'a' && c <= 'z') {
 				slugbuilder.append(c);
@@ -133,7 +133,7 @@ public class StringUtils
 	public static String join(String separator, String[] elements)
 	{
 		StringBuilder result = new StringBuilder();
-		for (int i = 0; i < elements.length; ++ i) {
+		for (int i = 0; i < elements.length; ++i) {
 			if (i > 0) {
 				result.append(separator);
 			}

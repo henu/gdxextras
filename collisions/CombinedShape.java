@@ -13,7 +13,7 @@ public class CombinedShape implements Shape
 	public boolean findCollisionsTo(Array<Collision> result, Shape shape, float pos_x, float pos_y, float pos_z, float extra_margin, boolean flip_normals)
 	{
 		boolean colls_found = false;
-		for (int subshape_i = 0; subshape_i < subshapes.size; ++ subshape_i) {
+		for (int subshape_i = 0; subshape_i < subshapes.size; ++subshape_i) {
 			SubShape subshape = subshapes.get(subshape_i);
 			if (flip_normals) {
 				if (subshape.shape.findCollisionsTo(result, shape, pos_x - subshape.pos_x, pos_y - subshape.pos_y, pos_z - subshape.pos_z, extra_margin, flip_normals)) {

@@ -9,7 +9,7 @@ public class Cast
 		}
 		int bytes_len = str.length() / 2;
 		byte[] bytes = new byte[bytes_len];
-		for (int i = 0; i < bytes_len; ++ i) {
+		for (int i = 0; i < bytes_len; ++i) {
 			char c1 = str.charAt(i * 2 + 1);
 			char c2 = str.charAt(i * 2);
 			byte b = 0;

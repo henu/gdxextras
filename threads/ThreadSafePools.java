@@ -45,7 +45,7 @@ public class ThreadSafePools
 			return;
 		}
 		Pool pool = null;
-		for (int obj_i = 0; obj_i < objs.size; ++ obj_i) {
+		for (int obj_i = 0; obj_i < objs.size; ++obj_i) {
 			Object obj = objs.get(obj_i);
 			if (obj == null) {
 				continue;

@@ -28,9 +28,11 @@ public class Hash
 		try {
 			SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA256");
 			return factory.generateSecret(spec).getEncoded();
-		} catch (NoSuchAlgorithmException e) {
+		}
+		catch (NoSuchAlgorithmException e) {
 			throw new RuntimeException("Unable to initialize PDKF2 SHA256!");
-		} catch (InvalidKeySpecException e) {
+		}
+		catch (InvalidKeySpecException e) {
 			throw new RuntimeException("Invalid key!");
 		}
 	}
@@ -38,7 +40,7 @@ public class Hash
 	public static int djb2(String data)
 	{
 		int hash = 5381;
-		for (int i = 0; i < data.length(); ++ i) {
+		for (int i = 0; i < data.length(); ++i) {
 			hash = ((hash << 5) + hash) + data.charAt(i);
 		}
 		return hash;
