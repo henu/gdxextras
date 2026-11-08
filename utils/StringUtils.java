@@ -2,6 +2,7 @@ package fi.henu.gdxextras.utils;
 
 import com.badlogic.gdx.utils.Array;
 
+import java.util.Locale;
 import java.util.Random;
 
 public class StringUtils
@@ -77,9 +78,9 @@ public class StringUtils
 		return splitted;
 	}
 
-	public static String capitalize(String str)
+	public static String capitalize(String str, Locale locale)
 	{
-		return str.substring(0, 1).toUpperCase() + str.substring(1);
+		return str.substring(0, 1).toUpperCase(locale) + str.substring(1);
 	}
 
 	public static String substr(String str, int start)
