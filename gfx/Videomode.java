@@ -192,6 +192,37 @@ public class Videomode implements Comparable<Videomode>
 		return new Videomode(Mode.WINDOWED, -1, -1, -1);
 	}
 
+	public static Videomode createWindowed(int width, int height)
+	{
+		return new Videomode(Mode.WINDOWED, width, height, -1);
+	}
+
+	// Keeps the refresh rate in use if the current monitor offers it at this size, otherwise takes
+	// the highest one. Returns null if the current monitor has no display mode of this size.
+	public static Videomode createFullscreen(int width, int height)
+	{
+		int current_refreshrate = Gdx.graphics.getDisplayMode().refreshRate;
+		int best_refreshrate = -1;
+		for (Graphics.DisplayMode displaymode : Gdx.graphics.getDisplayModes()) {
+			if (displaymode.width != width || displaymode.height != height) {
+				continue;
+			}
+			if (displaymode.refreshRate == current_refreshrate) {
+				return new Videomode(Mode.FULLSCREEN, width, height, current_refreshrate);
+			}
+			best_refreshrate = Math.max(best_refreshrate, displaymode.refreshRate);
+		}
+		if (best_refreshrate < 0) {
+			return null;
+		}
+		return new Videomode(Mode.FULLSCREEN, width, height, best_refreshrate);
+	}
+
+	public static Videomode createUndecorated(int width, int height)
+	{
+		return new Videomode(Mode.UNDECORATED, width, height, -1);
+	}
+
 	public static Videomode createFromKey(String key)
 	{
 		Array<String> args = StringUtils.split(key, " ");
