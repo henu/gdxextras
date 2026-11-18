@@ -120,8 +120,9 @@ public class GeneralUtils
 	// Returns the ISO-639 two-letter code of the user's language or null if the language cannot be detected.
 	public static String getLanguage()
 	{
-		String language = Locale.getDefault().getLanguage();
-		if (language.isEmpty()) {
+		// Not getLanguage(): Android returns obsolete codes there, e.g. "in" for Indonesian instead of "id".
+		String language = Locale.getDefault().toLanguageTag().split("-")[0];
+		if (language.equals("und")) {
 			return null;
 		}
 		return language;
